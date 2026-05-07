@@ -7,6 +7,59 @@ export const dynamic = "force-dynamic";
 
 type PaperSize = "A3" | "A4" | "A5" | "A6";
 type Orientation = "landscape" | "portrait";
+type Theme = "light" | "dark";
+
+// ─── Theme color tokens ───────────────────────────────────────────────────────
+
+interface ThemeColors {
+  pageBg: string;
+  cellBg: string;
+  gridLine: string;
+  strongBorder: string;  // day-header bottom line
+  titleColor: string;
+  subtitleColor: string;
+  weekdayColor: string;
+  dateColor: string;     // regular weekday date
+  sundayColor: string;
+  saturdayColor: string;
+  holidayColor: string;
+}
+
+const THEMES: Record<Theme, ThemeColors> = {
+  light: {
+    pageBg:       "white",
+    cellBg:       "white",
+    gridLine:     "#e5e5e5",
+    strongBorder: "#0a0a0a",
+    titleColor:   "#0a0a0a",
+    subtitleColor:"#737373",
+    weekdayColor: "#737373",
+    dateColor:    "#0a0a0a",
+    sundayColor:  "#dc2626",
+    saturdayColor:"#525252",
+    holidayColor: "#dc2626",
+  },
+  dark: {
+    pageBg:       "#111111",
+    cellBg:       "#1a1a1a",
+    gridLine:     "#3a3a3a",
+    strongBorder: "#555555",
+    titleColor:   "#f5f5f5",
+    subtitleColor:"#a0a0a0",
+    weekdayColor: "#888888",
+    dateColor:    "#f5f5f5",
+    sundayColor:  "#ff6b6b",
+    saturdayColor:"#7ab6ff",
+    holidayColor: "#ff6b6b",
+  },
+};
+
+// Font weight for date numbers — A6 dark needs heavier weight for readability
+function dateWeight(size: PaperSize, theme: Theme): number {
+  if (theme === "dark" && size === "A6") return 600;
+  if (theme === "dark") return 500;
+  return 500;
+}
 
 // CSS pixel dimensions at 96 DPI, landscape orientation (w > h)
 // 1mm = 96/25.4 ≈ 3.7795px
@@ -82,6 +135,7 @@ export async function GET(req: NextRequest) {
   const monthParam = searchParams.get("month");
   const size = (searchParams.get("size") ?? "A4") as PaperSize;
   const orientation = (searchParams.get("orientation") ?? "landscape") as Orientation;
+  const theme = (searchParams.get("theme") ?? "light") as Theme;
 
   const config = getCountryConfig(country);
   if (!config) {
@@ -103,11 +157,13 @@ export async function GET(req: NextRequest) {
     }
     const holidays = getHolidays(config.code, year);
     const days = buildCalendarDays(year, month, holidays);
-    html = generateMonthlyHTML({ days, year, month, countryName: config.name, size, orientation });
-    filename = `calendar-${country}-${year}-${String(month).padStart(2, "0")}.pdf`;
+    html = generateMonthlyHTML({ days, year, month, countryName: config.name, size, orientation, theme });
+    const themeSuffix = theme === "dark" ? "-dark" : "";
+    filename = `calendar-${country}-${year}-${String(month).padStart(2, "0")}${themeSuffix}.pdf`;
   } else {
-    html = generateYearlyHTML({ year, countryCode: config.code, countryName: config.name, size, orientation });
-    filename = `calendar-${country}-${year}.pdf`;
+    html = generateYearlyHTML({ year, countryCode: config.code, countryName: config.name, size, orientation, theme });
+    const themeSuffix = theme === "dark" ? "-dark" : "";
+    filename = `calendar-${country}-${year}${themeSuffix}.pdf`;
   }
 
   try {
@@ -165,17 +221,19 @@ interface MonthlyParams {
   countryName: string;
   size: PaperSize;
   orientation: Orientation;
+  theme: Theme;
 }
 
-function generateMonthlyHTML({ days, year, month, countryName, size, orientation }: MonthlyParams): string {
+function generateMonthlyHTML({ days, year, month, countryName, size, orientation, theme }: MonthlyParams): string {
   const cfg = SIZE_CONFIG[size];
+  const tc = THEMES[theme];
   const monthName = MONTH_NAMES[month - 1];
+  const numWeight = dateWeight(size, theme);
 
   const headers = DAY_NAMES.map((name, i) => {
-    const color = i === 0 ? "#dc2626" : i === 6 ? "#525252" : "#737373";
-    // A6: single letter to save space
+    const color = i === 0 ? tc.sundayColor : i === 6 ? tc.saturdayColor : tc.weekdayColor;
     const label = size === "A6" ? name.slice(0, 1) : name;
-    return `<div style="font-size:${cfg.dayHeaderSize}px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:${color};text-align:center;padding:${cfg.cellPadV} ${cfg.cellPadH};border-right:1px solid #e5e5e5;border-bottom:2px solid #0a0a0a;">${label}</div>`;
+    return `<div style="font-size:${cfg.dayHeaderSize}px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:${color};text-align:center;padding:${cfg.cellPadV} ${cfg.cellPadH};border-right:1px solid ${tc.gridLine};border-bottom:2px solid ${tc.strongBorder};">${label}</div>`;
   }).join("");
 
   const cells = days.map((day) => {
@@ -184,22 +242,21 @@ function generateMonthlyHTML({ days, year, month, countryName, size, orientation
     const isSat = dow === 6;
     const isOther = !day.isCurrentMonth;
     const isHoliday = !!day.holiday && day.isCurrentMonth;
-    let numColor = "#0a0a0a";
-    if (isSun || isHoliday) numColor = "#dc2626";
-    else if (isSat) numColor = "#525252";
+    let numColor = tc.dateColor;
+    if (isSun || isHoliday) numColor = tc.sundayColor;
+    else if (isSat) numColor = tc.saturdayColor;
 
-    // A6+: dot indicator; others: truncated name
     let holidayEl = "";
     if (day.holiday && day.isCurrentMonth) {
       if (cfg.holidaySize > 0) {
-        holidayEl = `<div style="font-size:${cfg.holidaySize}px;color:#dc2626;margin-top:2px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${day.holiday.name}</div>`;
+        holidayEl = `<div style="font-size:${cfg.holidaySize}px;color:${tc.holidayColor};margin-top:2px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${day.holiday.name}</div>`;
       } else {
-        holidayEl = `<div style="width:4px;height:4px;border-radius:50%;background:#dc2626;margin-top:2px;flex-shrink:0;"></div>`;
+        holidayEl = `<div style="width:4px;height:4px;border-radius:50%;background:${tc.holidayColor};margin-top:2px;flex-shrink:0;"></div>`;
       }
     }
 
-    return `<div style="border-right:1px solid #e5e5e5;border-bottom:1px solid #e5e5e5;padding:${cfg.cellPadV} ${cfg.cellPadH};background:white;opacity:${isOther ? "0.2" : "1"};overflow:hidden;display:flex;flex-direction:column;">
-      <div style="font-family:'Courier New',monospace;font-size:${cfg.dateNumSize}px;font-weight:500;color:${numColor};flex-shrink:0;line-height:1;">${day.date.getDate()}</div>
+    return `<div style="border-right:1px solid ${tc.gridLine};border-bottom:1px solid ${tc.gridLine};padding:${cfg.cellPadV} ${cfg.cellPadH};background:${tc.cellBg};opacity:${isOther ? "0.2" : "1"};overflow:hidden;display:flex;flex-direction:column;">
+      <div style="font-family:'Courier New',monospace;font-size:${cfg.dateNumSize}px;font-weight:${numWeight};color:${numColor};flex-shrink:0;line-height:1;">${day.date.getDate()}</div>
       ${holidayEl}
     </div>`;
   }).join("");
@@ -211,20 +268,20 @@ function generateMonthlyHTML({ days, year, month, countryName, size, orientation
   <title>${monthName} ${year} — ${countryName}</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: white; color: #0a0a0a; overflow: hidden; }
+    body { background: ${tc.pageBg}; color: ${tc.titleColor}; overflow: hidden; }
     @page { size: ${size} ${orientation}; margin: 0; }
-    .page { width: 100vw; height: 100vh; padding: ${cfg.margin}; display: flex; flex-direction: column; }
-    .grid { display: grid; grid-template-columns: repeat(7, 1fr); border-top: 1px solid #e5e5e5; border-left: 1px solid #e5e5e5; flex: 1; overflow: hidden; }
+    .page { width: 100vw; height: 100vh; padding: ${cfg.margin}; display: flex; flex-direction: column; background: ${tc.pageBg}; }
+    .grid { display: grid; grid-template-columns: repeat(7, 1fr); border-top: 1px solid ${tc.gridLine}; border-left: 1px solid ${tc.gridLine}; flex: 1; overflow: hidden; }
     .grid > div { min-height: 0; }
   </style>
 </head>
 <body>
   <div class="page">
     <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:${cfg.headerMB};flex-shrink:0;">
-      <h1 style="font-size:${cfg.titleSize}px;font-weight:300;letter-spacing:-0.03em;font-family:Georgia,serif;line-height:1;">
-        ${monthName} <span style="opacity:0.4;">${year}</span>
+      <h1 style="font-size:${cfg.titleSize}px;font-weight:300;letter-spacing:-0.03em;font-family:Georgia,serif;line-height:1;color:${tc.titleColor};">
+        ${monthName} <span style="opacity:0.45;">${year}</span>
       </h1>
-      <span style="font-size:${cfg.subtitleSize}px;color:#737373;font-weight:500;">${countryName}</span>
+      <span style="font-size:${cfg.subtitleSize}px;color:${tc.subtitleColor};font-weight:500;">${countryName}</span>
     </div>
     <div class="grid">
       ${headers}
@@ -243,10 +300,12 @@ interface YearlyParams {
   countryName: string;
   size: PaperSize;
   orientation: Orientation;
+  theme: Theme;
 }
 
-function generateYearlyHTML({ year, countryCode, countryName, size, orientation }: YearlyParams): string {
+function generateYearlyHTML({ year, countryCode, countryName, size, orientation, theme }: YearlyParams): string {
   const cfg = SIZE_CONFIG[size];
+  const tc = THEMES[theme];
   const [cols, rows] = cfg.yearGrid[orientation];
   const holidays = getHolidays(countryCode, year);
 
@@ -255,8 +314,8 @@ function generateYearlyHTML({ year, countryCode, countryName, size, orientation 
     const days = buildCalendarDays(year, month, holidays);
 
     const headers = DAY_NAMES.map((d, di) => {
-      const color = di === 0 ? "#dc2626" : di === 6 ? "#525252" : "#a3a3a3";
-      return `<div style="border-right:1px solid #e5e5e5;border-bottom:1px solid #0a0a0a;padding:2px 0;text-align:center;font-size:${cfg.yearDayHeaderSize}px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:${color};">${d.slice(0, 1)}</div>`;
+      const color = di === 0 ? tc.sundayColor : di === 6 ? tc.saturdayColor : tc.weekdayColor;
+      return `<div style="border-right:1px solid ${tc.gridLine};border-bottom:1px solid ${tc.strongBorder};padding:2px 0;text-align:center;font-size:${cfg.yearDayHeaderSize}px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:${color};background:${tc.cellBg};">${d.slice(0, 1)}</div>`;
     }).join("");
 
     const cells = days.map((day) => {
@@ -265,16 +324,16 @@ function generateYearlyHTML({ year, countryCode, countryName, size, orientation 
       const isSat = dow === 6;
       const isOther = !day.isCurrentMonth;
       const isHoliday = !!day.holiday && day.isCurrentMonth;
-      let color = "#0a0a0a";
-      if (isSun || isHoliday) color = "#dc2626";
-      else if (isSat) color = "#737373";
+      let color = tc.dateColor;
+      if (isSun || isHoliday) color = tc.sundayColor;
+      else if (isSat) color = tc.saturdayColor;
 
-      return `<div style="border-right:1px solid #e5e5e5;border-bottom:1px solid #e5e5e5;padding:1px 0;text-align:center;font-size:${cfg.yearDateSize}px;font-family:'Courier New',monospace;color:${color};opacity:${isOther ? "0.15" : "1"};background:white;overflow:hidden;line-height:1.4;">${day.date.getDate()}</div>`;
+      return `<div style="border-right:1px solid ${tc.gridLine};border-bottom:1px solid ${tc.gridLine};padding:1px 0;text-align:center;font-size:${cfg.yearDateSize}px;font-family:'Courier New',monospace;font-weight:500;color:${color};opacity:${isOther ? "0.15" : "1"};background:${tc.cellBg};overflow:hidden;line-height:1.4;">${day.date.getDate()}</div>`;
     }).join("");
 
-    return `<div style="border:1px solid #e5e5e5;border-radius:2px;padding:${cfg.yearCellPad};overflow:hidden;display:flex;flex-direction:column;min-height:0;">
-      <div style="font-family:Georgia,serif;font-size:${cfg.yearMonthTitleSize}px;font-weight:400;margin-bottom:3px;color:#0a0a0a;flex-shrink:0;line-height:1;">${name}</div>
-      <div style="display:grid;grid-template-columns:repeat(7,1fr);border-top:1px solid #e5e5e5;border-left:1px solid #e5e5e5;flex:1;min-height:0;">
+    return `<div style="border:1px solid ${tc.gridLine};border-radius:2px;padding:${cfg.yearCellPad};overflow:hidden;display:flex;flex-direction:column;min-height:0;background:${tc.cellBg};">
+      <div style="font-family:Georgia,serif;font-size:${cfg.yearMonthTitleSize}px;font-weight:400;margin-bottom:3px;color:${tc.titleColor};flex-shrink:0;line-height:1;">${name}</div>
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);border-top:1px solid ${tc.gridLine};border-left:1px solid ${tc.gridLine};flex:1;min-height:0;">
         ${headers}
         ${cells}
       </div>
@@ -288,17 +347,17 @@ function generateYearlyHTML({ year, countryCode, countryName, size, orientation 
   <title>${year} — ${countryName}</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: white; overflow: hidden; }
+    body { background: ${tc.pageBg}; overflow: hidden; }
     @page { size: ${size} ${orientation}; margin: 0; }
-    .page { width: 100vw; height: 100vh; padding: ${cfg.margin}; display: flex; flex-direction: column; }
+    .page { width: 100vw; height: 100vh; padding: ${cfg.margin}; display: flex; flex-direction: column; background: ${tc.pageBg}; }
     .months { flex: 1; display: grid; grid-template-columns: repeat(${cols}, 1fr); grid-template-rows: repeat(${rows}, 1fr); gap: ${cfg.yearGap}; min-height: 0; overflow: hidden; }
   </style>
 </head>
 <body>
   <div class="page">
     <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:${cfg.headerMB};flex-shrink:0;">
-      <h1 style="font-size:${cfg.yearTitleSize}px;font-weight:300;letter-spacing:-0.03em;font-family:Georgia,serif;line-height:1;">${year}</h1>
-      <span style="font-size:${cfg.subtitleSize}px;color:#737373;">${countryName}</span>
+      <h1 style="font-size:${cfg.yearTitleSize}px;font-weight:300;letter-spacing:-0.03em;font-family:Georgia,serif;line-height:1;color:${tc.titleColor};">${year}</h1>
+      <span style="font-size:${cfg.subtitleSize}px;color:${tc.subtitleColor};">${countryName}</span>
     </div>
     <div class="months">
       ${monthsHTML}

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 
 type PaperSize = "A3" | "A4" | "A5" | "A6";
 type Orientation = "landscape" | "portrait";
+type Theme = "light" | "dark";
 
 interface DownloadButtonProps {
   country: string;
@@ -27,6 +28,7 @@ export default function DownloadButton({ country, year, month }: DownloadButtonP
   const [loading, setLoading] = useState(false);
   const [size, setSize] = useState<PaperSize>("A4");
   const [orientation, setOrientation] = useState<Orientation>("landscape");
+  const [theme, setTheme] = useState<Theme>("light");
   const [error, setError] = useState<string | null>(null);
 
   // A6 is not available for yearly — reset if needed
@@ -48,6 +50,7 @@ export default function DownloadButton({ country, year, month }: DownloadButtonP
         year: String(year),
         size,
         orientation,
+        theme,
       });
       if (month) params.set("month", String(month));
 
@@ -133,6 +136,33 @@ export default function DownloadButton({ country, year, month }: DownloadButtonP
           })}
         </div>
 
+        {/* Theme */}
+        <div style={{ display: "flex", border: "1px solid var(--border)", borderRadius: 8, overflow: "hidden" }}>
+          {(["light", "dark"] as Theme[]).map((t) => {
+            const active = theme === t;
+            return (
+              <button
+                key={t}
+                onClick={() => setTheme(t)}
+                style={{
+                  height: 40,
+                  padding: "0 14px",
+                  border: "none",
+                  borderRight: "1px solid var(--border)",
+                  background: active ? "var(--fg)" : "var(--bg)",
+                  color: active ? "var(--bg)" : "var(--muted)",
+                  cursor: "pointer",
+                  fontSize: 12,
+                  fontWeight: active ? 600 : 400,
+                  transition: "background 0.15s, color 0.15s",
+                }}
+              >
+                {t === "light" ? "☀ Light" : "◑ Dark"}
+              </button>
+            );
+          })}
+        </div>
+
         {/* Download */}
         <button
           onClick={handleDownload}
@@ -158,11 +188,12 @@ export default function DownloadButton({ country, year, month }: DownloadButtonP
         </button>
       </div>
 
-      {isYearly && (
-        <p style={{ fontSize: 11, color: "var(--muted)", margin: 0 }}>
-          A6 is not available for yearly calendars
-        </p>
-      )}
+      <p style={{ fontSize: 11, color: "var(--muted)", margin: 0 }}>
+        {theme === "light"
+          ? "☀ Light — recommended for printing"
+          : "◑ Dark — best for tablets & digital use"}
+        {isYearly ? " · A6 not available for yearly" : ""}
+      </p>
       {error && (
         <p style={{ fontSize: 12, color: "var(--holiday)", margin: 0 }}>{error}</p>
       )}
