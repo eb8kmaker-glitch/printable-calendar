@@ -72,7 +72,6 @@ export default function CalendarGrid({
           const classes = [
             "calendar-cell",
             !day.isCurrentMonth ? "other-month" : "",
-            day.isToday ? "today" : "",
             isSun ? "sunday" : "",
             isSat ? "saturday" : "",
           ]

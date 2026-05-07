@@ -128,19 +128,28 @@ export default function HomePage() {
                       {c.name}
                     </h2>
                   </div>
-                  <Link
-                    href={`/calendar/${c.code.toLowerCase()}/${year}/${month}`}
-                    style={{
-                      fontSize: 12,
-                      padding: "5px 12px",
-                      border: "1px solid var(--border)",
-                      borderRadius: 6,
-                      textDecoration: "none",
-                      color: "var(--fg)",
-                    }}
-                  >
-                    Open →
-                  </Link>
+                  <div style={{ display: "flex", gap: 6 }}>
+                    <Link
+                      href={`/calendar/${c.code.toLowerCase()}/${year}`}
+                      style={{
+                        fontSize: 12, padding: "5px 12px",
+                        border: "1px solid var(--border)", borderRadius: 6,
+                        textDecoration: "none", color: "var(--muted)",
+                      }}
+                    >
+                      {year}
+                    </Link>
+                    <Link
+                      href={`/calendar/${c.code.toLowerCase()}/${year}/${month}`}
+                      style={{
+                        fontSize: 12, padding: "5px 12px",
+                        border: "1px solid var(--border)", borderRadius: 6,
+                        textDecoration: "none", color: "var(--fg)",
+                      }}
+                    >
+                      This month →
+                    </Link>
+                  </div>
                 </div>
 
                 {upcomingHolidays.length > 0 && (

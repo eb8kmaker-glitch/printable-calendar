@@ -126,7 +126,19 @@ export default async function CalendarPage({ params }: PageProps) {
             ))}
           </div>
 
-          <MonthNav country={country} year={year} month={month} />
+          <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+            <Link
+              href={`/calendar/${country}/${year}`}
+              style={{
+                fontSize: 12, padding: "5px 12px",
+                border: "1px solid var(--border)", borderRadius: 8,
+                textDecoration: "none", color: "var(--muted)",
+              }}
+            >
+              Year view
+            </Link>
+            <MonthNav country={country} year={year} month={month} />
+          </div>
         </div>
 
         {/* Calendar */}
@@ -210,7 +222,7 @@ export default async function CalendarPage({ params }: PageProps) {
               marginBottom: 16,
             }}
           >
-            A4 landscape PDF · includes public holidays · print-ready
+            Landscape PDF · includes public holidays · print-ready
           </p>
           <DownloadButton country={country} year={year} month={month} />
         </div>
@@ -236,9 +248,8 @@ export default async function CalendarPage({ params }: PageProps) {
           </h2>
           <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.7, maxWidth: 700 }}>
             This free printable {monthName} {year} calendar for {config.name} includes
-            all official public holidays. Download as an A4 PDF or print directly
-            from your browser. The clean, minimal design is optimized for both
-            black-and-white and color printing.
+            all official public holidays. Download as a PDF (A3–A6) in landscape format.
+            The clean, minimal design is optimized for both black-and-white and color printing.
           </p>
         </section>
       </div>
