@@ -73,6 +73,28 @@ export default function Header() {
             </Link>
           ))}
 
+          <Link
+            href="/events"
+            style={{
+              fontSize: 13,
+              color: "var(--muted)",
+              textDecoration: "none",
+              padding: "4px 10px",
+              borderRadius: 6,
+              transition: "color 0.15s, background 0.15s",
+            }}
+            onMouseEnter={(e) => {
+              (e.target as HTMLElement).style.color = "var(--fg)";
+              (e.target as HTMLElement).style.background = "var(--header-bg)";
+            }}
+            onMouseLeave={(e) => {
+              (e.target as HTMLElement).style.color = "var(--muted)";
+              (e.target as HTMLElement).style.background = "transparent";
+            }}
+          >
+            Events
+          </Link>
+
           {/* Theme toggle */}
           <button
             onClick={toggle}

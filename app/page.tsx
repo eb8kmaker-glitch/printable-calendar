@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { SUPPORTED_COUNTRIES, MONTH_NAMES } from "@/lib/types";
 import { getHolidays } from "@/lib/holidays";
+import TodaysEvents from "@/components/TodaysEvents";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -74,13 +75,21 @@ export default function HomePage() {
           </Link>
         </div>
 
-        {/* Country cards */}
+        {/* Country cards + Today's Events sidebar */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr minmax(240px, 300px)",
+            gap: 24,
+            marginBottom: 80,
+            alignItems: "start",
+          }}
+        >
         <div
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
             gap: 20,
-            marginBottom: 80,
           }}
         >
           {SUPPORTED_COUNTRIES.map((c) => {
@@ -224,6 +233,9 @@ export default function HomePage() {
               </div>
             );
           })}
+        </div>
+        {/* Today's events sidebar */}
+        <TodaysEvents />
         </div>
 
         {/* Features */}

@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next";
 import { SUPPORTED_COUNTRIES } from "@/lib/types";
 import { getHolidays } from "@/lib/holidays";
+import { WORLD_EVENTS } from "@/lib/events";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://printablecalendars.io";
@@ -36,6 +37,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
         priority: 0.5,
       });
     }
+  }
+
+  // Events index
+  entries.push({
+    url: `${baseUrl}/events`,
+    lastModified: new Date(),
+    changeFrequency: "monthly",
+    priority: 0.7,
+  });
+
+  // Individual event pages
+  for (const event of WORLD_EVENTS) {
+    entries.push({
+      url: `${baseUrl}/events/${event.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 0.6,
+    });
   }
 
   return entries;
