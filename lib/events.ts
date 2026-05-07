@@ -16,6 +16,8 @@ export interface WorldEvent {
   about: string;
   history: string;
   countries: string[];
+  /** Per-country cultural context for US / KR / JP */
+  culturalContext?: Partial<Record<"US" | "KR" | "JP", string>>;
   activities: string[];
   relatedSlugs: string[];
 }
@@ -34,6 +36,11 @@ export const WORLD_EVENTS: WorldEvent[] = [
     history:
       "The feast of Saint Valentine has been celebrated since at least the 14th century. Geoffrey Chaucer was among the first to associate the day with romantic love in his 1382 poem 'Parlement of Foules.' By the 18th century, exchanging handwritten love notes was common in England. Commercially printed cards appeared in the 19th century, and the holiday spread globally through trade and media.",
     countries: ["United States", "United Kingdom", "Canada", "Australia", "France", "Japan", "South Korea"],
+    culturalContext: {
+      US: "Valentine's Day is one of America's biggest retail events, with over $20 billion spent annually on cards, flowers, chocolates, and dining. It is celebrated by both romantic couples and friends, with classroom exchanges popular among children.",
+      KR: "In South Korea, Valentine's Day is specifically for women to give chocolate to men — romantic honmei-choco and polite obligation chocolate alike. Men reciprocate on White Day (March 14), creating a two-part tradition unique to East Asia.",
+      JP: "Japan follows a similar custom: on February 14, women give chocolate to men. Honmei-choco (handmade, for a romantic partner) is distinct from giri-choco (commercial, for coworkers). Men return gifts on White Day. The holiday is largely a confectionery industry creation from the 1950s.",
+    },
     activities: [
       "Send a handwritten card or letter to someone special",
       "Give flowers — roses are traditional, but any bloom works",
@@ -55,6 +62,11 @@ export const WORLD_EVENTS: WorldEvent[] = [
     history:
       "The first National Woman's Day was observed in the United States on February 28, 1909. The following year, an International Conference of Working Women proposed an annual international day. March 8 was formally adopted after thousands of women marched in Russia in 1917, demanding an end to World War I. The United Nations officially recognized IWD in 1977.",
     countries: ["Global — recognized in over 100 countries"],
+    culturalContext: {
+      US: "IWD in the US amplifies ongoing campaigns for equal pay, reproductive rights, and representation in corporate leadership. Major marches, corporate DEI events, and social media campaigns (#BreakTheBias) dominate the day.",
+      KR: "South Korea has one of the highest gender pay gaps in the OECD. IWD spurs public debate on workplace discrimination, the 'career break' phenomenon among women who leave work after childbirth, and the rise of feminist movements.",
+      JP: "Japan's IWD discourse centres on 'womenomics' — the economic case for female participation — and the persistent underrepresentation of women in corporate management and politics, despite government targets.",
+    },
     activities: [
       "Attend or organize a local IWD event or march",
       "Highlight and amplify women's voices on social media",
@@ -118,6 +130,11 @@ export const WORLD_EVENTS: WorldEvent[] = [
     history:
       "Senator Gaylord Nelson of Wisconsin proposed a national day for the environment after witnessing the devastation of the 1969 Santa Barbara oil spill. On April 22, 1970, 20 million Americans participated in the first Earth Day, leading to the creation of the US Environmental Protection Agency and landmark legislation including the Clean Air Act and Clean Water Act. Earth Day went global in 1990 with 200 million participants in 141 countries.",
     countries: ["Global — 193 countries"],
+    culturalContext: {
+      US: "Earth Day was born in the US in 1970 and remains a major civic event. It directly led to the EPA, Clean Air Act, and Clean Water Act. Annual community clean-ups, legislative advocacy, and campus events define the day.",
+      KR: "South Korea marks Earth Day with national campaigns on waste reduction and recycling. The country operates one of the world's most advanced recycling systems, and Earth Day aligns with Korea's 2050 Carbon Neutrality commitment.",
+      JP: "Japan observes Earth Day with city events and special emphasis on mottainai — a cultural concept expressing regret over waste. Zero-waste living, furoshiki cloth wrapping, and local farmers' markets are central activities.",
+    },
     activities: [
       "Plant a tree or tend a garden",
       "Join a local litter pick or beach clean",
@@ -265,6 +282,11 @@ export const WORLD_EVENTS: WorldEvent[] = [
     history:
       "While various coffee days had been observed informally for years, the International Coffee Organization officially launched International Coffee Day on October 1, 2015, at the Milan Expo. Coffee is one of the world's most traded commodities, and the industry supports the livelihoods of over 125 million people globally.",
     countries: ["Global — championed by the International Coffee Organization"],
+    culturalContext: {
+      US: "The US is the world's largest coffee consumer by volume. Third-wave specialty coffee culture — emphasising single origins, pour-overs, and roaster transparency — has surged alongside traditional drip coffee.",
+      KR: "South Korea has one of the world's highest café densities. Seoul has more Starbucks locations per capita than most cities globally. 'Café hopping' is a major leisure activity, and the aesthetics of coffee culture are deeply tied to K-lifestyle trends.",
+      JP: "Japan has a rich coffee heritage via the kissaten (traditional coffee house), dating to the early 1900s. Canned and bottled coffee from vending machines is uniquely Japanese. Third-wave specialty coffee now coexists with this deep-rooted café tradition.",
+    },
     activities: [
       "Try a single-origin coffee from a new region",
       "Visit a local independent coffee shop",
@@ -286,6 +308,11 @@ export const WORLD_EVENTS: WorldEvent[] = [
     history:
       "World Mental Health Day was first celebrated on October 10, 1992, as an initiative of the World Federation for Mental Health (WFMH), led by its then-Deputy Secretary General Richard Hunter. For the first three years there was no specific theme; from 1994 onwards each year has had a theme with a focus on a particular aspect of mental health.",
     countries: ["Global — recognized by the WHO and WFMH worldwide"],
+    culturalContext: {
+      US: "Mental health advocacy has gained significant momentum in the US, with major campaigns targeting teen mental health, veteran wellbeing, and workplace burnout. Organisations like NAMI run public awareness events and lobbying efforts.",
+      KR: "South Korea has one of the highest suicide rates among OECD nations. World Mental Health Day drives campaigns to reduce stigma — historically strong in Korean culture — and improve access to counselling and psychiatric care.",
+      JP: "Karoshi (overwork-related death) and mental health burnout are pressing issues in Japan. The day prompts corporations to adopt mental health programs and review long-hours culture, with increasing government pressure to mandate mental wellness checks.",
+    },
     activities: [
       "Check in on a friend or family member who may be struggling",
       "Practice mindfulness or meditation for 10 minutes",
@@ -328,6 +355,11 @@ export const WORLD_EVENTS: WorldEvent[] = [
     history:
       "Halloween's origins trace to the ancient Celtic festival of Samhain (pronounced sah-win), held on the night of October 31 to mark the end of the harvest season. With the spread of Christianity, November 1 became All Saints' Day (All Hallows' Day), making October 31 All Hallows' Eve. Irish and Scottish immigrants brought Halloween traditions to North America in the 19th century, where it evolved into its modern form.",
     countries: ["United States", "Canada", "Ireland", "United Kingdom", "Australia", "New Zealand"],
+    culturalContext: {
+      US: "Halloween is one of the US's biggest commercial holidays at over $10 billion annually. Trick-or-treating, elaborate haunted houses, corn mazes, and office costume parties are mainstream. Pumpkin carving is a near-universal tradition.",
+      KR: "Halloween has grown rapidly in South Korea since the 2010s through American media and expat communities. Itaewon in Seoul became famous for its Halloween street parties, though large public gatherings were scaled back after the 2022 crowd crush tragedy.",
+      JP: "Japan embraced Halloween commercially through Disney theme parks in the 1990s. It has evolved into a massive costume event — Shibuya Crossing's Halloween crowd is globally famous. The focus is cosplay and public gathering rather than trick-or-treating.",
+    },
     activities: [
       "Carve a jack-o-lantern from a pumpkin",
       "Dress up in a creative costume",

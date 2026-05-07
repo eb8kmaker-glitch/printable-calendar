@@ -8,6 +8,9 @@ import {
   formatEventDate,
   CATEGORY_LABELS,
 } from "@/lib/events";
+import { SUPPORTED_COUNTRIES } from "@/lib/types";
+
+const BASE_URL = "https://printablecalendars.io";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -21,15 +24,40 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params;
   const event = getEventBySlug(slug);
   if (!event) return {};
+
+  const url = `${BASE_URL}/events/${slug}`;
+  const title = `${event.name} — History, Activities & Printable Calendar`;
+  const description = `${event.tagline} Learn the history of ${event.name} (${formatEventDate(event)}), how it's celebrated worldwide, and download a free printable calendar.`;
+
   return {
-    title: event.name,
-    description: event.tagline,
+    title,
+    description,
+    alternates: {
+      canonical: url,
+      languages: { en: url, "x-default": url },
+    },
     openGraph: {
       title: `${event.name} | PrintableCalendars`,
       description: event.tagline,
+      url,
+      type: "article",
+      siteName: "PrintableCalendars",
     },
+    twitter: {
+      card: "summary_large_image",
+      title: `${event.name} | PrintableCalendars`,
+      description: event.tagline,
+    },
+    robots: { index: true, follow: true },
   };
 }
+
+const COUNTRY_FLAG: Record<string, string> = { US: "US", KR: "KR", JP: "JP" };
+const COUNTRY_LABEL: Record<string, string> = {
+  US: "United States",
+  KR: "South Korea",
+  JP: "Japan",
+};
 
 export default async function EventDetailPage({ params }: PageProps) {
   const { slug } = await params;
@@ -38,36 +66,75 @@ export default async function EventDetailPage({ params }: PageProps) {
 
   const related = getRelatedEvents(event);
   const currentYear = new Date().getFullYear();
+  const eventYear =
+    event.month >= new Date().getMonth() + 1 ? currentYear : currentYear + 1;
 
-  const jsonLd = {
+  const eventUrl = `${BASE_URL}/events/${slug}`;
+
+  const eventJsonLd = {
     "@context": "https://schema.org",
     "@type": "Event",
     name: event.name,
-    description: event.tagline,
-    startDate: `${currentYear}-${String(event.month).padStart(2, "0")}-${String(event.day).padStart(2, "0")}`,
-    url: `https://printablecalendars.io/events/${event.slug}`,
+    description: event.about,
+    startDate: `${eventYear}-${String(event.month).padStart(2, "0")}-${String(event.day).padStart(2, "0")}`,
+    endDate: `${eventYear}-${String(event.month).padStart(2, "0")}-${String(event.day).padStart(2, "0")}`,
+    url: eventUrl,
+    eventAttendanceMode: "https://schema.org/MixedEventAttendanceMode",
+    eventStatus: "https://schema.org/EventScheduled",
+    location: {
+      "@type": "VirtualLocation",
+      url: eventUrl,
+    },
     organizer: {
       "@type": "Organization",
       name: "PrintableCalendars",
-      url: "https://printablecalendars.io",
+      url: BASE_URL,
     },
   };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: BASE_URL },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "World Events",
+        item: `${BASE_URL}/events`,
+      },
+      { "@type": "ListItem", position: 3, name: event.name, item: eventUrl },
+    ],
+  };
+
+  const hasCultural =
+    event.culturalContext && Object.keys(event.culturalContext).length > 0;
 
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(eventJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
       <div style={{ maxWidth: 760, margin: "0 auto", padding: "56px 24px 96px" }}>
         {/* Breadcrumb */}
-        <nav style={{ marginBottom: 40, fontSize: 13, color: "var(--muted)" }}>
+        <nav
+          aria-label="breadcrumb"
+          style={{ marginBottom: 40, fontSize: 13, color: "var(--muted)" }}
+        >
           <Link href="/" style={{ color: "var(--muted)", textDecoration: "none" }}>
             Home
           </Link>
           <span style={{ margin: "0 8px", opacity: 0.4 }}>/</span>
-          <Link href="/events" style={{ color: "var(--muted)", textDecoration: "none" }}>
+          <Link
+            href="/events"
+            style={{ color: "var(--muted)", textDecoration: "none" }}
+          >
             World Events
           </Link>
           <span style={{ margin: "0 8px", opacity: 0.4 }}>/</span>
@@ -76,7 +143,15 @@ export default async function EventDetailPage({ params }: PageProps) {
 
         {/* Hero */}
         <div style={{ marginBottom: 56 }}>
-          <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 16 }}>
+          <div
+            style={{
+              display: "flex",
+              gap: 10,
+              alignItems: "center",
+              flexWrap: "wrap",
+              marginBottom: 16,
+            }}
+          >
             <span
               style={{
                 fontFamily: "'DM Mono', monospace",
@@ -113,7 +188,7 @@ export default async function EventDetailPage({ params }: PageProps) {
           </h1>
           <p
             style={{
-              fontSize: 18,
+              fontSize: "clamp(15px, 2.5vw, 18px)",
               color: "var(--muted)",
               lineHeight: 1.6,
               fontStyle: "italic",
@@ -124,67 +199,44 @@ export default async function EventDetailPage({ params }: PageProps) {
           </p>
         </div>
 
-        {/* Divider */}
-        <hr style={{ border: "none", borderTop: "1px solid var(--border)", marginBottom: 48 }} />
+        <hr
+          style={{
+            border: "none",
+            borderTop: "1px solid var(--border)",
+            marginBottom: 48,
+          }}
+        />
 
         {/* About */}
         <section style={{ marginBottom: 48 }}>
-          <h2
-            style={{
-              fontFamily: "'DM Mono', monospace",
-              fontSize: 11,
-              color: "var(--muted)",
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              marginBottom: 16,
-            }}
-          >
-            About
-          </h2>
-          <p style={{ fontSize: 15, lineHeight: 1.8, color: "var(--fg)" }}>{event.about}</p>
+          <SectionLabel>About</SectionLabel>
+          <p style={{ fontSize: 15, lineHeight: 1.85, color: "var(--fg)" }}>
+            {event.about}
+          </p>
         </section>
 
         {/* History */}
         <section style={{ marginBottom: 48 }}>
-          <h2
-            style={{
-              fontFamily: "'DM Mono', monospace",
-              fontSize: 11,
-              color: "var(--muted)",
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              marginBottom: 16,
-            }}
-          >
-            History
-          </h2>
-          <p style={{ fontSize: 15, lineHeight: 1.8, color: "var(--fg)" }}>{event.history}</p>
+          <SectionLabel>History</SectionLabel>
+          <p style={{ fontSize: 15, lineHeight: 1.85, color: "var(--fg)" }}>
+            {event.history}
+          </p>
         </section>
 
-        {/* Countries */}
+        {/* Where observed */}
         <section style={{ marginBottom: 48 }}>
-          <h2
-            style={{
-              fontFamily: "'DM Mono', monospace",
-              fontSize: 11,
-              color: "var(--muted)",
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              marginBottom: 16,
-            }}
-          >
-            Where It&apos;s Observed
-          </h2>
+          <SectionLabel>Where It&apos;s Observed</SectionLabel>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
             {event.countries.map((c) => (
               <span
                 key={c}
                 style={{
                   fontSize: 13,
-                  padding: "4px 12px",
+                  padding: "4px 14px",
                   border: "1px solid var(--border)",
                   borderRadius: 20,
                   color: "var(--fg)",
+                  lineHeight: 1.6,
                 }}
               >
                 {c}
@@ -193,35 +245,84 @@ export default async function EventDetailPage({ params }: PageProps) {
           </div>
         </section>
 
-        {/* Activities */}
+        {/* Cultural context — US / KR / JP */}
+        {hasCultural && (
+          <section style={{ marginBottom: 48 }}>
+            <SectionLabel>Cultural Context</SectionLabel>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
+                gap: 16,
+              }}
+            >
+              {(["US", "KR", "JP"] as const).map((code) => {
+                const text = event.culturalContext?.[code];
+                if (!text) return null;
+                return (
+                  <div
+                    key={code}
+                    style={{
+                      border: "1px solid var(--border)",
+                      borderRadius: 10,
+                      padding: "16px 18px",
+                    }}
+                  >
+                    <p
+                      style={{
+                        fontFamily: "'DM Mono', monospace",
+                        fontSize: 10,
+                        color: "var(--muted)",
+                        letterSpacing: "0.08em",
+                        textTransform: "uppercase",
+                        marginBottom: 8,
+                      }}
+                    >
+                      {COUNTRY_FLAG[code]} {COUNTRY_LABEL[code]}
+                    </p>
+                    <p
+                      style={{ fontSize: 13, lineHeight: 1.7, color: "var(--fg)" }}
+                    >
+                      {text}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        )}
+
+        {/* How to participate */}
         <section style={{ marginBottom: 56 }}>
-          <h2
+          <SectionLabel>How to Participate</SectionLabel>
+          <ul
             style={{
-              fontFamily: "'DM Mono', monospace",
-              fontSize: 11,
-              color: "var(--muted)",
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              marginBottom: 16,
+              listStyle: "none",
+              padding: 0,
+              margin: 0,
+              display: "flex",
+              flexDirection: "column",
+              gap: 12,
             }}
           >
-            How to Participate
-          </h2>
-          <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 12 }}>
             {event.activities.map((act, i) => (
-              <li key={i} style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
+              <li
+                key={i}
+                style={{ display: "flex", gap: 12, alignItems: "flex-start" }}
+              >
                 <span
                   style={{
                     fontFamily: "'DM Mono', monospace",
                     fontSize: 11,
                     color: "var(--muted)",
-                    minWidth: 20,
+                    minWidth: 22,
                     paddingTop: 2,
+                    flexShrink: 0,
                   }}
                 >
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <span style={{ fontSize: 15, lineHeight: 1.6 }}>{act}</span>
+                <span style={{ fontSize: 15, lineHeight: 1.7 }}>{act}</span>
               </li>
             ))}
           </ul>
@@ -232,80 +333,101 @@ export default async function EventDetailPage({ params }: PageProps) {
           style={{
             border: "1px solid var(--border)",
             borderRadius: 12,
-            padding: 28,
+            padding: "28px 28px 24px",
             marginBottom: 56,
-            display: "flex",
-            flexDirection: "column",
-            gap: 12,
           }}
         >
-          <p
-            style={{
-              fontFamily: "'DM Mono', monospace",
-              fontSize: 11,
-              color: "var(--muted)",
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-            }}
-          >
-            Mark the date
-          </p>
+          <SectionLabel>Mark the date</SectionLabel>
           <p
             style={{
               fontFamily: "'EB Garamond', Georgia, serif",
-              fontSize: 22,
+              fontSize: "clamp(18px, 3vw, 22px)",
               fontWeight: 400,
-              lineHeight: 1.3,
+              lineHeight: 1.4,
+              marginBottom: 20,
             }}
           >
-            Download a printable calendar for {event.month >= new Date().getMonth() + 1 ? currentYear : currentYear + 1} and never miss {event.name}.
+            Download a free printable calendar for {eventYear} and never miss{" "}
+            {event.name}.
           </p>
-          <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 4 }}>
-            <Link
-              href={`/calendar/us/${currentYear}/${event.month}`}
-              style={{
-                padding: "10px 20px",
-                background: "var(--fg)",
-                color: "var(--bg)",
-                borderRadius: 8,
-                textDecoration: "none",
-                fontSize: 13,
-                fontWeight: 500,
-              }}
-            >
-              US Calendar — {formatEventDate(event)}
-            </Link>
-            <Link
-              href={`/calendar/us/${currentYear}`}
-              style={{
-                padding: "10px 20px",
-                border: "1px solid var(--border)",
-                color: "var(--fg)",
-                borderRadius: 8,
-                textDecoration: "none",
-                fontSize: 13,
-              }}
-            >
-              Full Year View
-            </Link>
+
+          {/* Per-country calendar + PDF links */}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+              gap: 12,
+            }}
+          >
+            {SUPPORTED_COUNTRIES.map((c) => {
+              const code = c.code.toLowerCase();
+              const monthUrl = `/calendar/${code}/${eventYear}/${event.month}`;
+              const pdfUrl = `/api/pdf?country=${code}&year=${eventYear}&month=${event.month}&size=A4&orientation=landscape&theme=light`;
+              return (
+                <div
+                  key={c.code}
+                  style={{
+                    border: "1px solid var(--border)",
+                    borderRadius: 8,
+                    padding: "14px 16px",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 10,
+                  }}
+                >
+                  <p
+                    style={{
+                      fontFamily: "'DM Mono', monospace",
+                      fontSize: 10,
+                      color: "var(--muted)",
+                      letterSpacing: "0.07em",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    {COUNTRY_FLAG[c.code]} {c.name}
+                  </p>
+                  <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                    <Link
+                      href={monthUrl}
+                      style={{
+                        padding: "7px 14px",
+                        background: "var(--fg)",
+                        color: "var(--bg)",
+                        borderRadius: 6,
+                        textDecoration: "none",
+                        fontSize: 12,
+                        fontWeight: 500,
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      View Calendar
+                    </Link>
+                    <a
+                      href={pdfUrl}
+                      download={`calendar-${code}-${eventYear}-${String(event.month).padStart(2, "0")}.pdf`}
+                      style={{
+                        padding: "7px 14px",
+                        border: "1px solid var(--border)",
+                        color: "var(--fg)",
+                        borderRadius: 6,
+                        textDecoration: "none",
+                        fontSize: 12,
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      PDF
+                    </a>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
 
         {/* Related Events */}
         {related.length > 0 && (
           <section>
-            <h2
-              style={{
-                fontFamily: "'DM Mono', monospace",
-                fontSize: 11,
-                color: "var(--muted)",
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                marginBottom: 20,
-              }}
-            >
-              Related Events
-            </h2>
+            <SectionLabel>Related Events</SectionLabel>
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {related.map((r) => (
                 <Link
@@ -320,14 +442,36 @@ export default async function EventDetailPage({ params }: PageProps) {
                     borderRadius: 10,
                     textDecoration: "none",
                     color: "inherit",
-                    transition: "border-color 0.2s",
+                    gap: 12,
                   }}
                 >
-                  <div>
-                    <p style={{ fontSize: 15, fontWeight: 500, marginBottom: 2 }}>{r.name}</p>
-                    <p style={{ fontSize: 12, color: "var(--muted)" }}>{formatEventDate(r)}</p>
+                  <div style={{ minWidth: 0 }}>
+                    <p
+                      style={{
+                        fontSize: 15,
+                        fontWeight: 500,
+                        marginBottom: 2,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {r.name}
+                    </p>
+                    <p style={{ fontSize: 12, color: "var(--muted)" }}>
+                      {formatEventDate(r)} · {CATEGORY_LABELS[r.category]}
+                    </p>
                   </div>
-                  <span style={{ fontSize: 18, color: "var(--muted)", opacity: 0.5 }}>→</span>
+                  <span
+                    style={{
+                      fontSize: 16,
+                      color: "var(--muted)",
+                      opacity: 0.5,
+                      flexShrink: 0,
+                    }}
+                  >
+                    →
+                  </span>
                 </Link>
               ))}
             </div>
@@ -335,5 +479,22 @@ export default async function EventDetailPage({ params }: PageProps) {
         )}
       </div>
     </>
+  );
+}
+
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <h2
+      style={{
+        fontFamily: "'DM Mono', monospace",
+        fontSize: 11,
+        color: "var(--muted)",
+        letterSpacing: "0.08em",
+        textTransform: "uppercase",
+        marginBottom: 16,
+      }}
+    >
+      {children}
+    </h2>
   );
 }
