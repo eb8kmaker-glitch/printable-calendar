@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getHolidays, buildCalendarDays, getCountryConfig } from "@/lib/holidays";
 import { MONTH_NAMES, DAY_NAMES } from "@/lib/types";
 
+export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 type PaperSize = "A3" | "A4" | "A5" | "A6";
@@ -37,11 +38,17 @@ export async function GET(req: NextRequest) {
 
   try {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const puppeteer = require("puppeteer");
+    const chromium = require("@sparticuz/chromium");
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const puppeteer = require("puppeteer-core");
+
     const browser = await puppeteer.launch({
-      headless: true,
-      args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"],
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath(),
+      headless: chromium.headless,
     });
+
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: "networkidle0" });
     const pdf = await page.pdf({
@@ -52,7 +59,7 @@ export async function GET(req: NextRequest) {
     });
     await browser.close();
 
-    return new NextResponse(pdf, {
+    return new NextResponse(new Blob([pdf], { type: "application/pdf" }), {
       headers: {
         "Content-Type": "application/pdf",
         "Content-Disposition": `attachment; filename="${filename}"`,
@@ -62,7 +69,7 @@ export async function GET(req: NextRequest) {
   } catch (err) {
     console.error("PDF generation failed:", err);
     return NextResponse.json(
-      { error: "PDF generation failed. Ensure puppeteer is installed." },
+      { error: "PDF generation failed", detail: String(err) },
       { status: 500 }
     );
   }
