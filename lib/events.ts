@@ -452,6 +452,126 @@ export const WORLD_EVENTS: WorldEvent[] = [
     ],
     relatedSlugs: ["international-womens-day", "world-childrens-day", "international-day-of-peace"],
   },
+  {
+    slug: "new-years-day",
+    name: "New Year's Day",
+    month: 1,
+    day: 1,
+    category: "culture",
+    emoji: "confetti",
+    tagline: "A fresh start celebrated by billions around the world.",
+    about:
+      "New Year's Day on January 1 marks the start of the new calendar year and is one of the most widely observed holidays in the world. Celebrations typically begin on New Year's Eve (December 31) with fireworks, parties, and countdowns, carrying into January 1 with rest, reflection, and resolutions for the year ahead. The holiday is a public holiday in virtually every country that follows the Gregorian calendar.",
+    history:
+      "The celebration of January 1 as the start of the new year dates to the Roman calendar reform of 153 BCE, when January became the first month. The Gregorian calendar — the current international standard — was introduced by Pope Gregory XIII in 1582 as a reform of the Julian calendar. Ancient civilisations observed their new year at different times: Babylon celebrated in March, while many cultures today still observe separate lunar or solar new years alongside January 1.",
+    countries: ["Global — one of the most universally observed public holidays"],
+    culturalContext: {
+      US: "New Year's Eve is marked by parties and the iconic Times Square ball drop in New York City, broadcast to millions. January 1 is a federal holiday; many Americans make personal resolutions and watch college football bowl games.",
+      KR: "South Korea celebrates both January 1 (Yangryeok Seollal) and the Lunar New Year (Seollal), the latter being more culturally significant. On January 1, Koreans traditionally watch the first sunrise (해돋이) at coastal or mountain viewpoints, symbolising hope for the year ahead.",
+      JP: "New Year (Shōgatsu) is Japan's most important holiday, with businesses typically closed January 1–3. Traditions include the first shrine visit of the year (hatsumode), eating osechi ryori (traditional New Year foods), and children receiving otoshidama (money envelopes) from relatives.",
+    },
+    activities: [
+      "Write down personal goals or resolutions for the year ahead",
+      "Watch a midnight fireworks display or live countdown broadcast",
+      "Cook a traditional New Year's dish from another culture",
+      "Reflect on the past year and set one meaningful intention for the new one",
+    ],
+    relatedSlugs: ["valentines-day", "world-kindness-day"],
+  },
+  {
+    slug: "world-health-day",
+    name: "World Health Day",
+    month: 4,
+    day: 7,
+    category: "health",
+    emoji: "medical",
+    tagline: "Building a fairer, healthier world for everyone.",
+    about:
+      "World Health Day is observed on April 7 each year to mark the founding of the World Health Organization (WHO) in 1948. The day draws global attention to health issues and rallies support for universal health coverage — the principle that every person should have access to the health services they need without financial hardship. Each year the WHO selects a theme targeting a specific challenge, from antimicrobial resistance to climate and health.",
+    history:
+      "The World Health Organization was established on April 7, 1948. World Health Day has been observed annually since 1950. Over the decades it has shone a spotlight on issues ranging from mental health and maternal mortality to vaccine equity and universal health coverage. The day is coordinated across the WHO's 194 member states and thousands of partner organisations worldwide.",
+    countries: ["Global — World Health Organization initiative"],
+    activities: [
+      "Schedule a health check-up or screening you have been putting off",
+      "Learn about the year's World Health Day theme at who.int",
+      "Advocate for universal healthcare access in your community",
+      "Share reliable health information to counter misinformation online",
+    ],
+    relatedSlugs: ["world-mental-health-day", "international-nurses-day"],
+  },
+  {
+    slug: "international-yoga-day",
+    name: "International Yoga Day",
+    month: 6,
+    day: 21,
+    category: "health",
+    emoji: "lotus",
+    tagline: "An ancient practice, a modern gift to the world.",
+    about:
+      "International Yoga Day is observed on June 21 — the summer solstice in the northern hemisphere — to raise global awareness of the many benefits of practising yoga. From stress reduction and improved flexibility to mindfulness and community, yoga has become one of the world's most practised wellness disciplines, with an estimated 300 million practitioners across every continent.",
+    history:
+      "The initiative was proposed by India's Prime Minister Narendra Modi at the United Nations General Assembly in September 2014. The UN adopted the resolution unanimously on December 11, 2014 — with record co-sponsorship from 177 nations — and the first International Day of Yoga was celebrated on June 21, 2015. The date aligns with the summer solstice, which holds deep significance in many yoga and spiritual traditions.",
+    countries: ["Global — United Nations initiative, proposed by India"],
+    culturalContext: {
+      US: "Yoga is a $37 billion industry in the United States with over 36 million practitioners. Studios, apps, and corporate wellness programs have made it mainstream. International Yoga Day sees mass public sessions in parks and plazas across major cities.",
+      KR: "Yoga has grown rapidly in South Korea as a wellness and lifestyle practice, particularly popular among urban millennials. June 21 features outdoor group sessions in major cities and events promoted by K-wellness influencers.",
+      JP: "Yoga in Japan integrates naturally with existing mindfulness traditions — zen meditation, onsen bathing, and forest bathing (shinrin-yoku). International Yoga Day brings outdoor sessions to temple grounds, rooftops, and parks across major cities.",
+    },
+    activities: [
+      "Attend a free outdoor yoga session in your city or community",
+      "Try a beginner yoga routine at home using a free online video",
+      "Learn about the philosophy and history of yoga beyond postures",
+      "Share yoga's mental health benefits with a friend or colleague",
+    ],
+    relatedSlugs: ["world-mental-health-day", "world-health-day"],
+  },
+  {
+    slug: "international-friendship-day",
+    name: "International Friendship Day",
+    month: 7,
+    day: 30,
+    category: "humanitarian",
+    emoji: "handshake",
+    tagline: "Friendship is the foundation of a more peaceful world.",
+    about:
+      "International Friendship Day is observed on July 30 each year to recognise the role friendship plays in promoting peace and building bridges between communities, cultures, and nations. The United Nations recognises friendship as a powerful instrument for inspiring peace efforts and strengthening community resilience. In many countries, the day is celebrated by spending time with friends, exchanging gifts, and tying friendship bands.",
+    history:
+      "International Friendship Day was proclaimed by the UN General Assembly on April 27, 2011, by resolution A/RES/65/275. The concept of a dedicated friendship day has earlier roots — Hallmark Cards and others promoted various 'Friendship Day' observances in the United States from the 1930s onward on different dates. The UN formalised July 30 as the global date to align the celebration internationally.",
+    countries: ["Global — United Nations initiative"],
+    activities: [
+      "Reach out to a friend you haven't spoken to in a while",
+      "Organise a small gathering or shared meal with close friends",
+      "Write a heartfelt letter or message of appreciation to someone you value",
+      "Introduce two friends who don't know each other",
+    ],
+    relatedSlugs: ["world-kindness-day", "valentines-day"],
+  },
+  {
+    slug: "christmas",
+    name: "Christmas",
+    month: 12,
+    day: 25,
+    category: "culture",
+    emoji: "christmas-tree",
+    tagline: "Peace, goodwill, and the warmth of the season.",
+    about:
+      "Christmas is observed on December 25 each year, primarily celebrating the birth of Jesus Christ in Christian tradition, though it is now widely celebrated as a cultural holiday by people of many backgrounds. Traditions include gift-giving, decorating trees, attending church services, sharing festive meals, and singing carols. It is one of the world's most commercially significant and globally recognised holidays.",
+    history:
+      "The earliest evidence of December 25 being observed as Christ's birth date appears in a Roman almanac from 336 CE. The date may have been chosen to coincide with existing midwinter festivals. Many modern Christmas traditions — decorated trees, Father Christmas/Santa Claus, and greeting cards — emerged in the 19th century, shaped by British and German culture, then spread globally through commerce and American popular media throughout the 20th century.",
+    countries: ["United States", "United Kingdom", "Australia", "Canada", "Germany", "France", "Brazil", "South Korea", "Japan"],
+    culturalContext: {
+      US: "Christmas is the United States' largest retail event. Traditions include decorating trees, hanging stockings, exchanging gifts on Christmas morning, and Santa Claus visiting children. The holiday season effectively begins the day after Thanksgiving and runs through December 25.",
+      KR: "Christmas (크리스마스) is a public holiday in South Korea — one of the few East Asian countries where it is. While around 30% of South Koreans identify as Christian, the day is broadly celebrated as a festive occasion. Christmas Eve is especially popular among young couples and for shopping in illuminated commercial districts like Myeongdong.",
+      JP: "Christmas in Japan is primarily a cultural rather than religious holiday, associated with romantic dates, Kentucky Fried Chicken (a beloved tradition since a 1974 marketing campaign), and spectacularly lit cityscapes. New Year remains Japan's central winter holiday, but Christmas Eve has its own distinct festive identity.",
+    },
+    activities: [
+      "Exchange gifts with family or friends",
+      "Cook or share a special holiday meal together",
+      "Volunteer at a local shelter or food bank during the holiday season",
+      "Reflect on the year and share gratitude with those closest to you",
+    ],
+    relatedSlugs: ["new-years-day", "world-kindness-day", "world-childrens-day"],
+  },
 ];
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────

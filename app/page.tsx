@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { SUPPORTED_COUNTRIES, MONTH_NAMES } from "@/lib/types";
 import { getHolidays } from "@/lib/holidays";
+import { getUpcomingEvents, formatEventDate, CATEGORY_LABELS } from "@/lib/events";
 import TodaysEvents from "@/components/TodaysEvents";
 import type { Metadata } from "next";
 
@@ -14,6 +15,7 @@ export default function HomePage() {
   const now = new Date();
   const year = now.getFullYear();
   const month = now.getMonth() + 1;
+  const upcomingEvents = getUpcomingEvents(now, 6);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -236,6 +238,141 @@ export default function HomePage() {
         </div>
         {/* Today's events sidebar */}
         <TodaysEvents />
+        </div>
+
+        {/* World Events section */}
+        <div style={{ marginBottom: 80 }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "flex-end",
+              marginBottom: 24,
+            }}
+          >
+            <div>
+              <p
+                style={{
+                  fontFamily: "'DM Mono', monospace",
+                  fontSize: 11,
+                  color: "var(--muted)",
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  marginBottom: 8,
+                }}
+              >
+                World Events
+              </p>
+              <h2
+                style={{
+                  fontFamily: "'EB Garamond', Georgia, serif",
+                  fontSize: "clamp(22px, 4vw, 32px)",
+                  fontWeight: 400,
+                  letterSpacing: "-0.02em",
+                  lineHeight: 1.2,
+                }}
+              >
+                Coming up around the world
+              </h2>
+            </div>
+            <Link
+              href="/events"
+              style={{
+                fontSize: 13,
+                color: "var(--muted)",
+                textDecoration: "none",
+                borderBottom: "1px solid var(--border)",
+                paddingBottom: 2,
+                whiteSpace: "nowrap",
+                flexShrink: 0,
+                marginLeft: 16,
+              }}
+            >
+              All events →
+            </Link>
+          </div>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
+              gap: 16,
+            }}
+          >
+            {upcomingEvents.map((event) => (
+              <Link
+                key={event.slug}
+                href={`/events/${event.slug}`}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                <div
+                  style={{
+                    border: "1px solid var(--border)",
+                    borderRadius: 10,
+                    padding: "18px 20px",
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 8,
+                    transition: "border-color 0.2s",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontFamily: "'DM Mono', monospace",
+                        fontSize: 11,
+                        color: "var(--holiday)",
+                        letterSpacing: "0.05em",
+                      }}
+                    >
+                      {formatEventDate(event)}
+                    </span>
+                    <span
+                      style={{
+                        fontSize: 10,
+                        color: "var(--muted)",
+                        border: "1px solid var(--border)",
+                        borderRadius: 4,
+                        padding: "2px 6px",
+                      }}
+                    >
+                      {CATEGORY_LABELS[event.category]}
+                    </span>
+                  </div>
+                  <p
+                    style={{
+                      fontFamily: "'EB Garamond', Georgia, serif",
+                      fontSize: 18,
+                      fontWeight: 400,
+                      lineHeight: 1.3,
+                    }}
+                  >
+                    {event.name}
+                  </p>
+                  <p
+                    style={{
+                      fontSize: 12,
+                      color: "var(--muted)",
+                      lineHeight: 1.55,
+                      flex: 1,
+                      display: "-webkit-box",
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: "vertical",
+                      overflow: "hidden",
+                    }}
+                  >
+                    {event.tagline}
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
 
         {/* Features */}
