@@ -74,6 +74,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     });
   }
 
+  // Trust pages
+  for (const slug of ["about", "contact"]) {
+    entries.push({
+      url: `${baseUrl}/${slug}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.5,
+    });
+  }
+
   // Landing pages
   for (const slug of [
     "study-planner",

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { SUPPORTED_COUNTRIES, MONTH_NAMES } from "@/lib/types";
 import { getHolidays } from "@/lib/holidays";
+import { getFeaturedEvents, formatEventDate, CATEGORY_LABELS } from "@/lib/events";
 import TodaysEvents from "@/components/TodaysEvents";
 import type { Metadata } from "next";
 
@@ -14,6 +15,7 @@ export default function HomePage() {
   const now = new Date();
   const year = now.getFullYear();
   const month = now.getMonth() + 1;
+  const featuredEvents = getFeaturedEvents().slice(0, 6);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -237,6 +239,110 @@ export default function HomePage() {
         {/* Today's events sidebar */}
         <TodaysEvents />
         </div>
+
+        {/* Featured Events */}
+        {featuredEvents.length > 0 && (
+          <div style={{ marginBottom: 80 }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "baseline",
+                marginBottom: 24,
+              }}
+            >
+              <h2
+                style={{
+                  fontFamily: "'EB Garamond', Georgia, serif",
+                  fontSize: 24,
+                  fontWeight: 400,
+                  letterSpacing: "-0.01em",
+                }}
+              >
+                Notable world events
+              </h2>
+              <Link
+                href="/events"
+                style={{ fontSize: 12, color: "var(--muted)", textDecoration: "none" }}
+              >
+                View all →
+              </Link>
+            </div>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
+                gap: 14,
+              }}
+            >
+              {featuredEvents.map((event) => (
+                <Link
+                  key={event.slug}
+                  href={`/events/${event.slug}`}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  <div
+                    style={{
+                      border: "1px solid var(--border)",
+                      borderRadius: 10,
+                      padding: "16px 18px",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 6,
+                      height: "100%",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontFamily: "'DM Mono', monospace",
+                          fontSize: 10,
+                          color: "var(--holiday)",
+                          letterSpacing: "0.05em",
+                        }}
+                      >
+                        {formatEventDate(event)}
+                      </span>
+                      <span
+                        style={{
+                          fontSize: 10,
+                          color: "var(--muted)",
+                          border: "1px solid var(--border)",
+                          borderRadius: 3,
+                          padding: "1px 6px",
+                        }}
+                      >
+                        {CATEGORY_LABELS[event.category]}
+                      </span>
+                    </div>
+                    <p style={{ fontSize: 14, fontWeight: 500, lineHeight: 1.3 }}>
+                      {event.name}
+                    </p>
+                    <p
+                      style={{
+                        fontSize: 12,
+                        color: "var(--muted)",
+                        lineHeight: 1.55,
+                        display: "-webkit-box",
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                      }}
+                    >
+                      {event.tagline}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Features */}
         <div

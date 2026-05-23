@@ -6,6 +6,7 @@ import {
   getHolidayContentBySlug,
 } from "@/lib/holidays-content";
 import { SUPPORTED_COUNTRIES } from "@/lib/types";
+import { buildFaqSchema } from "@/lib/seo-helpers";
 
 const BASE_URL = "https://printablecalendars.io";
 
@@ -55,6 +56,31 @@ export default async function HolidayContentPage({ params }: PageProps) {
 
   const currentYear = new Date().getFullYear();
 
+  const faqs = [
+    {
+      q: `When is ${holiday.name}?`,
+      a: `${holiday.name} falls on ${holiday.dateLabel}. ${holiday.isLunar ? "Because it follows the lunar calendar, the Gregorian date shifts each year — check the calendar links below for exact dates." : "The date is fixed and does not change year to year."}`,
+    },
+    {
+      q: `Is ${holiday.name} a public holiday?`,
+      a: `${holiday.name} is a public holiday in ${holiday.countryName}. Most businesses, government offices, and schools are closed on this day. It is one of the most significant national holidays in the country.`,
+    },
+    {
+      q: `What do people eat during ${holiday.name}?`,
+      a: `Traditional foods eaten during ${holiday.name} include ${holiday.food.slice(0, 3).map((f) => f.name).join(", ")}. ${holiday.food[0].description}`,
+    },
+    {
+      q: `What are some activities associated with ${holiday.name}?`,
+      a: holiday.activities.slice(0, 3).join(" "),
+    },
+    {
+      q: `Is ${holiday.name} a good time to visit ${holiday.countryName}?`,
+      a: holiday.travelTips,
+    },
+  ];
+
+  const faqSchema = buildFaqSchema(faqs);
+
   const eventJsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -85,6 +111,10 @@ export default async function HolidayContentPage({ params }: PageProps) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       <div style={{ maxWidth: 760, margin: "0 auto", padding: "56px 24px 96px" }}>
@@ -292,6 +322,47 @@ export default async function HolidayContentPage({ params }: PageProps) {
             <p style={{ fontSize: 14, lineHeight: 1.85, color: "var(--fg)" }}>
               {holiday.travelTips}
             </p>
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section style={{ marginBottom: 56 }}>
+          <Label>Frequently asked questions</Label>
+          <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+            {faqs.map((faq, i) => (
+              <details
+                key={i}
+                style={{ borderTop: "1px solid var(--border)", padding: "16px 0" }}
+              >
+                <summary
+                  style={{
+                    fontSize: 15,
+                    fontWeight: 500,
+                    cursor: "pointer",
+                    listStyle: "none",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    gap: 12,
+                  }}
+                >
+                  {faq.q}
+                  <span style={{ fontSize: 18, opacity: 0.4, flexShrink: 0 }}>+</span>
+                </summary>
+                <p
+                  style={{
+                    fontSize: 14,
+                    lineHeight: 1.75,
+                    color: "var(--muted)",
+                    marginTop: 12,
+                    paddingRight: 32,
+                  }}
+                >
+                  {faq.a}
+                </p>
+              </details>
+            ))}
+            <div style={{ borderTop: "1px solid var(--border)" }} />
           </div>
         </section>
 

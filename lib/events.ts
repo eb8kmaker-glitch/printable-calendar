@@ -45,6 +45,44 @@ export function getRelatedEvents(event: WorldEvent): WorldEvent[] {
     .filter(Boolean) as WorldEvent[];
 }
 
+const FEATURED_SLUGS = [
+  "earth-day",
+  "world-environment-day",
+  "international-womens-day",
+  "world-mental-health-day",
+  "world-kindness-day",
+  "valentines-day",
+  "world-happiness-day",
+  "world-teachers-day",
+  "world-book-day",
+  "international-day-of-peace",
+  "human-rights-day",
+  "world-food-day",
+  "new-years-day",
+  "international-day-of-education",
+];
+
+export function getFeaturedEvents(): WorldEvent[] {
+  return FEATURED_SLUGS
+    .map((s) => getEventBySlug(s))
+    .filter(Boolean) as WorldEvent[];
+}
+
+/** Events happening within the next N days (inclusive today). */
+export function getEventsInNextDays(days = 14, date: Date = new Date()): WorldEvent[] {
+  const results: WorldEvent[] = [];
+  for (let i = 0; i < days; i++) {
+    const d = new Date(date);
+    d.setDate(d.getDate() + i);
+    const m = d.getMonth() + 1;
+    const day = d.getDate();
+    WORLD_EVENTS.filter((e) => e.month === m && e.day === day).forEach((e) => {
+      if (!results.find((r) => r.slug === e.slug)) results.push(e);
+    });
+  }
+  return results;
+}
+
 export function formatEventDate(event: WorldEvent): string {
   const d = new Date(2000, event.month - 1, event.day);
   return d.toLocaleDateString("en-US", { month: "long", day: "numeric" });
