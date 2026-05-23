@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { SUPPORTED_COUNTRIES, MONTH_NAMES } from "@/lib/types";
 import { getHolidays } from "@/lib/holidays";
-import { getUpcomingEvents, formatEventDate, CATEGORY_LABELS } from "@/lib/events";
+import { getFeaturedEvents, formatEventDate, CATEGORY_LABELS } from "@/lib/events";
 import TodaysEvents from "@/components/TodaysEvents";
 import type { Metadata } from "next";
 
@@ -15,7 +15,7 @@ export default function HomePage() {
   const now = new Date();
   const year = now.getFullYear();
   const month = now.getMonth() + 1;
-  const upcomingEvents = getUpcomingEvents(now, 6);
+  const featuredEvents = getFeaturedEvents().slice(0, 6);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -240,140 +240,109 @@ export default function HomePage() {
         <TodaysEvents />
         </div>
 
-        {/* World Events section */}
-        <div style={{ marginBottom: 80 }}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "flex-end",
-              marginBottom: 24,
-            }}
-          >
-            <div>
-              <p
-                style={{
-                  fontFamily: "'DM Mono', monospace",
-                  fontSize: 11,
-                  color: "var(--muted)",
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                  marginBottom: 8,
-                }}
-              >
-                World Events
-              </p>
+        {/* Featured Events */}
+        {featuredEvents.length > 0 && (
+          <div style={{ marginBottom: 80 }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "baseline",
+                marginBottom: 24,
+              }}
+            >
               <h2
                 style={{
                   fontFamily: "'EB Garamond', Georgia, serif",
-                  fontSize: "clamp(22px, 4vw, 32px)",
+                  fontSize: 24,
                   fontWeight: 400,
-                  letterSpacing: "-0.02em",
-                  lineHeight: 1.2,
+                  letterSpacing: "-0.01em",
                 }}
               >
-                Coming up around the world
+                Notable world events
               </h2>
+              <Link
+                href="/events"
+                style={{ fontSize: 12, color: "var(--muted)", textDecoration: "none" }}
+              >
+                View all →
+              </Link>
             </div>
-            <Link
-              href="/events"
+            <div
               style={{
-                fontSize: 13,
-                color: "var(--muted)",
-                textDecoration: "none",
-                borderBottom: "1px solid var(--border)",
-                paddingBottom: 2,
-                whiteSpace: "nowrap",
-                flexShrink: 0,
-                marginLeft: 16,
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
+                gap: 14,
               }}
             >
-              All events →
-            </Link>
-          </div>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
-              gap: 16,
-            }}
-          >
-            {upcomingEvents.map((event) => (
-              <Link
-                key={event.slug}
-                href={`/events/${event.slug}`}
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
-                <div
-                  style={{
-                    border: "1px solid var(--border)",
-                    borderRadius: 10,
-                    padding: "18px 20px",
-                    height: "100%",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 8,
-                    transition: "border-color 0.2s",
-                  }}
+              {featuredEvents.map((event) => (
+                <Link
+                  key={event.slug}
+                  href={`/events/${event.slug}`}
+                  style={{ textDecoration: "none", color: "inherit" }}
                 >
                   <div
                     style={{
+                      border: "1px solid var(--border)",
+                      borderRadius: 10,
+                      padding: "16px 18px",
                       display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
+                      flexDirection: "column",
+                      gap: 6,
+                      height: "100%",
                     }}
                   >
-                    <span
+                    <div
                       style={{
-                        fontFamily: "'DM Mono', monospace",
-                        fontSize: 11,
-                        color: "var(--holiday)",
-                        letterSpacing: "0.05em",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
                       }}
                     >
-                      {formatEventDate(event)}
-                    </span>
-                    <span
+                      <span
+                        style={{
+                          fontFamily: "'DM Mono', monospace",
+                          fontSize: 10,
+                          color: "var(--holiday)",
+                          letterSpacing: "0.05em",
+                        }}
+                      >
+                        {formatEventDate(event)}
+                      </span>
+                      <span
+                        style={{
+                          fontSize: 10,
+                          color: "var(--muted)",
+                          border: "1px solid var(--border)",
+                          borderRadius: 3,
+                          padding: "1px 6px",
+                        }}
+                      >
+                        {CATEGORY_LABELS[event.category]}
+                      </span>
+                    </div>
+                    <p style={{ fontSize: 14, fontWeight: 500, lineHeight: 1.3 }}>
+                      {event.name}
+                    </p>
+                    <p
                       style={{
-                        fontSize: 10,
+                        fontSize: 12,
                         color: "var(--muted)",
-                        border: "1px solid var(--border)",
-                        borderRadius: 4,
-                        padding: "2px 6px",
+                        lineHeight: 1.55,
+                        display: "-webkit-box",
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
                       }}
                     >
-                      {CATEGORY_LABELS[event.category]}
-                    </span>
+                      {event.tagline}
+                    </p>
                   </div>
-                  <p
-                    style={{
-                      fontFamily: "'EB Garamond', Georgia, serif",
-                      fontSize: 18,
-                      fontWeight: 400,
-                      lineHeight: 1.3,
-                    }}
-                  >
-                    {event.name}
-                  </p>
-                  <p
-                    style={{
-                      fontSize: 12,
-                      color: "var(--muted)",
-                      lineHeight: 1.55,
-                      flex: 1,
-                      display: "-webkit-box",
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: "vertical",
-                      overflow: "hidden",
-                    }}
-                  >
-                    {event.tagline}
-                  </p>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Features */}
         <div

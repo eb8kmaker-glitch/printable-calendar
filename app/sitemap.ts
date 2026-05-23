@@ -2,6 +2,7 @@ import { MetadataRoute } from "next";
 import { SUPPORTED_COUNTRIES } from "@/lib/types";
 import { getHolidays } from "@/lib/holidays";
 import { WORLD_EVENTS } from "@/lib/events";
+import { CULTURAL_HOLIDAYS } from "@/lib/holidays-content";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://printablecalendars.io";
@@ -53,6 +54,49 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${baseUrl}/events/${event.slug}`,
       lastModified: new Date(),
       changeFrequency: "yearly",
+      priority: 0.6,
+    });
+  }
+
+  // Cultural holidays index + detail pages
+  entries.push({
+    url: `${baseUrl}/holidays`,
+    lastModified: new Date(),
+    changeFrequency: "monthly",
+    priority: 0.7,
+  });
+  for (const h of CULTURAL_HOLIDAYS) {
+    entries.push({
+      url: `${baseUrl}/holidays/${h.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 0.65,
+    });
+  }
+
+  // Trust pages
+  for (const slug of ["about", "contact"]) {
+    entries.push({
+      url: `${baseUrl}/${slug}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.5,
+    });
+  }
+
+  // Landing pages
+  for (const slug of [
+    "study-planner",
+    "ramadan-2026",
+    "school-calendar-2026",
+    "holiday-planner",
+    "teacher-planner",
+    "wedding-countdown",
+  ]) {
+    entries.push({
+      url: `${baseUrl}/${slug}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
       priority: 0.6,
     });
   }
