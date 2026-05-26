@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getHolidays, buildCalendarDays, getCountryConfig } from "@/lib/holidays";
 import { MONTH_NAMES, SUPPORTED_COUNTRIES } from "@/lib/types";
+import { getEventsByMonth, formatEventDate, CATEGORY_LABELS } from "@/lib/events";
 import CalendarGrid from "@/components/CalendarGrid";
 import MonthNav from "@/components/MonthNav";
 import DownloadButton from "@/components/DownloadButton";
@@ -64,6 +65,7 @@ export default async function CalendarPage({ params }: PageProps) {
   const days = buildCalendarDays(year, month, holidays);
   const monthHolidays = days.filter((d) => d.holiday && d.isCurrentMonth);
   const monthName = MONTH_NAMES[month - 1];
+  const monthEvents = getEventsByMonth(month).slice(0, 8);
 
   // Structured data
   const jsonLd = {
@@ -200,6 +202,84 @@ export default async function CalendarPage({ params }: PageProps) {
                 </div>
               ))}
             </div>
+          </section>
+        )}
+
+        {/* World events this month */}
+        {monthEvents.length > 0 && (
+          <section
+            className="no-print"
+            style={{
+              marginTop: 32,
+              padding: 24,
+              border: "1px solid var(--border)",
+              borderRadius: 10,
+            }}
+          >
+            <h2
+              style={{
+                fontFamily: "'EB Garamond', Georgia, serif",
+                fontSize: 20,
+                fontWeight: 400,
+                marginBottom: 16,
+                color: "var(--fg)",
+              }}
+            >
+              World Events in {monthName}
+            </h2>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
+                gap: 10,
+              }}
+            >
+              {monthEvents.map((event) => (
+                <Link
+                  key={event.slug}
+                  href={`/events/${event.slug}`}
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "flex-start",
+                    gap: 12,
+                    padding: "10px 14px",
+                    border: "1px solid var(--border)",
+                    borderRadius: 8,
+                    textDecoration: "none",
+                    color: "inherit",
+                  }}
+                >
+                  <span style={{ fontSize: 13, lineHeight: 1.4 }}>{event.name}</span>
+                  <span
+                    style={{
+                      fontFamily: "'DM Mono', monospace",
+                      fontSize: 10,
+                      color: "var(--holiday)",
+                      whiteSpace: "nowrap",
+                      flexShrink: 0,
+                      paddingTop: 2,
+                    }}
+                  >
+                    {formatEventDate(event)}
+                  </span>
+                </Link>
+              ))}
+            </div>
+            <Link
+              href={`/events`}
+              style={{
+                display: "inline-block",
+                marginTop: 14,
+                fontSize: 12,
+                color: "var(--muted)",
+                textDecoration: "none",
+                borderBottom: "1px solid var(--border)",
+                paddingBottom: 1,
+              }}
+            >
+              Browse all world events →
+            </Link>
           </section>
         )}
 

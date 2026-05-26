@@ -9,6 +9,7 @@ import {
   CATEGORY_LABELS,
 } from "@/lib/events";
 import { SUPPORTED_COUNTRIES } from "@/lib/types";
+import { buildFaqSchema } from "@/lib/seo-helpers";
 
 const BASE_URL = "https://printablecalendars.io";
 
@@ -110,6 +111,31 @@ export default async function EventDetailPage({ params }: PageProps) {
   const hasCultural =
     event.culturalContext && Object.keys(event.culturalContext).length > 0;
 
+  const faqs = [
+    {
+      q: `When is ${event.name}?`,
+      a: `${event.name} is observed annually on ${formatEventDate(event)}. The date is fixed each year — ${formatEventDate(event)} — and does not shift based on the lunar calendar or weekday.`,
+    },
+    {
+      q: `What is ${event.name}?`,
+      a: event.about.slice(0, 300) + (event.about.length > 300 ? "…" : ""),
+    },
+    {
+      q: `Is ${event.name} a public holiday?`,
+      a: `${event.name} is an international observance or awareness day, not a public holiday in most countries. It does not typically result in days off work or school closures, though some countries and organisations hold official events.`,
+    },
+    {
+      q: `How can I participate in ${event.name}?`,
+      a: event.activities.slice(0, 3).join(" ") + " These are some of the most accessible ways to engage with the day's purpose.",
+    },
+    {
+      q: `Which countries observe ${event.name}?`,
+      a: event.countries.join(", ") + ".",
+    },
+  ];
+
+  const faqSchema = buildFaqSchema(faqs);
+
   return (
     <>
       <script
@@ -119,6 +145,10 @@ export default async function EventDetailPage({ params }: PageProps) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       <div style={{ maxWidth: 760, margin: "0 auto", padding: "56px 24px 96px" }}>
@@ -326,6 +356,50 @@ export default async function EventDetailPage({ params }: PageProps) {
               </li>
             ))}
           </ul>
+        </section>
+
+        {/* FAQ */}
+        <section style={{ marginBottom: 56 }}>
+          <SectionLabel>Frequently asked questions</SectionLabel>
+          <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+            {faqs.map((faq, i) => (
+              <details
+                key={i}
+                style={{
+                  borderTop: "1px solid var(--border)",
+                  padding: "16px 0",
+                }}
+              >
+                <summary
+                  style={{
+                    fontSize: 15,
+                    fontWeight: 500,
+                    cursor: "pointer",
+                    listStyle: "none",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    gap: 12,
+                  }}
+                >
+                  {faq.q}
+                  <span style={{ fontSize: 18, opacity: 0.4, flexShrink: 0 }}>+</span>
+                </summary>
+                <p
+                  style={{
+                    fontSize: 14,
+                    lineHeight: 1.75,
+                    color: "var(--muted)",
+                    marginTop: 12,
+                    paddingRight: 32,
+                  }}
+                >
+                  {faq.a}
+                </p>
+              </details>
+            ))}
+            <div style={{ borderTop: "1px solid var(--border)" }} />
+          </div>
         </section>
 
         {/* Calendar CTA */}
