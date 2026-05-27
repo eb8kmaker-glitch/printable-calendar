@@ -109,12 +109,20 @@ body {
 
 .print-only { display: none; }
 
-/* Kakao AdFit responsive */
-.kakao-pc { display: none; }
-.kakao-mobile { display: inline-block; }
+/* Kakao AdFit responsive — wrapper controls visibility, not <ins> */
+.kakao-pc-wrap {
+  display: none;
+  justify-content: center;
+  padding: 12px 0;
+}
+.kakao-mobile-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 12px 0;
+}
 @media (min-width: 768px) {
-  .kakao-pc { display: inline-block; }
-  .kakao-mobile { display: none; }
+  .kakao-pc-wrap { display: flex; }
+  .kakao-mobile-wrap { display: none; }
 }
 
 @keyframes fadeUp {

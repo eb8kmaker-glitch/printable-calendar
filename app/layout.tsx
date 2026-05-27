@@ -80,15 +80,17 @@ export default function RootLayout({
           <Header />
           <main style={{ minHeight: "calc(100vh - 120px)" }}>{children}</main>
           {/* Kakao AdFit — PC 728×90 (≥768px) / Mobile 320×50 (<768px) */}
-          <div className="no-print" style={{ display: "flex", justifyContent: "center", padding: "12px 0" }}>
+          <div className="no-print kakao-pc-wrap">
             <ins
-              className="kakao_ad_area kakao-pc"
+              className="kakao_ad_area"
               data-ad-unit="DAN-CoVdtClU3lNByMCT"
               data-ad-width="728"
               data-ad-height="90"
             />
+          </div>
+          <div className="no-print kakao-mobile-wrap">
             <ins
-              className="kakao_ad_area kakao-mobile"
+              className="kakao_ad_area"
               data-ad-unit="DAN-3RN3Rk3bpFXPgnnP"
               data-ad-width="320"
               data-ad-height="50"
