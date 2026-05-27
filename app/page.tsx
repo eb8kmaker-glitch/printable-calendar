@@ -3,12 +3,37 @@ import { SUPPORTED_COUNTRIES, MONTH_NAMES } from "@/lib/types";
 import { getHolidays } from "@/lib/holidays";
 import { getFeaturedEvents, formatEventDate, CATEGORY_LABELS } from "@/lib/events";
 import TodaysEvents from "@/components/TodaysEvents";
+import AdSenseBanner from "@/components/AdSenseBanner";
 import type { Metadata } from "next";
+import { buildFaqSchema } from "@/lib/seo-helpers";
+
+const BASE_URL = "https://printablecalendars.app";
 
 export const metadata: Metadata = {
-  title: "Free Printable Calendars — Download PDF with Public Holidays",
+  title: "Free Printable Calendars 2026 — PDF Download with Public Holidays",
   description:
-    "Download free printable monthly calendars for USA, Japan and South Korea. Includes public holidays. A4 PDF, minimal design, instant download.",
+    "Download free printable monthly and annual calendars for 2026 with public holidays. USA, Japan, South Korea. A4 PDF — no login, no watermark, instant download.",
+  keywords: [
+    "free printable calendar 2026",
+    "printable calendar PDF",
+    "printable monthly calendar",
+    "calendar with public holidays",
+    "US calendar 2026",
+    "Japan calendar 2026",
+    "South Korea calendar 2026",
+    "annual calendar 2026 PDF",
+    "A4 calendar download",
+    "free calendar no signup",
+  ],
+  alternates: { canonical: BASE_URL },
+  openGraph: {
+    title: "Free Printable Calendars 2026 — PDF with Public Holidays",
+    description:
+      "Monthly and annual calendars for USA, Japan, South Korea. Public holidays included. Free A4 PDF — no login required.",
+    url: BASE_URL,
+    type: "website",
+    siteName: "PrintableCalendars",
+  },
 };
 
 export default function HomePage() {
@@ -17,24 +42,60 @@ export default function HomePage() {
   const month = now.getMonth() + 1;
   const featuredEvents = getFeaturedEvents().slice(0, 6);
 
-  const jsonLd = {
+  const webSiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "PrintableCalendars",
-    url: "https://printablecalendars.io",
-    description: "Free printable monthly calendars with public holidays",
+    url: BASE_URL,
+    description:
+      "Free printable monthly and annual calendars with public holidays for USA, Japan, and South Korea.",
     potentialAction: {
       "@type": "SearchAction",
-      target: "https://printablecalendars.io/calendar/{country}/{year}/{month}",
+      target: `${BASE_URL}/calendar/{country}/{year}/{month}`,
       "query-input": "required name=country",
     },
   };
+
+  const faqSchema = buildFaqSchema([
+    {
+      q: "Is PrintableCalendars really free?",
+      a: "Yes. All calendars are completely free to download with no account, no payment, and no watermark.",
+    },
+    {
+      q: "Which countries are supported?",
+      a: "USA (United States), Japan, and South Korea. More countries including Australia, Canada, UK, and Germany are coming soon.",
+    },
+    {
+      q: "What file format are the calendars?",
+      a: "Calendars download as A4 landscape PDF, optimized for both color and black-and-white printing on any home printer.",
+    },
+    {
+      q: "Do the calendars include public holidays?",
+      a: "Yes. Every calendar includes all official public holidays for the selected country.",
+    },
+    {
+      q: "How do I download a printable calendar?",
+      a: "Select your country, year, and month, then click the Download PDF button. No login or sign-up is required.",
+    },
+    {
+      q: "What is the difference between monthly and yearly calendars?",
+      a: "Monthly calendars show one month at a time with a full grid. Yearly calendars show all 12 months as a compact overview for the entire year.",
+    },
+    {
+      q: "Can I use these calendars for commercial purposes?",
+      a: "Yes. The calendars are free to use, print, and distribute.",
+    },
+  ]);
 
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "64px 24px" }}>
@@ -76,6 +137,9 @@ export default function HomePage() {
             View this month →
           </Link>
         </div>
+
+        {/* AdSense — Hero 하단 배너 */}
+        <AdSenseBanner />
 
         {/* Country cards + Today's Events sidebar */}
         <div

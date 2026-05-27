@@ -6,7 +6,7 @@ import {
   COUNTRY_FULL_NAMES,
 } from "@/lib/holidays-content";
 
-const BASE_URL = "https://printablecalendars.io";
+const BASE_URL = "https://printablecalendars.app";
 
 export const metadata: Metadata = {
   title: "Cultural Holidays — History, Traditions & Printable Calendars",

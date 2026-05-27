@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { SUPPORTED_COUNTRIES } from "@/lib/types";
 import { buildWebPageSchema } from "@/lib/seo-helpers";
 
-const BASE_URL = "https://printablecalendars.io";
+const BASE_URL = "https://printablecalendars.app";
 
 export const metadata: Metadata = {
   title: "About PrintableCalendars — Free Printable Calendar PDFs",

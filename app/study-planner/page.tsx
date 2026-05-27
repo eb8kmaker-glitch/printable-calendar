@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { SUPPORTED_COUNTRIES, MONTH_NAMES } from "@/lib/types";
 import AdSlot from "@/components/AdSlot";
 
-const BASE_URL = "https://printablecalendars.io";
+const BASE_URL = "https://printablecalendars.app";
 
 export const metadata: Metadata = {
   title: "Free Printable Study Planner Calendars — PDF Download",

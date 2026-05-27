@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { SUPPORTED_COUNTRIES } from "@/lib/types";
 import AdSlot from "@/components/AdSlot";
 
-const BASE_URL = "https://printablecalendars.io";
+const BASE_URL = "https://printablecalendars.app";
 
 // Ramadan 2026: approx Feb 18 – Mar 19, 2026
 // Ramadan 2027: approx Feb 7 – Mar 8, 2027

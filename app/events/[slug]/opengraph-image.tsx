@@ -109,7 +109,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
             letterSpacing: "0.04em",
           }}
         >
-          <span>Free printable calendars — printablecalendars.io</span>
+          <span>Free printable calendars — printablecalendars.app</span>
         </div>
       </div>
     ),

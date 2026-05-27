@@ -4,7 +4,7 @@ import { SUPPORTED_COUNTRIES, MONTH_NAMES } from "@/lib/types";
 import { getHolidays } from "@/lib/holidays";
 import AdSlot from "@/components/AdSlot";
 
-const BASE_URL = "https://printablecalendars.io";
+const BASE_URL = "https://printablecalendars.app";
 
 export const metadata: Metadata = {
   title: "Holiday Planner — Map Your Time Off with Printable Calendars",
