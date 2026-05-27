@@ -83,14 +83,12 @@ export default function RootLayout({
           <div className="no-print" style={{ display: "flex", justifyContent: "center", padding: "12px 0" }}>
             <ins
               className="kakao_ad_area kakao-pc"
-              style={{ display: "none" }}
               data-ad-unit="DAN-CoVdtClU3lNByMCT"
               data-ad-width="728"
               data-ad-height="90"
             />
             <ins
               className="kakao_ad_area kakao-mobile"
-              style={{ display: "none" }}
               data-ad-unit="DAN-3RN3Rk3bpFXPgnnP"
               data-ad-width="320"
               data-ad-height="50"
