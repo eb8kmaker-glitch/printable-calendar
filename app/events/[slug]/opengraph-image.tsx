@@ -33,7 +33,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
         {/* Top row: site name + category */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <span style={{ fontFamily: "serif", fontSize: 20, opacity: 0.45, letterSpacing: "0.02em" }}>
-            printcal
+            PrintableCalendars
           </span>
           {category && (
             <span

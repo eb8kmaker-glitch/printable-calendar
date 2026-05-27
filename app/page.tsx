@@ -12,13 +12,16 @@ const BASE_URL = "https://printablecalendars.app";
 export const metadata: Metadata = {
   title: "Free Printable Calendars 2026 — PDF Download with Public Holidays",
   description:
-    "Download free printable monthly and annual calendars for 2026 with public holidays. USA, Japan, South Korea. A4 PDF — no login, no watermark, instant download.",
+    "Download free printable monthly and annual calendars for 2026 with public holidays. USA, UK, Australia, Canada, Japan, South Korea. A4 PDF — no login, no watermark, instant download.",
   keywords: [
     "free printable calendar 2026",
     "printable calendar PDF",
     "printable monthly calendar",
     "calendar with public holidays",
     "US calendar 2026",
+    "UK calendar 2026",
+    "Australia calendar 2026",
+    "Canada calendar 2026",
     "Japan calendar 2026",
     "South Korea calendar 2026",
     "annual calendar 2026 PDF",
@@ -29,7 +32,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Free Printable Calendars 2026 — PDF with Public Holidays",
     description:
-      "Monthly and annual calendars for USA, Japan, South Korea. Public holidays included. Free A4 PDF — no login required.",
+      "Monthly and annual calendars for USA, UK, Australia, Canada, Japan, South Korea. Public holidays included. Free A4 PDF — no login required.",
     url: BASE_URL,
     type: "website",
     siteName: "PrintableCalendars",
@@ -48,7 +51,7 @@ export default function HomePage() {
     name: "PrintableCalendars",
     url: BASE_URL,
     description:
-      "Free printable monthly and annual calendars with public holidays for USA, Japan, and South Korea.",
+      "Free printable monthly and annual calendars with public holidays for USA, UK, Australia, Canada, Japan, and South Korea.",
     potentialAction: {
       "@type": "SearchAction",
       target: `${BASE_URL}/calendar/{country}/{year}/{month}`,
@@ -63,7 +66,7 @@ export default function HomePage() {
     },
     {
       q: "Which countries are supported?",
-      a: "USA (United States), Japan, and South Korea. More countries including Australia, Canada, UK, and Germany are coming soon.",
+      a: "USA, United Kingdom, Australia, Canada, Japan, and South Korea. Public holidays for all six countries are included.",
     },
     {
       q: "What file format are the calendars?",
@@ -116,8 +119,8 @@ export default function HomePage() {
             <span style={{ opacity: 0.4 }}>free forever.</span>
           </h1>
           <p style={{ fontSize: 16, color: "var(--muted)", lineHeight: 1.6, marginBottom: 28 }}>
-            Download monthly calendars with public holidays for USA, Japan, and
-            South Korea. Clean A4 PDFs, no login required.
+            Download monthly calendars with public holidays for USA, UK, Australia,
+            Canada, Japan, and South Korea. Clean A4 PDFs, no login required.
           </p>
           <Link
             href={`/calendar/us/${year}/${month}`}

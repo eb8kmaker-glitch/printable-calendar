@@ -28,6 +28,27 @@ export const SUPPORTED_COUNTRIES: CountryConfig[] = [
     dateFormat: "MM/DD/YYYY",
   },
   {
+    code: "GB",
+    name: "United Kingdom",
+    locale: "en-GB",
+    weekStart: 1,
+    dateFormat: "DD/MM/YYYY",
+  },
+  {
+    code: "AU",
+    name: "Australia",
+    locale: "en-AU",
+    weekStart: 1,
+    dateFormat: "DD/MM/YYYY",
+  },
+  {
+    code: "CA",
+    name: "Canada",
+    locale: "en-CA",
+    weekStart: 0,
+    dateFormat: "YYYY-MM-DD",
+  },
+  {
     code: "KR",
     name: "South Korea",
     locale: "ko-KR",
@@ -45,6 +66,9 @@ export const SUPPORTED_COUNTRIES: CountryConfig[] = [
 
 export const COUNTRY_NAMES: Record<string, string> = {
   US: "United States",
+  GB: "United Kingdom",
+  AU: "Australia",
+  CA: "Canada",
   KR: "South Korea",
   JP: "Japan",
 };

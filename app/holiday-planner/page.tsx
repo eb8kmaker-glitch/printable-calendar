@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { SUPPORTED_COUNTRIES, MONTH_NAMES } from "@/lib/types";
 import { getHolidays } from "@/lib/holidays";
 import AdSlot from "@/components/AdSlot";
+import { buildFaqSchema } from "@/lib/seo-helpers";
 
 const BASE_URL = "https://printablecalendars.app";
 
@@ -35,7 +36,26 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const COUNTRY_FLAG: Record<string, string> = { US: "🇺🇸", KR: "🇰🇷", JP: "🇯🇵" };
+const COUNTRY_FLAG: Record<string, string> = { US: "🇺🇸", GB: "🇬🇧", AU: "🇦🇺", CA: "🇨🇦", KR: "🇰🇷", JP: "🇯🇵" };
+
+const HOLIDAY_PLANNER_FAQS = [
+  {
+    q: "What is a holiday planner 2026 printable?",
+    a: "A holiday planner is a monthly calendar PDF you download and print to map out your time off around public holidays. It shows every public holiday for your country so you can identify bridge days, long weekends, and holiday clusters before booking flights or accommodation.",
+  },
+  {
+    q: "How do I plan a vacation around public holidays?",
+    a: "Start by printing the months that contain public holidays for your country. Mark the holidays, then look for adjacent Mondays or Fridays you could take as annual leave to create 4- or 5-day breaks using just one or two vacation days. This is especially effective around Tuesday or Thursday holidays.",
+  },
+  {
+    q: "Which countries' holidays are shown in the holiday planner?",
+    a: "The planner shows official public holidays for USA, United Kingdom, Australia, Canada, Japan, and South Korea. You can compare across countries if you work remotely or are planning international travel.",
+  },
+  {
+    q: "Can I download a vacation planner template as a PDF?",
+    a: "Yes. Click any country link next to a holiday-rich month to view the full calendar, then use the Download PDF button on that page. All PDFs are free, A4 landscape, and require no account.",
+  },
+];
 
 const PLANNING_TIPS = [
   ["Bridge days", "When a holiday falls on Tuesday or Thursday, taking the adjacent Monday or Friday creates a 4-day weekend with just one vacation day."],
@@ -48,6 +68,7 @@ export default function HolidayPlannerPage() {
   const now = new Date();
   const year = now.getFullYear();
   const currentMonth = now.getMonth() + 1;
+  const faqSchema = buildFaqSchema(HOLIDAY_PLANNER_FAQS.map((f) => ({ q: f.q, a: f.a })));
 
   // Gather upcoming holidays for each country
   const upcomingByCountry = SUPPORTED_COUNTRIES.map((c) => {
@@ -77,6 +98,10 @@ export default function HolidayPlannerPage() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "64px 24px" }}>
         <AdSlot slot="top-banner" style={{ marginBottom: 32 }} />
 
@@ -331,6 +356,32 @@ export default function HolidayPlannerPage() {
               <div key={title} style={{ borderTop: "1px solid var(--border)", paddingTop: 16 }}>
                 <p style={{ fontSize: 14, fontWeight: 500, marginBottom: 6 }}>{title}</p>
                 <p style={{ fontSize: 13, color: "var(--muted)", lineHeight: 1.65 }}>{desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section style={{ marginTop: 64, paddingTop: 40, borderTop: "1px solid var(--border)" }}>
+          <h2
+            style={{
+              fontFamily: "'EB Garamond', Georgia, serif",
+              fontSize: 28,
+              fontWeight: 400,
+              letterSpacing: "-0.01em",
+              marginBottom: 32,
+            }}
+          >
+            Frequently asked questions
+          </h2>
+          <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+            {HOLIDAY_PLANNER_FAQS.map((faq, i) => (
+              <div
+                key={i}
+                style={{ borderTop: "1px solid var(--border)", paddingTop: 20, paddingBottom: 20 }}
+              >
+                <p style={{ fontSize: 15, fontWeight: 500, marginBottom: 8 }}>{faq.q}</p>
+                <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.7 }}>{faq.a}</p>
               </div>
             ))}
           </div>

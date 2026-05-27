@@ -43,7 +43,7 @@ export default function Header() {
             letterSpacing: "-0.02em",
           }}
         >
-          printcal
+          PrintableCalendars
         </Link>
 
         {/* Nav */}

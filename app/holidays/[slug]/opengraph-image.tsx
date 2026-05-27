@@ -54,7 +54,7 @@ export default async function Image({
               letterSpacing: "0.02em",
             }}
           >
-            printcal
+            PrintableCalendars
           </span>
           {countryName && (
             <span

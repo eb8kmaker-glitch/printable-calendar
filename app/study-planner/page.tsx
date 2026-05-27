@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { SUPPORTED_COUNTRIES, MONTH_NAMES } from "@/lib/types";
 import AdSlot from "@/components/AdSlot";
+import { buildFaqSchema } from "@/lib/seo-helpers";
 
 const BASE_URL = "https://printablecalendars.app";
 
@@ -33,6 +34,29 @@ export const metadata: Metadata = {
   },
   robots: { index: true, follow: true },
 };
+
+const STUDY_FAQS = [
+  {
+    q: "What is a printable study planner 2026?",
+    a: "A printable study planner is a monthly calendar you download as a PDF and print at home. It gives you a physical grid to write in exam dates, assignment deadlines, and study blocks — without needing an app or an account.",
+  },
+  {
+    q: "How do I use a free study schedule template effectively?",
+    a: "Start by filling in fixed commitments: exam dates, submission deadlines, and class times. Then work backwards to schedule study blocks. Print one month at a time so you can annotate directly on paper. Many students colour-code by subject.",
+  },
+  {
+    q: "Do the study planner calendars include public holidays?",
+    a: "Yes. Every calendar includes official public holidays for your chosen country (USA, UK, Australia, Canada, Japan, or South Korea), so you never accidentally schedule a study session on a day your library or campus is closed.",
+  },
+  {
+    q: "Can I download a study planner for a specific month?",
+    a: "Yes. Choose any month and country from the grid above, then click View to preview or PDF to download instantly. No login or payment is required.",
+  },
+  {
+    q: "What paper size are the study planner PDFs?",
+    a: "All calendars download as A4 landscape PDF. They also print well on US Letter paper with minimal scaling. The clean, minimal design works in both colour and black-and-white.",
+  },
+];
 
 const STUDY_TIPS = [
   ["Block exam weeks first", "Add exam dates as soon as they are announced. Everything else schedules around them."],
@@ -69,11 +93,17 @@ export default function StudyPlannerPage() {
     },
   };
 
+  const faqSchema = buildFaqSchema(STUDY_FAQS.map((f) => ({ q: f.q, a: f.a })));
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "64px 24px" }}>
@@ -273,6 +303,36 @@ export default function StudyPlannerPage() {
               <p style={{ fontSize: 13, color: "var(--muted)", lineHeight: 1.6 }}>{desc}</p>
             </div>
           ))}
+        </section>
+
+        {/* FAQ */}
+        <section style={{ marginTop: 64, paddingTop: 40, borderTop: "1px solid var(--border)" }}>
+          <h2
+            style={{
+              fontFamily: "'EB Garamond', Georgia, serif",
+              fontSize: 28,
+              fontWeight: 400,
+              letterSpacing: "-0.01em",
+              marginBottom: 32,
+            }}
+          >
+            Frequently asked questions
+          </h2>
+          <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+            {STUDY_FAQS.map((faq, i) => (
+              <div
+                key={i}
+                style={{
+                  borderTop: "1px solid var(--border)",
+                  paddingTop: 20,
+                  paddingBottom: 20,
+                }}
+              >
+                <p style={{ fontSize: 15, fontWeight: 500, marginBottom: 8 }}>{faq.q}</p>
+                <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.7 }}>{faq.a}</p>
+              </div>
+            ))}
+          </div>
         </section>
       </div>
     </>

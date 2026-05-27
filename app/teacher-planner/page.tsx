@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { SUPPORTED_COUNTRIES, MONTH_NAMES } from "@/lib/types";
 import AdSlot from "@/components/AdSlot";
+import { buildFaqSchema } from "@/lib/seo-helpers";
 
 const BASE_URL = "https://printablecalendars.app";
 
@@ -34,6 +35,25 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
+const TEACHER_FAQS = [
+  {
+    q: "What makes a printable teacher planner 2026 useful in the classroom?",
+    a: "A printed monthly calendar sits on your desk without requiring a screen, a password, or an internet connection. You can annotate it in pen, circle dates, and hand a copy to a substitute with no setup. For classroom planning, that physical permanence is often more reliable than a digital tool.",
+  },
+  {
+    q: "Can I use this as a free classroom calendar template?",
+    a: "Yes. All calendars are free to download, print, and use in a classroom setting. Each PDF includes the official public holidays for your country, a clean monthly grid, and landscape A4 layout with space to write lesson titles and notes beside each day.",
+  },
+  {
+    q: "Which countries' public holidays are included in the teacher planner?",
+    a: "Calendars are available for USA, United Kingdom, Australia, Canada, Japan, and South Korea. Each country's official public holidays are marked on the grid, so you can plan around school closures without cross-referencing a separate source.",
+  },
+  {
+    q: "How far ahead can I download teacher planner calendars?",
+    a: "You can download any month for the current year or the next year. The section above shows the next 8 months by default — just scroll to the country and month you need and click PDF.",
+  },
+];
+
 const CLASSROOM_USES = [
   {
     title: "Lesson planning overview",
@@ -65,6 +85,7 @@ export default function TeacherPlannerPage() {
   const now = new Date();
   const year = now.getFullYear();
   const currentMonth = now.getMonth() + 1;
+  const faqSchema = buildFaqSchema(TEACHER_FAQS.map((f) => ({ q: f.q, a: f.a })));
 
   // Show the remaining months of the current academic year (next 8 months)
   const plannerMonths = Array.from({ length: 8 }, (_, i) => {
@@ -76,6 +97,10 @@ export default function TeacherPlannerPage() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "64px 24px" }}>
         <AdSlot slot="top-banner" style={{ marginBottom: 32 }} />
 
@@ -268,6 +293,32 @@ export default function TeacherPlannerPage() {
               <p style={{ fontSize: 13, color: "var(--muted)", lineHeight: 1.6 }}>{desc}</p>
             </div>
           ))}
+        </section>
+
+        {/* FAQ */}
+        <section style={{ marginTop: 64, paddingTop: 40, borderTop: "1px solid var(--border)" }}>
+          <h2
+            style={{
+              fontFamily: "'EB Garamond', Georgia, serif",
+              fontSize: 28,
+              fontWeight: 400,
+              letterSpacing: "-0.01em",
+              marginBottom: 32,
+            }}
+          >
+            Frequently asked questions
+          </h2>
+          <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+            {TEACHER_FAQS.map((faq, i) => (
+              <div
+                key={i}
+                style={{ borderTop: "1px solid var(--border)", paddingTop: 20, paddingBottom: 20 }}
+              >
+                <p style={{ fontSize: 15, fontWeight: 500, marginBottom: 8 }}>{faq.q}</p>
+                <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.7 }}>{faq.a}</p>
+              </div>
+            ))}
+          </div>
         </section>
       </div>
     </>

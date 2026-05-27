@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { SUPPORTED_COUNTRIES } from "@/lib/types";
 import AdSlot from "@/components/AdSlot";
+import { buildFaqSchema } from "@/lib/seo-helpers";
 
 const BASE_URL = "https://printablecalendars.app";
 
@@ -56,6 +57,25 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
+const RAMADAN_FAQS = [
+  {
+    q: "When is Ramadan 2026?",
+    a: "Ramadan 2026 is expected to begin around February 18, 2026 and end around March 19, 2026. Eid al-Fitr is anticipated around March 20, 2026. The exact start date depends on the moon sighting and may vary by one to two days depending on location.",
+  },
+  {
+    q: "Can I download a Ramadan 2026 calendar printable for free?",
+    a: "Yes. Calendars for February and March 2026 — the two months that span Ramadan — are available as free A4 landscape PDFs. Click the PDF button next to your country to download instantly with no account required.",
+  },
+  {
+    q: "What are the Ramadan 2026 dates I should mark on my calendar?",
+    a: "Mark February 18, 2026 as the first day of fasting (subject to moon sighting), March 19, 2026 as the last day of Ramadan, and March 20, 2026 as the approximate date of Eid al-Fitr. The Laylat al-Qadr (Night of Power) falls in the last ten nights, most likely March 15 or 17.",
+  },
+  {
+    q: "When is Ramadan 2027?",
+    a: "Ramadan 2027 is expected to run from approximately February 7 to March 8, 2027. Because the Islamic calendar is lunar, Ramadan shifts about 10–11 days earlier each year on the Gregorian calendar.",
+  },
+];
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebPage",
@@ -65,11 +85,16 @@ const jsonLd = {
 };
 
 export default function Ramadan2026Page() {
+  const faqSchema = buildFaqSchema(RAMADAN_FAQS.map((f) => ({ q: f.q, a: f.a })));
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "64px 24px" }}>
@@ -316,6 +341,32 @@ export default function Ramadan2026Page() {
                   {new Date(2000, m - 1).toLocaleString("en-US", { month: "long" })} {RAMADAN_2027.year} · {c.code}
                 </Link>
               ))
+            ))}
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section style={{ marginTop: 64, paddingTop: 40, borderTop: "1px solid var(--border)" }}>
+          <h2
+            style={{
+              fontFamily: "'EB Garamond', Georgia, serif",
+              fontSize: 28,
+              fontWeight: 400,
+              letterSpacing: "-0.01em",
+              marginBottom: 32,
+            }}
+          >
+            Frequently asked questions
+          </h2>
+          <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+            {RAMADAN_FAQS.map((faq, i) => (
+              <div
+                key={i}
+                style={{ borderTop: "1px solid var(--border)", paddingTop: 20, paddingBottom: 20 }}
+              >
+                <p style={{ fontSize: 15, fontWeight: 500, marginBottom: 8 }}>{faq.q}</p>
+                <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.7 }}>{faq.a}</p>
+              </div>
             ))}
           </div>
         </section>

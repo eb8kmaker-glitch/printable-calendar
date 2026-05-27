@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { SUPPORTED_COUNTRIES, MONTH_NAMES } from "@/lib/types";
 import AdSlot from "@/components/AdSlot";
+import { buildFaqSchema } from "@/lib/seo-helpers";
 
 const BASE_URL = "https://printablecalendars.app";
 
@@ -33,6 +34,25 @@ export const metadata: Metadata = {
   },
   robots: { index: true, follow: true },
 };
+
+const WEDDING_FAQS = [
+  {
+    q: "How do I use a wedding countdown calendar printable?",
+    a: "Download one calendar PDF for each month between now and your wedding date. Print them all and store them in a binder, or put the current month on the fridge. Write in vendor calls, fittings, payment deadlines, and family commitments as they come up. A physical calendar is harder to ignore than a phone reminder.",
+  },
+  {
+    q: "What should I track on a wedding planning calendar PDF?",
+    a: "Key milestones include: venue and vendor deposit deadlines, dress and suit fitting appointments, RSVP cutoff dates, rehearsal dinner and ceremony rehearsal, final headcount to the caterer, and honeymoon booking deadlines. The planning checklist above shows the typical month-by-month breakdown.",
+  },
+  {
+    q: "How far in advance should I start my wedding countdown calendar?",
+    a: "Most couples start planning 12 to 18 months in advance for weekend weddings at popular venues. If your wedding is in peak season (June, September, October), start even earlier. The download section above shows the next 12 months so you can begin immediately.",
+  },
+  {
+    q: "Do the wedding countdown calendars include public holidays?",
+    a: "Yes. Every calendar includes the official public holidays for your chosen country (USA, UK, Australia, Canada, Japan, or South Korea). This helps you avoid scheduling meetings or deliveries on bank holidays when vendors may be unavailable.",
+  },
+];
 
 // Month-by-month wedding planning milestones
 const PLANNING_MILESTONES: { monthsBefore: number; tasks: string[] }[] = [
@@ -87,6 +107,7 @@ export default function WeddingCountdownPage() {
   const now = new Date();
   const year = now.getFullYear();
   const currentMonth = now.getMonth() + 1;
+  const faqSchema = buildFaqSchema(WEDDING_FAQS.map((f) => ({ q: f.q, a: f.a })));
 
   // Show the next 12 months for planning
   const countdownMonths = Array.from({ length: 12 }, (_, i) => {
@@ -98,6 +119,10 @@ export default function WeddingCountdownPage() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "64px 24px" }}>
         <AdSlot slot="top-banner" style={{ marginBottom: 32 }} />
 
@@ -379,6 +404,32 @@ export default function WeddingCountdownPage() {
         </section>
 
         <AdSlot slot="pre-download" style={{ marginBottom: 32 }} />
+
+        {/* FAQ */}
+        <section style={{ marginTop: 32, paddingTop: 40, borderTop: "1px solid var(--border)" }}>
+          <h2
+            style={{
+              fontFamily: "'EB Garamond', Georgia, serif",
+              fontSize: 28,
+              fontWeight: 400,
+              letterSpacing: "-0.01em",
+              marginBottom: 32,
+            }}
+          >
+            Frequently asked questions
+          </h2>
+          <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+            {WEDDING_FAQS.map((faq, i) => (
+              <div
+                key={i}
+                style={{ borderTop: "1px solid var(--border)", paddingTop: 20, paddingBottom: 20 }}
+              >
+                <p style={{ fontSize: 15, fontWeight: 500, marginBottom: 8 }}>{faq.q}</p>
+                <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.7 }}>{faq.a}</p>
+              </div>
+            ))}
+          </div>
+        </section>
       </div>
     </>
   );
