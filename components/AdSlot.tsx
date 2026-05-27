@@ -30,30 +30,7 @@ export default function AdSlot({ slot, style }: AdSlotProps) {
     } catch {}
   }, [slotId]);
 
-  // Show placeholder until real slot IDs are added
-  if (!slotId) {
-    return (
-      <div
-        className="no-print"
-        style={{
-          width: "100%",
-          minHeight: 90,
-          border: "1px dashed var(--border)",
-          borderRadius: 8,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          color: "var(--muted)",
-          fontSize: 11,
-          letterSpacing: "0.05em",
-          background: "transparent",
-          ...style,
-        }}
-      >
-        <span style={{ opacity: 0.3 }}>advertisement</span>
-      </div>
-    );
-  }
+  if (!slotId) return null;
 
   return (
     <div className="no-print" style={{ width: "100%", overflow: "hidden", ...style }}>
