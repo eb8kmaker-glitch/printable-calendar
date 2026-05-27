@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { organizationSchema } from "@/lib/seo-helpers";
+import { Analytics } from "@vercel/analytics/next";
 
 const ADSENSE_ID = "ca-pub-8254204287118850";
 
@@ -107,6 +108,7 @@ export default function RootLayout({
         />
         {/* Kakao AdFit */}
         <Script src="//t1.kakaocdn.net/kas/static/ba.min.js" strategy="afterInteractive" />
+        <Analytics />
       </body>
     </html>
   );
