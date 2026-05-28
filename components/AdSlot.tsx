@@ -2,13 +2,14 @@
 
 import { useEffect, useRef } from "react";
 
-// Ad slot IDs from AdSense console — add per-unit IDs here once created
 const SLOT_IDS: Record<string, string> = {
-  "top-banner":    "", // TODO: replace with AdSense ad unit slot ID
-  "pre-download":  "", // TODO: replace with AdSense ad unit slot ID
+  "top-banner":    "",
+  "pre-download":  "",
   "todays-events": "1150474290",
+  "hero-infeed":   "2290946981",
 };
 
+const INFEED_SLOTS = new Set(["hero-infeed"]);
 const ADSENSE_CLIENT = "ca-pub-8254204287118850";
 
 interface AdSlotProps {
@@ -20,6 +21,7 @@ export default function AdSlot({ slot, style }: AdSlotProps) {
   const slotId = SLOT_IDS[slot] ?? "";
   const ref = useRef<HTMLModElement>(null);
   const pushed = useRef(false);
+  const isInfeed = INFEED_SLOTS.has(slot);
 
   useEffect(() => {
     if (!slotId || pushed.current) return;
@@ -40,8 +42,10 @@ export default function AdSlot({ slot, style }: AdSlotProps) {
         style={{ display: "block" }}
         data-ad-client={ADSENSE_CLIENT}
         data-ad-slot={slotId}
-        data-ad-format="auto"
-        data-full-width-responsive="true"
+        {...(isInfeed
+          ? { "data-ad-format": "fluid", "data-ad-layout-key": "-gw-3+1f-3d+2z" }
+          : { "data-ad-format": "auto", "data-full-width-responsive": "true" }
+        )}
       />
     </div>
   );

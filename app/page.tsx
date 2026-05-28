@@ -1,9 +1,11 @@
+import { Fragment } from "react";
 import Link from "next/link";
 import { SUPPORTED_COUNTRIES, MONTH_NAMES } from "@/lib/types";
 import { getHolidays } from "@/lib/holidays";
 import { getFeaturedEvents, formatEventDate, CATEGORY_LABELS } from "@/lib/events";
 import TodaysEvents from "@/components/TodaysEvents";
 import AdSenseBanner from "@/components/AdSenseBanner";
+import AdSlot from "@/components/AdSlot";
 import type { Metadata } from "next";
 import { buildFaqSchema } from "@/lib/seo-helpers";
 
@@ -167,14 +169,14 @@ export default function HomePage() {
             gap: 20,
           }}
         >
-          {SUPPORTED_COUNTRIES.map((c) => {
+          {SUPPORTED_COUNTRIES.map((c, idx) => {
             const upcomingHolidays = getHolidays(c.code, year)
               .filter((h) => new Date(h.date) >= now)
               .slice(0, 3);
 
             return (
+              <Fragment key={c.code}>
               <div
-                key={c.code}
                 style={{
                   border: "1px solid var(--border)",
                   borderRadius: 12,
@@ -306,6 +308,12 @@ export default function HomePage() {
                   ))}
                 </div>
               </div>
+              {idx === 0 && (
+                <div style={{ gridColumn: "1 / -1" }}>
+                  <AdSlot slot="hero-infeed" style={{ margin: "8px 0" }} />
+                </div>
+              )}
+              </Fragment>
             );
           })}
         </div>
@@ -416,6 +424,9 @@ export default function HomePage() {
             </div>
           </div>
         )}
+
+        {/* Printable Calendars_Today's Events — footer 직전 */}
+        <AdSlot slot="todays-events" style={{ margin: "40px 0" }} />
 
         {/* Features */}
         <div
