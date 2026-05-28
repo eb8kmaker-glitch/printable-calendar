@@ -66,6 +66,43 @@ const RAMADAN_MILESTONES: DayMilestone[] = [
   { min: 20, max: 99999, message: "The month of reflection has begun.", tip: "Set your intention (niyyah) each night." },
 ];
 
+// ── Ramadan day labels ────────────────────────────────────────────────────────
+const FEB_DAY_LABELS: Record<string, string> = {
+  "2026-02-18": "R1",  "2026-02-19": "R2",  "2026-02-20": "R3",
+  "2026-02-21": "R4",  "2026-02-22": "R5",  "2026-02-23": "R6",
+  "2026-02-24": "R7",  "2026-02-25": "R8",  "2026-02-26": "R9",
+  "2026-02-27": "R10", "2026-02-28": "R11",
+};
+
+const MAR_DAY_LABELS: Record<string, string> = {
+  "2026-03-01": "R12", "2026-03-02": "R13", "2026-03-03": "R14",
+  "2026-03-04": "R15", "2026-03-05": "R16", "2026-03-06": "R17",
+  "2026-03-07": "R18", "2026-03-08": "R19", "2026-03-09": "R20",
+  "2026-03-10": "R21", "2026-03-11": "R22", "2026-03-12": "R23",
+  "2026-03-13": "R24", "2026-03-14": "R25", "2026-03-15": "R26",
+  "2026-03-16": "★R27", // Laylat al-Qadr candidate
+  "2026-03-17": "R28",
+  "2026-03-18": "★R29", // Laylat al-Qadr candidate
+  "2026-03-19": "R30",
+  "2026-03-20": "Eid",
+};
+
+function buildRamadanPdfUrl(country: string, month: 2 | 3): string {
+  const params = new URLSearchParams({
+    country,
+    year: "2026",
+    month: String(month),
+    size: "A4",
+    orientation: "landscape",
+    theme: "light",
+    headerText: month === 2 ? "Ramadan 2026" : "Ramadan 2026 · Eid al-Fitr",
+    targetDate: "2026-03-20",
+    targetLabel: "Eid al-Fitr",
+    dayLabels: JSON.stringify(month === 2 ? FEB_DAY_LABELS : MAR_DAY_LABELS),
+  });
+  return `/api/pdf?${params.toString()}`;
+}
+
 const RAMADAN_FAQS = [
   {
     q: "When is Ramadan 2026?",
@@ -258,7 +295,7 @@ export default function Ramadan2026Page() {
                         {c.name}
                       </Link>
                       <a
-                        href={`/api/pdf?country=${c.code.toLowerCase()}&year=${RAMADAN_2026.year}&month=${month}&size=A4&orientation=landscape&theme=light`}
+                        href={buildRamadanPdfUrl(c.code.toLowerCase(), month as 2 | 3)}
                         download={`ramadan-calendar-${c.code.toLowerCase()}-2026-${String(month).padStart(2, "0")}.pdf`}
                         style={{
                           padding: "7px 14px",

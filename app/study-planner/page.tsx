@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { SUPPORTED_COUNTRIES, MONTH_NAMES } from "@/lib/types";
 import AdSlot from "@/components/AdSlot";
+import StudyDownloadSection from "./StudyDownloadSection";
 import { buildFaqSchema } from "@/lib/seo-helpers";
 import DayCounter from "@/components/DayCounter";
 import type { DayMilestone } from "@/components/DayCounter";
@@ -82,12 +82,6 @@ export default function StudyPlannerPage() {
   const now = new Date();
   const year = now.getFullYear();
   const month = now.getMonth() + 1;
-
-  const upcomingMonths = Array.from({ length: 6 }, (_, i) => {
-    const m = ((month - 1 + i) % 12) + 1;
-    const y = year + Math.floor((month - 1 + i) / 12);
-    return { month: m, year: y, name: MONTH_NAMES[m - 1] };
-  });
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -179,88 +173,7 @@ export default function StudyPlannerPage() {
           milestones={STUDY_MILESTONES}
         />
 
-        {/* Upcoming months grid */}
-        <section style={{ marginBottom: 64 }}>
-          <h2
-            style={{
-              fontFamily: "'DM Mono', monospace",
-              fontSize: 11,
-              color: "var(--muted)",
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              marginBottom: 24,
-            }}
-          >
-            Download by month
-          </h2>
-
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-              gap: 16,
-            }}
-          >
-            {upcomingMonths.map(({ month: m, year: y, name }) => (
-              <div
-                key={`${y}-${m}`}
-                style={{
-                  border: "1px solid var(--border)",
-                  borderRadius: 10,
-                  padding: "18px 20px",
-                }}
-              >
-                <p
-                  style={{
-                    fontFamily: "'DM Mono', monospace",
-                    fontSize: 11,
-                    color: "var(--muted)",
-                    letterSpacing: "0.05em",
-                    marginBottom: 8,
-                  }}
-                >
-                  {name} {y}
-                </p>
-                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                  {SUPPORTED_COUNTRIES.map((c) => {
-                    const pdfUrl = `/api/pdf?country=${c.code.toLowerCase()}&year=${y}&month=${m}&size=A4&orientation=landscape&theme=light`;
-                    return (
-                      <div key={c.code} style={{ display: "flex", gap: 6, alignItems: "center" }}>
-                        <Link
-                          href={`/calendar/${c.code.toLowerCase()}/${y}/${m}`}
-                          style={{
-                            fontSize: 12,
-                            padding: "5px 12px",
-                            border: "1px solid var(--border)",
-                            borderRadius: 6,
-                            textDecoration: "none",
-                            color: "var(--fg)",
-                          }}
-                        >
-                          {c.code}
-                        </Link>
-                        <a
-                          href={pdfUrl}
-                          download={`study-calendar-${c.code.toLowerCase()}-${y}-${String(m).padStart(2, "0")}.pdf`}
-                          style={{
-                            fontSize: 11,
-                            padding: "5px 10px",
-                            border: "1px solid var(--border)",
-                            borderRadius: 6,
-                            textDecoration: "none",
-                            color: "var(--muted)",
-                          }}
-                        >
-                          PDF
-                        </a>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
+        <StudyDownloadSection />
 
         <AdSlot slot="pre-download" style={{ marginBottom: 48 }} />
 

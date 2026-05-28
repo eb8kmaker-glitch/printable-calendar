@@ -137,6 +137,16 @@ export async function GET(req: NextRequest) {
   const orientation = (searchParams.get("orientation") ?? "landscape") as Orientation;
   const theme = (searchParams.get("theme") ?? "light") as Theme;
 
+  // ── New optional decoration params ────────────────────────────────────────
+  const headerText  = searchParams.get("headerText") ?? "";
+  const targetDate  = searchParams.get("targetDate") ?? "";   // YYYY-MM-DD
+  const targetLabel = searchParams.get("targetLabel") ?? "";
+  let dayLabels: Record<string, string> = {};
+  try {
+    const raw = searchParams.get("dayLabels");
+    if (raw) dayLabels = JSON.parse(raw);
+  } catch { /* ignore invalid JSON */ }
+
   const config = getCountryConfig(country);
   if (!config) {
     return NextResponse.json({ error: "Invalid country" }, { status: 400 });
@@ -157,7 +167,7 @@ export async function GET(req: NextRequest) {
     }
     const holidays = getHolidays(config.code, year);
     const days = buildCalendarDays(year, month, holidays);
-    html = generateMonthlyHTML({ days, year, month, countryName: config.name, size, orientation, theme });
+    html = generateMonthlyHTML({ days, year, month, countryName: config.name, size, orientation, theme, headerText, targetDate, targetLabel, dayLabels });
     const themeSuffix = theme === "dark" ? "-dark" : "";
     filename = `calendar-${country}-${year}-${String(month).padStart(2, "0")}${themeSuffix}.pdf`;
   } else {
@@ -222,13 +232,22 @@ interface MonthlyParams {
   size: PaperSize;
   orientation: Orientation;
   theme: Theme;
+  // Decoration params
+  headerText?: string;
+  targetDate?: string;
+  targetLabel?: string;
+  dayLabels?: Record<string, string>;
 }
 
-function generateMonthlyHTML({ days, year, month, countryName, size, orientation, theme }: MonthlyParams): string {
+function generateMonthlyHTML({
+  days, year, month, countryName, size, orientation, theme,
+  headerText = "", targetDate = "", targetLabel = "", dayLabels = {},
+}: MonthlyParams): string {
   const cfg = SIZE_CONFIG[size];
   const tc = THEMES[theme];
   const monthName = MONTH_NAMES[month - 1];
   const numWeight = dateWeight(size, theme);
+  const labelSize = Math.max(cfg.holidaySize, 8);
 
   const headers = DAY_NAMES.map((name, i) => {
     const color = i === 0 ? tc.sundayColor : i === 6 ? tc.saturdayColor : tc.weekdayColor;
@@ -246,6 +265,35 @@ function generateMonthlyHTML({ days, year, month, countryName, size, orientation
     if (isSun || isHoliday) numColor = tc.sundayColor;
     else if (isSat) numColor = tc.saturdayColor;
 
+    // ── D-day / label logic ────────────────────────────────────────────────
+    const d = day.date;
+    const isoDate = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+    const isTargetDate = !!targetDate && isoDate === targetDate && day.isCurrentMonth;
+    const rawLabel = dayLabels[isoDate] ?? "";
+    const isGoldCell = rawLabel.startsWith("★") && day.isCurrentMonth;
+    const labelText = rawLabel.startsWith("★") ? rawLabel.slice(1) : rawLabel;
+
+    // Auto D-N: show D-14…D-1 in the 14 days before targetDate (no explicit label needed)
+    let autoLabel = "";
+    if (targetDate && !rawLabel && day.isCurrentMonth && !isTargetDate) {
+      const diffMs = new Date(targetDate + "T00:00:00").getTime() - new Date(isoDate + "T00:00:00").getTime();
+      const diff = Math.round(diffMs / 86400000);
+      if (diff >= 1 && diff <= 14) autoLabel = `D-${diff}`;
+    }
+
+    const effectiveLabel = isTargetDate
+      ? (targetLabel || "D-Day")
+      : (labelText || autoLabel);
+
+    // ── Cell background ────────────────────────────────────────────────────
+    let bg = tc.cellBg;
+    if (day.isCurrentMonth) {
+      if (isTargetDate) bg = "#fef9e7";
+      else if (isGoldCell) bg = "#fef3c7";
+    }
+    const boxShadow = isTargetDate && day.isCurrentMonth ? "box-shadow:inset 0 0 0 2px #d97706;" : "";
+
+    // ── Holiday label ──────────────────────────────────────────────────────
     let holidayEl = "";
     if (day.holiday && day.isCurrentMonth) {
       if (cfg.holidaySize > 0) {
@@ -255,11 +303,22 @@ function generateMonthlyHTML({ days, year, month, countryName, size, orientation
       }
     }
 
-    return `<div style="border-right:1px solid ${tc.gridLine};border-bottom:1px solid ${tc.gridLine};padding:${cfg.cellPadV} ${cfg.cellPadH};background:${tc.cellBg};opacity:${isOther ? "0.2" : "1"};overflow:hidden;display:flex;flex-direction:column;">
+    // ── Special label ──────────────────────────────────────────────────────
+    const specialEl = effectiveLabel
+      ? `<div style="font-size:${labelSize}px;color:#d97706;margin-top:2px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:${isTargetDate ? 700 : 600};">${effectiveLabel}</div>`
+      : "";
+
+    return `<div style="border-right:1px solid ${tc.gridLine};border-bottom:1px solid ${tc.gridLine};padding:${cfg.cellPadV} ${cfg.cellPadH};background:${bg};opacity:${isOther ? "0.2" : "1"};overflow:hidden;display:flex;flex-direction:column;${boxShadow}">
       <div style="font-family:'Courier New',monospace;font-size:${cfg.dateNumSize}px;font-weight:${numWeight};color:${numColor};flex-shrink:0;line-height:1;">${day.date.getDate()}</div>
       ${holidayEl}
+      ${specialEl}
     </div>`;
   }).join("");
+
+  // Header: append headerText next to month name if provided
+  const headerSuffix = headerText
+    ? ` <span style="font-size:${Math.round(cfg.titleSize * 0.36)}px;color:${tc.subtitleColor};font-weight:400;font-family:'Helvetica Neue',Arial,sans-serif;letter-spacing:normal;opacity:0.8;">· ${headerText}</span>`
+    : "";
 
   return `<!DOCTYPE html>
 <html>
@@ -279,7 +338,7 @@ function generateMonthlyHTML({ days, year, month, countryName, size, orientation
   <div class="page">
     <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:${cfg.headerMB};flex-shrink:0;">
       <h1 style="font-size:${cfg.titleSize}px;font-weight:300;letter-spacing:-0.03em;font-family:Georgia,serif;line-height:1;color:${tc.titleColor};">
-        ${monthName} <span style="opacity:0.45;">${year}</span>
+        ${monthName} <span style="opacity:0.45;">${year}</span>${headerSuffix}
       </h1>
       <span style="font-size:${cfg.subtitleSize}px;color:${tc.subtitleColor};font-weight:500;">${countryName}</span>
     </div>
