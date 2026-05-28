@@ -4,6 +4,8 @@ import { SUPPORTED_COUNTRIES, MONTH_NAMES } from "@/lib/types";
 import { getHolidays } from "@/lib/holidays";
 import AdSlot from "@/components/AdSlot";
 import { buildFaqSchema } from "@/lib/seo-helpers";
+import DayCounter from "@/components/DayCounter";
+import type { DayMilestone } from "@/components/DayCounter";
 
 const BASE_URL = "https://printablecalendars.app";
 
@@ -37,6 +39,15 @@ export const metadata: Metadata = {
 };
 
 const COUNTRY_FLAG: Record<string, string> = { US: "🇺🇸", GB: "🇬🇧", AU: "🇦🇺", CA: "🇨🇦", KR: "🇰🇷", JP: "🇯🇵" };
+
+const HOLIDAY_MILESTONES: DayMilestone[] = [
+  { min: 0, max: 0, message: "Today you leave. Safe travels." },
+  { min: 1, max: 6, message: "Last check — confirm all bookings.", tip: "Charge all devices tonight." },
+  { min: 7, max: 13, message: "Pack light, prepare documents.", tip: "Digital copies of passport and bookings in email." },
+  { min: 14, max: 29, message: "Finalise — travel insurance, itinerary, currency.", tip: "Notify your bank before you travel." },
+  { min: 30, max: 89, message: "Mid-planning — check visa requirements now.", tip: "Some visas take 4–6 weeks to process." },
+  { min: 90, max: 99999, message: "Early planning — flights and accommodation first.", tip: "Booking 3+ months out saves 20–40%." },
+];
 
 const HOLIDAY_PLANNER_FAQS = [
   {
@@ -139,6 +150,12 @@ export default function HolidayPlannerPage() {
             then download free printable calendars to plan your time off.
           </p>
         </div>
+
+        <DayCounter
+          targetLabel="Departure Date"
+          storageKey="trip-date"
+          milestones={HOLIDAY_MILESTONES}
+        />
 
         {/* Holiday-dense months */}
         {hotMonths.length > 0 && (

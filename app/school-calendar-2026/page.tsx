@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { SUPPORTED_COUNTRIES, MONTH_NAMES } from "@/lib/types";
 import AdSlot from "@/components/AdSlot";
 import { buildFaqSchema } from "@/lib/seo-helpers";
+import DayCounter from "@/components/DayCounter";
+import type { DayMilestone } from "@/components/DayCounter";
 
 const BASE_URL = "https://printablecalendars.app";
 
@@ -136,6 +138,14 @@ const ACADEMIC_YEARS: Record<string, { label: string; months: { year: number; mo
 
 const COUNTRY_FLAG: Record<string, string> = { US: "🇺🇸", GB: "🇬🇧", AU: "🇦🇺", CA: "🇨🇦", KR: "🇰🇷", JP: "🇯🇵" };
 
+const SCHOOL_MILESTONES: DayMilestone[] = [
+  { min: 0, max: 0, message: "School's out!" },
+  { min: 1, max: 13, message: "Final days — finish strong.", tip: "One week of effort pays off all year." },
+  { min: 14, max: 29, message: "Almost done — finals prep time.", tip: "Start studying earlier than you think you need to." },
+  { min: 30, max: 59, message: "Second half begins — push through.", tip: "This is when consistency matters most." },
+  { min: 60, max: 99999, message: "Plenty of semester left — stay on track.", tip: "Review your syllabus and set weekly goals." },
+];
+
 const SCHOOL_FAQS = [
   {
     q: "What is a printable school calendar 2026?",
@@ -214,6 +224,12 @@ export default function SchoolCalendar2026Page() {
             writing in class schedules and exam dates.
           </p>
         </div>
+
+        <DayCounter
+          targetLabel="Last Day of School"
+          storageKey="school-end"
+          milestones={SCHOOL_MILESTONES}
+        />
 
         {/* Per-country academic year sections */}
         {SUPPORTED_COUNTRIES.map((c) => {

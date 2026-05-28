@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { SUPPORTED_COUNTRIES } from "@/lib/types";
 import AdSlot from "@/components/AdSlot";
 import { buildFaqSchema } from "@/lib/seo-helpers";
+import DayCounter from "@/components/DayCounter";
+import type { DayMilestone } from "@/components/DayCounter";
 
 const BASE_URL = "https://printablecalendars.app";
 
@@ -56,6 +58,13 @@ export const metadata: Metadata = {
   },
   robots: { index: true, follow: true },
 };
+
+const RAMADAN_MILESTONES: DayMilestone[] = [
+  { min: 0, max: 0, message: "Eid Mubarak!" },
+  { min: 1, max: 9, message: "The final days — Laylat al-Qadr is near.", tip: "Increase worship in the last odd nights." },
+  { min: 10, max: 19, message: "The middle third — stay consistent.", tip: "Increase Quran recitation in the last 10 days." },
+  { min: 20, max: 99999, message: "The month of reflection has begun.", tip: "Set your intention (niyyah) each night." },
+];
 
 const RAMADAN_FAQS = [
   {
@@ -152,6 +161,13 @@ export default function Ramadan2026Page() {
             Note: exact start date depends on the moon sighting and may vary by 1–2 days by location.
           </p>
         </div>
+
+        <DayCounter
+          targetLabel="End of Ramadan (Eid)"
+          storageKey="ramadan-start"
+          milestones={RAMADAN_MILESTONES}
+          defaultDate="2026-03-20"
+        />
 
         {/* Key dates */}
         <div

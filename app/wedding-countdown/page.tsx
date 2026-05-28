@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { SUPPORTED_COUNTRIES, MONTH_NAMES } from "@/lib/types";
 import AdSlot from "@/components/AdSlot";
 import { buildFaqSchema } from "@/lib/seo-helpers";
+import DayCounter from "@/components/DayCounter";
+import type { DayMilestone } from "@/components/DayCounter";
 
 const BASE_URL = "https://printablecalendars.app";
 
@@ -52,6 +54,16 @@ const WEDDING_FAQS = [
     q: "Do the wedding countdown calendars include public holidays?",
     a: "Yes. Every calendar includes the official public holidays for your chosen country (USA, UK, Australia, Canada, Japan, or South Korea). This helps you avoid scheduling meetings or deliveries on bank holidays when vendors may be unavailable.",
   },
+];
+
+const WEDDING_MILESTONES: DayMilestone[] = [
+  { min: 0, max: 0, message: "Today is your wedding day." },
+  { min: 1, max: 6, message: "This is it. You're ready.", tip: "Sleep. Everything is handled." },
+  { min: 7, max: 29, message: "Almost there — delegate, pack, breathe.", tip: "Hand off day-of coordination to someone you trust." },
+  { min: 30, max: 89, message: "Final fittings, payments, and last confirmations.", tip: "Write your vows this week." },
+  { min: 90, max: 179, message: "Send formal invitations and finalise your vendors.", tip: "Confirm headcount with caterer 6 weeks out." },
+  { min: 180, max: 364, message: "Big decisions time — photographer, caterer, dress.", tip: "Send save-the-dates now." },
+  { min: 365, max: 99999, message: "Start early — book your venue and set a date.", tip: "Popular venues book up 18 months out." },
 ];
 
 // Month-by-month wedding planning milestones
@@ -198,6 +210,12 @@ export default function WeddingCountdownPage() {
             </a>
           </div>
         </div>
+
+        <DayCounter
+          targetLabel="Wedding Day"
+          storageKey="wedding-date"
+          milestones={WEDDING_MILESTONES}
+        />
 
         {/* How to use */}
         <section

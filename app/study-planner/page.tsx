@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { SUPPORTED_COUNTRIES, MONTH_NAMES } from "@/lib/types";
 import AdSlot from "@/components/AdSlot";
 import { buildFaqSchema } from "@/lib/seo-helpers";
+import DayCounter from "@/components/DayCounter";
+import type { DayMilestone } from "@/components/DayCounter";
 
 const BASE_URL = "https://printablecalendars.app";
 
@@ -34,6 +36,15 @@ export const metadata: Metadata = {
   },
   robots: { index: true, follow: true },
 };
+
+const STUDY_MILESTONES: DayMilestone[] = [
+  { min: 0, max: 0, message: "Exam day. You've got this." },
+  { min: 1, max: 6, message: "Almost there — stay calm, trust your prep.", tip: "Light review only. Rest is productive." },
+  { min: 7, max: 13, message: "One week out — review, don't learn new material.", tip: "Simulate exam conditions at least once." },
+  { min: 14, max: 29, message: "Final stretch — active recall every day.", tip: "Sleep matters more than extra hours now." },
+  { min: 30, max: 59, message: "Halfway there — review weak areas first.", tip: "Practice tests are more effective than re-reading." },
+  { min: 60, max: 99999, message: "Plenty of time — build your schedule now.", tip: "Study 1–2 hours daily beats cramming." },
+];
 
 const STUDY_FAQS = [
   {
@@ -161,6 +172,12 @@ export default function StudyPlannerPage() {
             View this month →
           </Link>
         </div>
+
+        <DayCounter
+          targetLabel="Exam Date"
+          storageKey="exam-date"
+          milestones={STUDY_MILESTONES}
+        />
 
         {/* Upcoming months grid */}
         <section style={{ marginBottom: 64 }}>

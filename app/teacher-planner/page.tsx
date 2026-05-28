@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { SUPPORTED_COUNTRIES, MONTH_NAMES } from "@/lib/types";
 import AdSlot from "@/components/AdSlot";
 import { buildFaqSchema } from "@/lib/seo-helpers";
+import DayCounter from "@/components/DayCounter";
+import type { DayMilestone } from "@/components/DayCounter";
 
 const BASE_URL = "https://printablecalendars.app";
 
@@ -34,6 +36,14 @@ export const metadata: Metadata = {
   },
   robots: { index: true, follow: true },
 };
+
+const TEACHER_MILESTONES: DayMilestone[] = [
+  { min: 0, max: 0, message: "Term complete. Well done." },
+  { min: 1, max: 13, message: "End of term — grades, reports, parent comms.", tip: "Batch similar tasks to save time." },
+  { min: 14, max: 29, message: "Final push — start wrapping up units.", tip: "Leave buffer time for unexpected delays." },
+  { min: 30, max: 59, message: "Mid-term — check in with struggling students now.", tip: "Small interventions now prevent big problems later." },
+  { min: 60, max: 99999, message: "Strong start — establish routines early.", tip: "First 2 weeks set the tone for the whole term." },
+];
 
 const TEACHER_FAQS = [
   {
@@ -156,6 +166,12 @@ export default function TeacherPlannerPage() {
             View this month →
           </Link>
         </div>
+
+        <DayCounter
+          targetLabel="End of Term"
+          storageKey="term-end"
+          milestones={TEACHER_MILESTONES}
+        />
 
         {/* Month grid */}
         <section style={{ marginBottom: 64 }}>
