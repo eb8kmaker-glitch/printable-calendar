@@ -247,7 +247,6 @@ function generateMonthlyHTML({
   const tc = THEMES[theme];
   const monthName = MONTH_NAMES[month - 1];
   const numWeight = dateWeight(size, theme);
-  const labelSize = Math.max(cfg.holidaySize, 8);
 
   const headers = DAY_NAMES.map((name, i) => {
     const color = i === 0 ? tc.sundayColor : i === 6 ? tc.saturdayColor : tc.weekdayColor;
@@ -265,25 +264,32 @@ function generateMonthlyHTML({
     if (isSun || isHoliday) numColor = tc.sundayColor;
     else if (isSat) numColor = tc.saturdayColor;
 
-    // ── D-day / label logic ────────────────────────────────────────────────
+    // ── ISO date string ────────────────────────────────────────────────────
     const d = day.date;
     const isoDate = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
     const isTargetDate = !!targetDate && isoDate === targetDate && day.isCurrentMonth;
+
+    // ── dayLabel (left bottom) ─────────────────────────────────────────────
     const rawLabel = dayLabels[isoDate] ?? "";
     const isGoldCell = rawLabel.startsWith("★") && day.isCurrentMonth;
-    const labelText = rawLabel.startsWith("★") ? rawLabel.slice(1) : rawLabel;
+    const labelText = day.isCurrentMonth ? (rawLabel.startsWith("★") ? rawLabel.slice(1) : rawLabel) : "";
 
-    // Auto D-N: show D-14…D-1 in the 14 days before targetDate (no explicit label needed)
-    let autoLabel = "";
-    if (targetDate && !rawLabel && day.isCurrentMonth && !isTargetDate) {
+    // ── D-N (right bottom) — computed for all current-month cells ──────────
+    let dNValue = "";
+    let dNColor = "#999";
+    let dNWeight = 400;
+    if (targetDate && day.isCurrentMonth) {
       const diffMs = new Date(targetDate + "T00:00:00").getTime() - new Date(isoDate + "T00:00:00").getTime();
       const diff = Math.round(diffMs / 86400000);
-      if (diff >= 1 && diff <= 14) autoLabel = `D-${diff}`;
+      if (isTargetDate) {
+        dNValue = targetLabel || "D-Day";
+        dNColor = "#333";
+        dNWeight = 700;
+      } else if (diff > 0 && diff <= 60) {
+        dNValue = `D-${diff}`;
+        dNColor = diff <= 7 ? "#e53e3e" : "#999";
+      }
     }
-
-    const effectiveLabel = isTargetDate
-      ? (targetLabel || "D-Day")
-      : (labelText || autoLabel);
 
     // ── Cell background ────────────────────────────────────────────────────
     let bg = tc.cellBg;
@@ -291,7 +297,7 @@ function generateMonthlyHTML({
       if (isTargetDate) bg = "#fef9e7";
       else if (isGoldCell) bg = "#fef3c7";
     }
-    const boxShadow = isTargetDate && day.isCurrentMonth ? "box-shadow:inset 0 0 0 2px #d97706;" : "";
+    const boxShadow = isTargetDate ? "box-shadow:inset 0 0 0 2px #d97706;" : "";
 
     // ── Holiday label ──────────────────────────────────────────────────────
     let holidayEl = "";
@@ -303,15 +309,19 @@ function generateMonthlyHTML({
       }
     }
 
-    // ── Special label ──────────────────────────────────────────────────────
-    const specialEl = effectiveLabel
-      ? `<div style="font-size:${labelSize}px;color:#d97706;margin-top:2px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:${isTargetDate ? 700 : 600};">${effectiveLabel}</div>`
+    // ── Bottom row: dayLabel (left) + D-N (right) ──────────────────────────
+    const hasBottom = !!labelText || !!dNValue;
+    const bottomEl = hasBottom
+      ? `<div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:auto;padding-top:1px;overflow:hidden;flex-shrink:0;">
+          <span style="font-size:9px;color:#888;line-height:1.1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${labelText}</span>
+          <span style="font-size:9px;color:${dNColor};font-weight:${dNWeight};line-height:1.1;flex-shrink:0;${labelText ? "margin-left:2px;" : "margin-left:auto;"}">${dNValue}</span>
+        </div>`
       : "";
 
     return `<div style="border-right:1px solid ${tc.gridLine};border-bottom:1px solid ${tc.gridLine};padding:${cfg.cellPadV} ${cfg.cellPadH};background:${bg};opacity:${isOther ? "0.2" : "1"};overflow:hidden;display:flex;flex-direction:column;${boxShadow}">
       <div style="font-family:'Courier New',monospace;font-size:${cfg.dateNumSize}px;font-weight:${numWeight};color:${numColor};flex-shrink:0;line-height:1;">${day.date.getDate()}</div>
       ${holidayEl}
-      ${specialEl}
+      ${bottomEl}
     </div>`;
   }).join("");
 
