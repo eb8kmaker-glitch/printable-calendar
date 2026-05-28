@@ -4,9 +4,11 @@ import { useEffect, useRef } from "react";
 
 // Ad slot IDs from AdSense console — add per-unit IDs here once created
 const SLOT_IDS: Record<string, string> = {
-  "top-banner":    "", // TODO: replace with AdSense ad unit slot ID
-  "pre-download":  "", // TODO: replace with AdSense ad unit slot ID
-  "todays-events": "1150474290",
+  "top-banner":         "", // TODO: replace with AdSense ad unit slot ID
+  "pre-download":       "", // TODO: replace with AdSense ad unit slot ID
+  "todays-events":      "1150474290",
+  "between-countries":  "", // TODO: replace with AdSense ad unit slot ID
+  "above-footer":       "", // TODO: replace with AdSense ad unit slot ID
 };
 
 const ADSENSE_CLIENT = "ca-pub-8254204287118850";

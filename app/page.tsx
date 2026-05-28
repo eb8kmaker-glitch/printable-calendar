@@ -4,6 +4,7 @@ import { getHolidays } from "@/lib/holidays";
 import { getFeaturedEvents, formatEventDate, CATEGORY_LABELS } from "@/lib/events";
 import TodaysEvents from "@/components/TodaysEvents";
 import AdSenseBanner from "@/components/AdSenseBanner";
+import AdSlot from "@/components/AdSlot";
 import type { Metadata } from "next";
 import { buildFaqSchema } from "@/lib/seo-helpers";
 
@@ -167,12 +168,12 @@ export default function HomePage() {
             gap: 20,
           }}
         >
-          {SUPPORTED_COUNTRIES.map((c) => {
+          {SUPPORTED_COUNTRIES.flatMap((c, idx) => {
             const upcomingHolidays = getHolidays(c.code, year)
               .filter((h) => new Date(h.date) >= now)
               .slice(0, 3);
 
-            return (
+            const countryCard = (
               <div
                 key={c.code}
                 style={{
@@ -307,6 +308,30 @@ export default function HomePage() {
                 </div>
               </div>
             );
+
+            // Ad unit A: between CA (index 3) and KR (index 4)
+            if (idx === 4) {
+              return [
+                <div
+                  key="ad-between-countries"
+                  className="no-print"
+                  style={{
+                    border: "1px solid var(--border)",
+                    borderRadius: 12,
+                    padding: 24,
+                    gridColumn: "1 / -1",
+                  }}
+                >
+                  <p style={{ fontSize: 10, color: "#bbb", textAlign: "center", marginBottom: 8 }}>
+                    advertisement
+                  </p>
+                  <AdSlot slot="between-countries" />
+                </div>,
+                countryCard,
+              ];
+            }
+
+            return [countryCard];
           })}
         </div>
         {/* Today's events sidebar */}
@@ -416,6 +441,14 @@ export default function HomePage() {
             </div>
           </div>
         )}
+
+        {/* Ad unit B: above footer, after Notable world events */}
+        <div
+          className="no-print"
+          style={{ width: "100%", margin: "40px 0" }}
+        >
+          <AdSlot slot="above-footer" />
+        </div>
 
         {/* Features */}
         <div
