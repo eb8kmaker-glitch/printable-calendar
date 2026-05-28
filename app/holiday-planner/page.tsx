@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { SUPPORTED_COUNTRIES, MONTH_NAMES } from "@/lib/types";
 import { getHolidays } from "@/lib/holidays";
 import AdSlot from "@/components/AdSlot";
+import DynamicCalendarList from "@/components/DynamicCalendarList";
 import { buildFaqSchema } from "@/lib/seo-helpers";
 import DayCounter from "@/components/DayCounter";
 import type { DayMilestone } from "@/components/DayCounter";
@@ -155,6 +156,15 @@ export default function HolidayPlannerPage() {
           targetLabel="Departure Date"
           storageKey="trip-date"
           milestones={HOLIDAY_MILESTONES}
+        />
+
+        <DynamicCalendarList
+          storageKey="trip-date"
+          maxMonths={12}
+          badgeLabel="Trip month"
+          pdfHeaderText="Trip Countdown"
+          pdfTargetLabel="Departure"
+          noDateHint="Set your departure date above to see your trip calendars."
         />
 
         {/* Holiday-dense months */}

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { SUPPORTED_COUNTRIES, MONTH_NAMES } from "@/lib/types";
 import AdSlot from "@/components/AdSlot";
+import DynamicCalendarList from "@/components/DynamicCalendarList";
 import { buildFaqSchema } from "@/lib/seo-helpers";
 import DayCounter from "@/components/DayCounter";
 import type { DayMilestone } from "@/components/DayCounter";
@@ -97,13 +97,6 @@ export default function TeacherPlannerPage() {
   const currentMonth = now.getMonth() + 1;
   const faqSchema = buildFaqSchema(TEACHER_FAQS.map((f) => ({ q: f.q, a: f.a })));
 
-  // Show the remaining months of the current academic year (next 8 months)
-  const plannerMonths = Array.from({ length: 8 }, (_, i) => {
-    const totalMonth = currentMonth + i;
-    const m = ((totalMonth - 1) % 12) + 1;
-    const y = year + Math.floor((totalMonth - 1) / 12);
-    return { month: m, year: y, name: MONTH_NAMES[m - 1] };
-  });
 
   return (
     <>
@@ -173,86 +166,14 @@ export default function TeacherPlannerPage() {
           milestones={TEACHER_MILESTONES}
         />
 
-        {/* Month grid */}
-        <section style={{ marginBottom: 64 }}>
-          <h2
-            style={{
-              fontFamily: "'DM Mono', monospace",
-              fontSize: 11,
-              color: "var(--muted)",
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              marginBottom: 24,
-            }}
-          >
-            Download monthly planner PDFs
-          </h2>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-              gap: 16,
-            }}
-          >
-            {plannerMonths.map(({ month: m, year: y, name }) => (
-              <div
-                key={`${y}-${m}`}
-                style={{
-                  border: "1px solid var(--border)",
-                  borderRadius: 10,
-                  padding: "18px 20px",
-                }}
-              >
-                <p
-                  style={{
-                    fontFamily: "'EB Garamond', Georgia, serif",
-                    fontSize: 17,
-                    fontWeight: 400,
-                    marginBottom: 14,
-                  }}
-                >
-                  {name} {y}
-                </p>
-                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                  {SUPPORTED_COUNTRIES.map((c) => {
-                    const pdfUrl = `/api/pdf?country=${c.code.toLowerCase()}&year=${y}&month=${m}&size=A4&orientation=landscape&theme=light`;
-                    return (
-                      <div key={c.code} style={{ display: "flex", gap: 5 }}>
-                        <Link
-                          href={`/calendar/${c.code.toLowerCase()}/${y}/${m}`}
-                          style={{
-                            fontSize: 12,
-                            padding: "5px 12px",
-                            border: "1px solid var(--border)",
-                            borderRadius: 6,
-                            textDecoration: "none",
-                            color: "var(--fg)",
-                          }}
-                        >
-                          {c.code}
-                        </Link>
-                        <a
-                          href={pdfUrl}
-                          download={`teacher-planner-${c.code.toLowerCase()}-${y}-${String(m).padStart(2, "0")}.pdf`}
-                          style={{
-                            fontSize: 11,
-                            padding: "5px 10px",
-                            border: "1px solid var(--border)",
-                            borderRadius: 6,
-                            textDecoration: "none",
-                            color: "var(--muted)",
-                          }}
-                        >
-                          PDF
-                        </a>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
+        <DynamicCalendarList
+          storageKey="term-end"
+          maxMonths={12}
+          badgeLabel="Last term month"
+          pdfHeaderText="Term Countdown"
+          pdfTargetLabel="Term End"
+          noDateHint="Set your term end date above to see your planner calendars."
+        />
 
         <AdSlot slot="pre-download" style={{ marginBottom: 48 }} />
 

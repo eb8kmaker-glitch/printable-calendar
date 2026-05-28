@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import AdSlot from "@/components/AdSlot";
-import StudyDownloadSection from "./StudyDownloadSection";
+import DynamicCalendarList from "@/components/DynamicCalendarList";
 import { buildFaqSchema } from "@/lib/seo-helpers";
 import DayCounter from "@/components/DayCounter";
 import type { DayMilestone } from "@/components/DayCounter";
@@ -173,7 +173,15 @@ export default function StudyPlannerPage() {
           milestones={STUDY_MILESTONES}
         />
 
-        <StudyDownloadSection />
+        <DynamicCalendarList
+          storageKey="exam-date"
+          maxMonths={24}
+          badgeLabel="Exam month"
+          pdfHeaderText="Exam Countdown"
+          pdfTargetLabel="Exam Day"
+          noDateHint="Set your exam date above to customize this calendar list."
+          urlParamName="target"
+        />
 
         <AdSlot slot="pre-download" style={{ marginBottom: 48 }} />
 

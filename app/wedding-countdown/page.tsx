@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import AdSlot from "@/components/AdSlot";
-import WeddingDownloadSection from "./WeddingDownloadSection";
+import DynamicCalendarList from "@/components/DynamicCalendarList";
 import { buildFaqSchema } from "@/lib/seo-helpers";
 import DayCounter from "@/components/DayCounter";
 import type { DayMilestone } from "@/components/DayCounter";
@@ -332,7 +332,14 @@ export default function WeddingCountdownPage() {
           </div>
         </section>
 
-        <WeddingDownloadSection />
+        <DynamicCalendarList
+          storageKey="wedding-date"
+          maxMonths={24}
+          badgeLabel="Wedding month"
+          pdfHeaderText="Wedding Countdown"
+          pdfTargetLabel="Wedding Day"
+          noDateHint="Enter your wedding date above to customize this list."
+        />
 
         <AdSlot slot="pre-download" style={{ marginBottom: 32 }} />
 

@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { SUPPORTED_COUNTRIES, MONTH_NAMES } from "@/lib/types";
 import AdSlot from "@/components/AdSlot";
+import DynamicCalendarList from "@/components/DynamicCalendarList";
 import { buildFaqSchema } from "@/lib/seo-helpers";
 import DayCounter from "@/components/DayCounter";
 import type { DayMilestone } from "@/components/DayCounter";
@@ -229,6 +230,15 @@ export default function SchoolCalendar2026Page() {
           targetLabel="Last Day of School"
           storageKey="school-end"
           milestones={SCHOOL_MILESTONES}
+        />
+
+        <DynamicCalendarList
+          storageKey="school-end"
+          maxMonths={12}
+          badgeLabel="Last school month"
+          pdfHeaderText="School Countdown"
+          pdfTargetLabel="School End"
+          noDateHint="Set your last day of school above to customize this list."
         />
 
         {/* Per-country academic year sections */}
