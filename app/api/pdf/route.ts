@@ -206,11 +206,13 @@ export async function GET(req: NextRequest) {
 
     await browser.close();
 
+    // Personalized PDFs (targetDate / dayLabels) must not be CDN-cached
+    const isDecorated = !!targetDate || Object.keys(dayLabels).length > 0;
     return new NextResponse(new Blob([pdf], { type: "application/pdf" }), {
       headers: {
         "Content-Type": "application/pdf",
         "Content-Disposition": `attachment; filename="${filename}"`,
-        "Cache-Control": "public, max-age=86400",
+        "Cache-Control": isDecorated ? "no-store" : "public, max-age=86400",
       },
     });
   } catch (err) {
@@ -279,7 +281,7 @@ function generateMonthlyHTML({
     let dNColor = "#999";
     let dNWeight = 400;
     if (targetDate && day.isCurrentMonth) {
-      const diffMs = new Date(targetDate + "T00:00:00").getTime() - new Date(isoDate + "T00:00:00").getTime();
+      const diffMs = new Date(targetDate + "T12:00:00").getTime() - new Date(isoDate + "T12:00:00").getTime();
       const diff = Math.round(diffMs / 86400000);
       if (isTargetDate) {
         dNValue = targetLabel || "D-Day";
