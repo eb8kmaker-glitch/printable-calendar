@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import type { Metadata } from "next";
 import {
   CULTURAL_HOLIDAYS,
@@ -6,12 +6,13 @@ import {
   COUNTRY_FULL_NAMES,
 } from "@/lib/holidays-content";
 
+export const dynamic = "force-static";
 const BASE_URL = "https://printablecalendars.app";
 
 export const metadata: Metadata = {
-  title: "Cultural Holidays — History, Traditions & Printable Calendars",
+  title: "Cultural Holidays ??History, Traditions & Printable Calendars",
   description:
-    "Explore the history, food, and traditions of major cultural holidays in Japan, South Korea, and the United States — from Chuseok to Thanksgiving. Download free printable calendars.",
+    "Explore the history, food, and traditions of major cultural holidays in Japan, South Korea, and the United States ??from Chuseok to Thanksgiving. Download free printable calendars.",
   alternates: {
     canonical: `${BASE_URL}/holidays`,
     languages: { en: `${BASE_URL}/holidays`, "x-default": `${BASE_URL}/holidays` },
@@ -28,17 +29,17 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Cultural Holidays | PrintableCalendars",
     description:
-      "History and traditions of major holidays in Japan, South Korea, and the USA — with free printable calendars.",
+      "History and traditions of major holidays in Japan, South Korea, and the USA ??with free printable calendars.",
   },
   robots: { index: true, follow: true },
 };
 
-const FLAG: Record<string, string> = { US: "🇺🇸", KR: "🇰🇷", JP: "🇯🇵" };
+const FLAG: Record<string, string> = { US: "?눣?눡", KR: "?눖?눟", JP: "?눓?눝" };
 
 const itemListJsonLd = {
   "@context": "https://schema.org",
   "@type": "ItemList",
-  name: "Cultural Holidays — History & Traditions",
+  name: "Cultural Holidays ??History & Traditions",
   url: `${BASE_URL}/holidays`,
   numberOfItems: CULTURAL_HOLIDAYS.length,
   itemListElement: CULTURAL_HOLIDAYS.map((h, i) => ({
@@ -93,7 +94,7 @@ export default function HolidaysPage() {
               maxWidth: 560,
             }}
           >
-            From Chuseok to Golden Week to Thanksgiving — explore the origin,
+            From Chuseok to Golden Week to Thanksgiving ??explore the origin,
             history, food, and culture of the world&apos;s most celebrated
             holidays. Each entry links to a free printable calendar for the
             relevant month.
@@ -242,7 +243,7 @@ export default function HolidaysPage() {
                           marginTop: 4,
                         }}
                       >
-                        {holiday.food.length} traditional dishes ·{" "}
+                        {holiday.food.length} traditional dishes 쨌{" "}
                         {holiday.activities.length} activities
                       </p>
                     </div>
@@ -256,3 +257,4 @@ export default function HolidaysPage() {
     </>
   );
 }
+

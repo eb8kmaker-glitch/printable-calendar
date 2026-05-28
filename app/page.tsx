@@ -1,6 +1,8 @@
 import { Fragment } from "react";
 import Link from "next/link";
 import { SUPPORTED_COUNTRIES, MONTH_NAMES } from "@/lib/types";
+
+export const dynamic = "force-static";
 import { getHolidays } from "@/lib/holidays";
 import { getFeaturedEvents, formatEventDate, CATEGORY_LABELS } from "@/lib/events";
 import TodaysEvents from "@/components/TodaysEvents";

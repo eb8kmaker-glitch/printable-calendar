@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import type { Metadata } from "next";
 import {
   WORLD_EVENTS,
@@ -7,12 +7,13 @@ import {
   type EventCategory,
 } from "@/lib/events";
 
+export const dynamic = "force-static";
 const BASE_URL = "https://printablecalendars.app";
 
 export const metadata: Metadata = {
   title: "World Events & International Days",
   description:
-    "Browse international observances and world events — from Earth Day to World Mental Health Day. Explore history, cultural context, activities, and free printable calendars.",
+    "Browse international observances and world events ??from Earth Day to World Mental Health Day. Explore history, cultural context, activities, and free printable calendars.",
   alternates: {
     canonical: `${BASE_URL}/events`,
     languages: {
@@ -124,7 +125,7 @@ export default async function EventsPage({ searchParams }: PageProps) {
             }}
           >
             Discover the stories behind the world&apos;s most celebrated
-            international days — their history, global reach, cultural context,
+            international days ??their history, global reach, cultural context,
             and how you can participate.
           </p>
         </div>
@@ -139,7 +140,7 @@ export default async function EventsPage({ searchParams }: PageProps) {
             marginBottom: 32,
           }}
         >
-          {/* Search form — GET, works without JS */}
+          {/* Search form ??GET, works without JS */}
           <form
             method="GET"
             action="/events"
@@ -151,7 +152,7 @@ export default async function EventsPage({ searchParams }: PageProps) {
             <input
               name="q"
               defaultValue={q ?? ""}
-              placeholder="Search events…"
+              placeholder="Search events??
               autoComplete="off"
               style={{
                 height: 36,
@@ -223,7 +224,7 @@ export default async function EventsPage({ searchParams }: PageProps) {
             {events.length} result{events.length !== 1 ? "s" : ""}
             {query ? ` for "${q}"` : ""}
             {activeCategory ? ` in ${CATEGORY_LABELS[activeCategory]}` : ""}
-            {" — "}
+            {" ??"}
             <Link
               href="/events"
               style={{ color: "var(--muted)", textDecoration: "underline" }}
@@ -337,7 +338,7 @@ export default async function EventsPage({ searchParams }: PageProps) {
                         letterSpacing: "0.04em",
                       }}
                     >
-                      {Object.keys(event.culturalContext).join(" · ")} context
+                      {Object.keys(event.culturalContext).join(" 쨌 ")} context
                     </p>
                   )}
                 </div>
@@ -363,3 +364,4 @@ function pillStyle(active: boolean): React.CSSProperties {
     whiteSpace: "nowrap",
   };
 }
+
