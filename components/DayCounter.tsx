@@ -45,6 +45,7 @@ export default function DayCounter({ targetLabel, storageKey, milestones, defaul
     if (!val) {
       setStored(null);
       localStorage.removeItem(storageKey);
+      window.dispatchEvent(new CustomEvent("planner-date-change", { detail: { key: storageKey, date: "" } }));
       return;
     }
     const today = new Date().toISOString().slice(0, 10);
@@ -52,6 +53,7 @@ export default function DayCounter({ targetLabel, storageKey, milestones, defaul
     const s: Stored = { date: val, start: stored?.start ?? today };
     setStored(s);
     localStorage.setItem(storageKey, JSON.stringify(s));
+    window.dispatchEvent(new CustomEvent("planner-date-change", { detail: { key: storageKey, date: val } }));
   };
 
   // Avoid hydration mismatch — render a placeholder until mounted

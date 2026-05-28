@@ -126,14 +126,23 @@ export default function DynamicCalendarList({
 
   useEffect(() => {
     setMounted(true);
-    if (urlApplied.current) return;
-    try {
-      const raw = localStorage.getItem(storageKey);
-      if (raw) {
-        const parsed: Stored = JSON.parse(raw);
-        if (parsed.date) setTargetDate(parsed.date);
-      }
-    } catch { /* ignore */ }
+    if (!urlApplied.current) {
+      try {
+        const raw = localStorage.getItem(storageKey);
+        if (raw) {
+          const parsed: Stored = JSON.parse(raw);
+          if (parsed.date) setTargetDate(parsed.date);
+        }
+      } catch { /* ignore */ }
+    }
+
+    // Live-sync when DayCounter on the same page updates the date
+    const handler = (e: Event) => {
+      const { key, date } = (e as CustomEvent<{ key: string; date: string }>).detail;
+      if (key === storageKey) setTargetDate(date || undefined);
+    };
+    window.addEventListener("planner-date-change", handler);
+    return () => window.removeEventListener("planner-date-change", handler);
   }, [storageKey]);
 
   if (!mounted) return <div style={{ height: 400, marginBottom: 64 }} />;
