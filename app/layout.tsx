@@ -80,23 +80,6 @@ export default function RootLayout({
         <ThemeProvider>
           <Header />
           <main style={{ minHeight: "calc(100vh - 120px)" }}>{children}</main>
-          {/* Kakao AdFit — PC 728×90 (≥768px) / Mobile 320×50 (<768px) */}
-          <div className="no-print kakao-pc-wrap">
-            <ins
-              className="kakao_ad_area"
-              data-ad-unit="DAN-CoVdtClU3lNByMCT"
-              data-ad-width="728"
-              data-ad-height="90"
-            />
-          </div>
-          <div className="no-print kakao-mobile-wrap">
-            <ins
-              className="kakao_ad_area"
-              data-ad-unit="DAN-3RN3Rk3bpFXPgnnP"
-              data-ad-width="320"
-              data-ad-height="50"
-            />
-          </div>
           <Footer />
         </ThemeProvider>
         {/* Google AdSense — auto-ads */}
@@ -106,8 +89,6 @@ export default function RootLayout({
           crossOrigin="anonymous"
           strategy="afterInteractive"
         />
-        {/* Kakao AdFit */}
-        <Script src="//t1.kakaocdn.net/kas/static/ba.min.js" strategy="afterInteractive" />
         <Analytics />
       </body>
     </html>
