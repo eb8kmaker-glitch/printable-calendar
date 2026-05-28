@@ -10,32 +10,38 @@ import { buildFaqSchema } from "@/lib/seo-helpers";
 const BASE_URL = "https://printablecalendars.app";
 
 export const metadata: Metadata = {
-  title: "Free Printable Calendars 2026 — PDF Download with Public Holidays",
+  title: "Free Printable Calendars with Public Holidays — Japan, Korea & USA | PrintableCalendars",
   description:
-    "Download free printable monthly and annual calendars for 2026 with public holidays. USA, UK, Australia, Canada, Japan, South Korea. A4 PDF — no login, no watermark, instant download.",
+    "Download free printable monthly calendars with official public holidays for USA, Japan, and South Korea. Clean A4 PDF, instant download, no sign-up required.",
   keywords: [
     "free printable calendar 2026",
-    "printable calendar PDF",
-    "printable monthly calendar",
-    "calendar with public holidays",
-    "US calendar 2026",
-    "UK calendar 2026",
-    "Australia calendar 2026",
-    "Canada calendar 2026",
+    "printable calendar with public holidays",
     "Japan calendar 2026",
     "South Korea calendar 2026",
-    "annual calendar 2026 PDF",
+    "USA calendar 2026",
+    "printable calendar PDF",
+    "printable monthly calendar",
     "A4 calendar download",
     "free calendar no signup",
+    "calendar with holidays Japan",
+    "calendar with holidays Korea",
+    "calendar with holidays USA",
   ],
   alternates: { canonical: BASE_URL },
   openGraph: {
-    title: "Free Printable Calendars 2026 — PDF with Public Holidays",
+    title: "Free Printable Calendars with Public Holidays — Japan, Korea & USA | PrintableCalendars",
     description:
-      "Monthly and annual calendars for USA, UK, Australia, Canada, Japan, South Korea. Public holidays included. Free A4 PDF — no login required.",
+      "Download free printable monthly calendars with official public holidays for USA, Japan, and South Korea. Clean A4 PDF, instant download, no sign-up required.",
     url: BASE_URL,
     type: "website",
     siteName: "PrintableCalendars",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Free Printable Calendars with Public Holidays — Japan, Korea & USA | PrintableCalendars",
+    description:
+      "Download free printable monthly calendars with official public holidays for USA, Japan, and South Korea. Clean A4 PDF, instant download, no sign-up required.",
+    images: ["/og-image.png"],
   },
 };
 
@@ -114,9 +120,9 @@ export default function HomePage() {
               marginBottom: 20,
             }}
           >
-            Printable calendars,
+            Printable calendars with public holidays.
             <br />
-            <span style={{ opacity: 0.4 }}>free forever.</span>
+            <span style={{ opacity: 0.4 }}>Free forever.</span>
           </h1>
           <p style={{ fontSize: 16, color: "var(--muted)", lineHeight: 1.6, marginBottom: 28 }}>
             Download monthly calendars with public holidays for USA, UK, Australia,

@@ -34,8 +34,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const config = getCountryConfig(country);
   if (!config) return {};
   const monthName = MONTH_NAMES[Number(month) - 1];
-  const title = `Free ${monthName} ${year} Printable Calendar — ${config.name} PDF`;
-  const description = `Download a free printable ${monthName} ${year} calendar for ${config.name} with all public holidays. A4 landscape PDF — no login, instant download.`;
+  const title = `${monthName} ${year} Printable Calendar — ${config.name} Public Holidays | PrintableCalendars`;
+  const description = `Free printable ${monthName} ${year} calendar for ${config.name} with official public holidays. Download as A4 PDF instantly, no login required.`;
   return {
     title,
     description,
@@ -50,7 +50,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     openGraph: { title, description, type: "website", siteName: "PrintableCalendars" },
     twitter: { card: "summary_large_image", title, description },
     alternates: {
-      canonical: `/calendar/${country}/${year}/${month}`,
+      canonical: `https://printablecalendars.app/calendar/${country}/${year}/${month}`,
     },
   };
 }

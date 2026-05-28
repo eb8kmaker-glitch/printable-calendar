@@ -26,6 +26,7 @@ export default function Footer() {
                 ["/contact", "Contact"],
                 ["/events", "World Events"],
                 ["/holidays", "Cultural Holidays"],
+                ["/date-calculator", "Date Calculator"],
               ].map(([href, label]) => (
                 <Link key={href} href={href} style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
                   {label}
