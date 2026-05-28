@@ -5,7 +5,7 @@ import { WORLD_EVENTS } from "@/lib/events";
 import { CULTURAL_HOLIDAYS } from "@/lib/holidays-content";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://printablecalendars.io";
+  const baseUrl = "https://printablecalendars.app";
   const year = new Date().getFullYear();
   const entries: MetadataRoute.Sitemap = [
     { url: baseUrl, lastModified: new Date(), changeFrequency: "monthly", priority: 1 },
@@ -14,12 +14,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Calendar pages — current year + next year
   for (const country of SUPPORTED_COUNTRIES) {
     for (const y of [year, year + 1]) {
+      // Year-view page
+      entries.push({
+        url: `${baseUrl}/calendar/${country.code.toLowerCase()}/${y}`,
+        lastModified: new Date(),
+        changeFrequency: "yearly",
+        priority: 0.85,
+      });
+
       for (let month = 1; month <= 12; month++) {
         entries.push({
           url: `${baseUrl}/calendar/${country.code.toLowerCase()}/${y}/${month}`,
           lastModified: new Date(),
           changeFrequency: "monthly",
-          priority: 0.8,
+          priority: 0.9,
         });
       }
     }

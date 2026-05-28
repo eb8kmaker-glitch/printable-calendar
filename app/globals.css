@@ -109,6 +109,22 @@ body {
 
 .print-only { display: none; }
 
+/* Kakao AdFit responsive — wrapper controls visibility, not <ins> */
+.kakao-pc-wrap {
+  display: none;
+  justify-content: center;
+  padding: 12px 0;
+}
+.kakao-mobile-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 12px 0;
+}
+@media (min-width: 768px) {
+  .kakao-pc-wrap { display: flex; }
+  .kakao-mobile-wrap { display: none; }
+}
+
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(12px); }
   to   { opacity: 1; transform: translateY(0); }

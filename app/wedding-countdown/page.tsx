@@ -1,9 +1,12 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { SUPPORTED_COUNTRIES, MONTH_NAMES } from "@/lib/types";
 import AdSlot from "@/components/AdSlot";
+import DynamicCalendarList from "@/components/DynamicCalendarList";
+import { buildFaqSchema } from "@/lib/seo-helpers";
+import DayCounter from "@/components/DayCounter";
+import type { DayMilestone } from "@/components/DayCounter";
 
-const BASE_URL = "https://printablecalendars.io";
+const BASE_URL = "https://printablecalendars.app";
 
 export const metadata: Metadata = {
   title: "Wedding Countdown Printable Calendar — Plan Month by Month",
@@ -33,6 +36,35 @@ export const metadata: Metadata = {
   },
   robots: { index: true, follow: true },
 };
+
+const WEDDING_FAQS = [
+  {
+    q: "How do I use a wedding countdown calendar printable?",
+    a: "Download one calendar PDF for each month between now and your wedding date. Print them all and store them in a binder, or put the current month on the fridge. Write in vendor calls, fittings, payment deadlines, and family commitments as they come up. A physical calendar is harder to ignore than a phone reminder.",
+  },
+  {
+    q: "What should I track on a wedding planning calendar PDF?",
+    a: "Key milestones include: venue and vendor deposit deadlines, dress and suit fitting appointments, RSVP cutoff dates, rehearsal dinner and ceremony rehearsal, final headcount to the caterer, and honeymoon booking deadlines. The planning checklist above shows the typical month-by-month breakdown.",
+  },
+  {
+    q: "How far in advance should I start my wedding countdown calendar?",
+    a: "Most couples start planning 12 to 18 months in advance for weekend weddings at popular venues. If your wedding is in peak season (June, September, October), start even earlier. The download section above shows the next 12 months so you can begin immediately.",
+  },
+  {
+    q: "Do the wedding countdown calendars include public holidays?",
+    a: "Yes. Every calendar includes the official public holidays for your chosen country (USA, UK, Australia, Canada, Japan, or South Korea). This helps you avoid scheduling meetings or deliveries on bank holidays when vendors may be unavailable.",
+  },
+];
+
+const WEDDING_MILESTONES: DayMilestone[] = [
+  { min: 0, max: 0, message: "Today is your wedding day." },
+  { min: 1, max: 6, message: "This is it. You're ready.", tip: "Sleep. Everything is handled." },
+  { min: 7, max: 29, message: "Almost there — delegate, pack, breathe.", tip: "Hand off day-of coordination to someone you trust." },
+  { min: 30, max: 89, message: "Final fittings, payments, and last confirmations.", tip: "Write your vows this week." },
+  { min: 90, max: 179, message: "Send formal invitations and finalise your vendors.", tip: "Confirm headcount with caterer 6 weeks out." },
+  { min: 180, max: 364, message: "Big decisions time — photographer, caterer, dress.", tip: "Send save-the-dates now." },
+  { min: 365, max: 99999, message: "Start early — book your venue and set a date.", tip: "Popular venues book up 18 months out." },
+];
 
 // Month-by-month wedding planning milestones
 const PLANNING_MILESTONES: { monthsBefore: number; tasks: string[] }[] = [
@@ -87,17 +119,14 @@ export default function WeddingCountdownPage() {
   const now = new Date();
   const year = now.getFullYear();
   const currentMonth = now.getMonth() + 1;
-
-  // Show the next 12 months for planning
-  const countdownMonths = Array.from({ length: 12 }, (_, i) => {
-    const totalMonth = currentMonth + i;
-    const m = ((totalMonth - 1) % 12) + 1;
-    const y = year + Math.floor((totalMonth - 1) / 12);
-    return { month: m, year: y, name: MONTH_NAMES[m - 1] };
-  });
+  const faqSchema = buildFaqSchema(WEDDING_FAQS.map((f) => ({ q: f.q, a: f.a })));
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "64px 24px" }}>
         <AdSlot slot="top-banner" style={{ marginBottom: 32 }} />
 
@@ -173,6 +202,12 @@ export default function WeddingCountdownPage() {
             </a>
           </div>
         </div>
+
+        <DayCounter
+          targetLabel="Wedding Day"
+          storageKey="wedding-date"
+          milestones={WEDDING_MILESTONES}
+        />
 
         {/* How to use */}
         <section
@@ -297,88 +332,42 @@ export default function WeddingCountdownPage() {
           </div>
         </section>
 
-        {/* Calendar downloads */}
-        <section style={{ marginBottom: 56 }}>
+        <DynamicCalendarList
+          storageKey="wedding-date"
+          maxMonths={24}
+          badgeLabel="Wedding month"
+          pdfHeaderText="Wedding Countdown"
+          pdfTargetLabel="Wedding Day"
+          noDateHint="Enter your wedding date above to customize this list."
+        />
+
+        <AdSlot slot="pre-download" style={{ marginBottom: 32 }} />
+
+        {/* FAQ */}
+        <section style={{ marginTop: 32, paddingTop: 40, borderTop: "1px solid var(--border)" }}>
           <h2
             style={{
-              fontFamily: "'DM Mono', monospace",
-              fontSize: 11,
-              color: "var(--muted)",
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              marginBottom: 24,
+              fontFamily: "'EB Garamond', Georgia, serif",
+              fontSize: 28,
+              fontWeight: 400,
+              letterSpacing: "-0.01em",
+              marginBottom: 32,
             }}
           >
-            Download your countdown months
+            Frequently asked questions
           </h2>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
-              gap: 12,
-            }}
-          >
-            {countdownMonths.map(({ month: m, year: y, name }, i) => (
+          <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+            {WEDDING_FAQS.map((faq, i) => (
               <div
-                key={`${y}-${m}`}
-                style={{
-                  border: "1px solid var(--border)",
-                  borderRadius: 8,
-                  padding: "14px 16px",
-                }}
+                key={i}
+                style={{ borderTop: "1px solid var(--border)", paddingTop: 20, paddingBottom: 20 }}
               >
-                <div style={{ marginBottom: 10 }}>
-                  <p style={{ fontSize: 14, fontWeight: 500 }}>{name} {y}</p>
-                  <p
-                    style={{
-                      fontFamily: "'DM Mono', monospace",
-                      fontSize: 10,
-                      color: "var(--muted)",
-                      marginTop: 2,
-                    }}
-                  >
-                    {i === 0 ? "This month" : `${i + 1} months from now`}
-                  </p>
-                </div>
-                <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-                  {SUPPORTED_COUNTRIES.map((c) => (
-                    <div key={c.code} style={{ display: "flex", gap: 4 }}>
-                      <Link
-                        href={`/calendar/${c.code.toLowerCase()}/${y}/${m}`}
-                        style={{
-                          fontSize: 11,
-                          padding: "4px 10px",
-                          border: "1px solid var(--border)",
-                          borderRadius: 5,
-                          textDecoration: "none",
-                          color: "var(--fg)",
-                        }}
-                      >
-                        {c.code}
-                      </Link>
-                      <a
-                        href={`/api/pdf?country=${c.code.toLowerCase()}&year=${y}&month=${m}&size=A4&orientation=landscape&theme=light`}
-                        download={`wedding-countdown-${c.code.toLowerCase()}-${y}-${String(m).padStart(2, "0")}.pdf`}
-                        style={{
-                          fontSize: 11,
-                          padding: "4px 10px",
-                          border: "1px solid var(--border)",
-                          borderRadius: 5,
-                          textDecoration: "none",
-                          color: "var(--muted)",
-                        }}
-                      >
-                        PDF
-                      </a>
-                    </div>
-                  ))}
-                </div>
+                <p style={{ fontSize: 15, fontWeight: 500, marginBottom: 8 }}>{faq.q}</p>
+                <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.7 }}>{faq.a}</p>
               </div>
             ))}
           </div>
         </section>
-
-        <AdSlot slot="pre-download" style={{ marginBottom: 32 }} />
       </div>
     </>
   );

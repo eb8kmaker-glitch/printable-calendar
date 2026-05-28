@@ -137,6 +137,16 @@ export async function GET(req: NextRequest) {
   const orientation = (searchParams.get("orientation") ?? "landscape") as Orientation;
   const theme = (searchParams.get("theme") ?? "light") as Theme;
 
+  // ── New optional decoration params ────────────────────────────────────────
+  const headerText  = searchParams.get("headerText") ?? "";
+  const targetDate  = searchParams.get("targetDate") ?? "";   // YYYY-MM-DD
+  const targetLabel = searchParams.get("targetLabel") ?? "";
+  let dayLabels: Record<string, string> = {};
+  try {
+    const raw = searchParams.get("dayLabels");
+    if (raw) dayLabels = JSON.parse(raw);
+  } catch { /* ignore invalid JSON */ }
+
   const config = getCountryConfig(country);
   if (!config) {
     return NextResponse.json({ error: "Invalid country" }, { status: 400 });
@@ -157,7 +167,7 @@ export async function GET(req: NextRequest) {
     }
     const holidays = getHolidays(config.code, year);
     const days = buildCalendarDays(year, month, holidays);
-    html = generateMonthlyHTML({ days, year, month, countryName: config.name, size, orientation, theme });
+    html = generateMonthlyHTML({ days, year, month, countryName: config.name, size, orientation, theme, headerText, targetDate, targetLabel, dayLabels });
     const themeSuffix = theme === "dark" ? "-dark" : "";
     filename = `calendar-${country}-${year}-${String(month).padStart(2, "0")}${themeSuffix}.pdf`;
   } else {
@@ -196,11 +206,13 @@ export async function GET(req: NextRequest) {
 
     await browser.close();
 
+    // Personalized PDFs (targetDate / dayLabels) must not be CDN-cached
+    const isDecorated = !!targetDate || Object.keys(dayLabels).length > 0;
     return new NextResponse(new Blob([pdf], { type: "application/pdf" }), {
       headers: {
         "Content-Type": "application/pdf",
         "Content-Disposition": `attachment; filename="${filename}"`,
-        "Cache-Control": "public, max-age=86400",
+        "Cache-Control": isDecorated ? "no-store" : "public, max-age=86400",
       },
     });
   } catch (err) {
@@ -222,9 +234,17 @@ interface MonthlyParams {
   size: PaperSize;
   orientation: Orientation;
   theme: Theme;
+  // Decoration params
+  headerText?: string;
+  targetDate?: string;
+  targetLabel?: string;
+  dayLabels?: Record<string, string>;
 }
 
-function generateMonthlyHTML({ days, year, month, countryName, size, orientation, theme }: MonthlyParams): string {
+function generateMonthlyHTML({
+  days, year, month, countryName, size, orientation, theme,
+  headerText = "", targetDate = "", targetLabel = "", dayLabels = {},
+}: MonthlyParams): string {
   const cfg = SIZE_CONFIG[size];
   const tc = THEMES[theme];
   const monthName = MONTH_NAMES[month - 1];
@@ -246,6 +266,42 @@ function generateMonthlyHTML({ days, year, month, countryName, size, orientation
     if (isSun || isHoliday) numColor = tc.sundayColor;
     else if (isSat) numColor = tc.saturdayColor;
 
+    // ── ISO date string ────────────────────────────────────────────────────
+    const d = day.date;
+    const isoDate = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+    const isTargetDate = !!targetDate && isoDate === targetDate && day.isCurrentMonth;
+
+    // ── dayLabel (left bottom) ─────────────────────────────────────────────
+    const rawLabel = dayLabels[isoDate] ?? "";
+    const isGoldCell = rawLabel.startsWith("★") && day.isCurrentMonth;
+    const labelText = day.isCurrentMonth ? (rawLabel.startsWith("★") ? rawLabel.slice(1) : rawLabel) : "";
+
+    // ── D-N (right bottom) — computed for all current-month cells ──────────
+    let dNValue = "";
+    let dNColor = "#999";
+    let dNWeight = 400;
+    if (targetDate && day.isCurrentMonth) {
+      const diffMs = new Date(targetDate + "T12:00:00").getTime() - new Date(isoDate + "T12:00:00").getTime();
+      const diff = Math.round(diffMs / 86400000);
+      if (isTargetDate) {
+        dNValue = targetLabel || "D-Day";
+        dNColor = "#333";
+        dNWeight = 700;
+      } else if (diff > 0 && diff <= 60) {
+        dNValue = `D-${diff}`;
+        dNColor = diff <= 7 ? "#e53e3e" : "#999";
+      }
+    }
+
+    // ── Cell background ────────────────────────────────────────────────────
+    let bg = tc.cellBg;
+    if (day.isCurrentMonth) {
+      if (isTargetDate) bg = "#fef9e7";
+      else if (isGoldCell) bg = "#fef3c7";
+    }
+    const boxShadow = isTargetDate ? "box-shadow:inset 0 0 0 2px #d97706;" : "";
+
+    // ── Holiday label ──────────────────────────────────────────────────────
     let holidayEl = "";
     if (day.holiday && day.isCurrentMonth) {
       if (cfg.holidaySize > 0) {
@@ -255,11 +311,26 @@ function generateMonthlyHTML({ days, year, month, countryName, size, orientation
       }
     }
 
-    return `<div style="border-right:1px solid ${tc.gridLine};border-bottom:1px solid ${tc.gridLine};padding:${cfg.cellPadV} ${cfg.cellPadH};background:${tc.cellBg};opacity:${isOther ? "0.2" : "1"};overflow:hidden;display:flex;flex-direction:column;">
+    // ── Bottom row: dayLabel (left) + D-N (right) ──────────────────────────
+    const hasBottom = !!labelText || !!dNValue;
+    const bottomEl = hasBottom
+      ? `<div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:auto;padding-top:1px;overflow:hidden;flex-shrink:0;">
+          <span style="font-size:9px;color:#888;line-height:1.1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${labelText}</span>
+          <span style="font-size:9px;color:${dNColor};font-weight:${dNWeight};line-height:1.1;flex-shrink:0;${labelText ? "margin-left:2px;" : "margin-left:auto;"}">${dNValue}</span>
+        </div>`
+      : "";
+
+    return `<div style="border-right:1px solid ${tc.gridLine};border-bottom:1px solid ${tc.gridLine};padding:${cfg.cellPadV} ${cfg.cellPadH};background:${bg};opacity:${isOther ? "0.2" : "1"};overflow:hidden;display:flex;flex-direction:column;${boxShadow}">
       <div style="font-family:'Courier New',monospace;font-size:${cfg.dateNumSize}px;font-weight:${numWeight};color:${numColor};flex-shrink:0;line-height:1;">${day.date.getDate()}</div>
       ${holidayEl}
+      ${bottomEl}
     </div>`;
   }).join("");
+
+  // Header: append headerText next to month name if provided
+  const headerSuffix = headerText
+    ? ` <span style="font-size:${Math.round(cfg.titleSize * 0.36)}px;color:${tc.subtitleColor};font-weight:400;font-family:'Helvetica Neue',Arial,sans-serif;letter-spacing:normal;opacity:0.8;">· ${headerText}</span>`
+    : "";
 
   return `<!DOCTYPE html>
 <html>
@@ -279,7 +350,7 @@ function generateMonthlyHTML({ days, year, month, countryName, size, orientation
   <div class="page">
     <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:${cfg.headerMB};flex-shrink:0;">
       <h1 style="font-size:${cfg.titleSize}px;font-weight:300;letter-spacing:-0.03em;font-family:Georgia,serif;line-height:1;color:${tc.titleColor};">
-        ${monthName} <span style="opacity:0.45;">${year}</span>
+        ${monthName} <span style="opacity:0.45;">${year}</span>${headerSuffix}
       </h1>
       <span style="font-size:${cfg.subtitleSize}px;color:${tc.subtitleColor};font-weight:500;">${countryName}</span>
     </div>

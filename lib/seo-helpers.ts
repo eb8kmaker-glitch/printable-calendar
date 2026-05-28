@@ -1,3 +1,17 @@
+const BASE_URL = "https://printablecalendars.app";
+
+/** Singleton Organization schema — embed in layout for Knowledge Graph. */
+export const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "PrintableCalendars",
+  url: BASE_URL,
+  logo: `${BASE_URL}/og-image.png`,
+  description:
+    "Free printable monthly and annual calendars with official public holidays for USA, Japan, and South Korea. A4 PDF, no login required.",
+  sameAs: [],
+};
+
 /** Build a FAQPage JSON-LD object from a list of question/answer pairs. */
 export function buildFaqSchema(faqs: { q: string; a: string }[]) {
   return {
@@ -7,6 +21,31 @@ export function buildFaqSchema(faqs: { q: string; a: string }[]) {
       "@type": "Question",
       name: q,
       acceptedAnswer: { "@type": "Answer", text: a },
+    })),
+  };
+}
+
+/** Build a HowTo JSON-LD for calendar download pages. */
+export function buildHowToSchema({
+  name,
+  description,
+  steps,
+}: {
+  name: string;
+  description: string;
+  steps: { name: string; text: string }[];
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name,
+    description,
+    totalTime: "PT1M",
+    step: steps.map((s, i) => ({
+      "@type": "HowToStep",
+      position: i + 1,
+      name: s.name,
+      text: s.text,
     })),
   };
 }
@@ -34,7 +73,7 @@ export function buildWebPageSchema({
     schema.breadcrumb = {
       "@type": "BreadcrumbList",
       itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Home", item: "https://printablecalendars.io" },
+        { "@type": "ListItem", position: 1, name: "Home", item: "https://printablecalendars.app" },
         ...breadcrumbs.map((b, i) => ({
           "@type": "ListItem",
           position: i + 2,

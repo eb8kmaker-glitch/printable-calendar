@@ -7,7 +7,7 @@ import {
   type EventCategory,
 } from "@/lib/events";
 
-const BASE_URL = "https://printablecalendars.io";
+const BASE_URL = "https://printablecalendars.app";
 
 export const metadata: Metadata = {
   title: "World Events & International Days",

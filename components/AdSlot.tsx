@@ -2,10 +2,19 @@
 
 import { useEffect, useRef } from "react";
 
-// Ad slot IDs from AdSense console — add per-unit IDs here once created
-const SLOT_IDS: Record<string, string> = {
-  "top-banner":   "", // TODO: replace with AdSense ad unit slot ID
-  "pre-download": "", // TODO: replace with AdSense ad unit slot ID
+interface SlotConfig {
+  id: string;
+  format: "auto" | "fluid";
+  layoutKey?: string;
+  fullWidthResponsive?: boolean;
+}
+
+const SLOTS: Record<string, SlotConfig> = {
+  "top-banner":        { id: "",           format: "auto",  fullWidthResponsive: true },
+  "pre-download":      { id: "",           format: "auto",  fullWidthResponsive: true },
+  "todays-events":     { id: "1150474290", format: "auto",  fullWidthResponsive: true },
+  "between-countries": { id: "2290946981", format: "fluid", layoutKey: "-gw-3+1f-3d+2z" },
+  "above-footer":      { id: "1150474290", format: "auto",  fullWidthResponsive: true },
 };
 
 const ADSENSE_CLIENT = "ca-pub-8254204287118850";
@@ -16,7 +25,8 @@ interface AdSlotProps {
 }
 
 export default function AdSlot({ slot, style }: AdSlotProps) {
-  const slotId = SLOT_IDS[slot] ?? "";
+  const config = SLOTS[slot];
+  const slotId = config?.id ?? "";
   const ref = useRef<HTMLModElement>(null);
   const pushed = useRef(false);
 
@@ -29,30 +39,7 @@ export default function AdSlot({ slot, style }: AdSlotProps) {
     } catch {}
   }, [slotId]);
 
-  // Show placeholder until real slot IDs are added
-  if (!slotId) {
-    return (
-      <div
-        className="no-print"
-        style={{
-          width: "100%",
-          minHeight: 90,
-          border: "1px dashed var(--border)",
-          borderRadius: 8,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          color: "var(--muted)",
-          fontSize: 11,
-          letterSpacing: "0.05em",
-          background: "transparent",
-          ...style,
-        }}
-      >
-        <span style={{ opacity: 0.3 }}>advertisement</span>
-      </div>
-    );
-  }
+  if (!slotId) return null;
 
   return (
     <div className="no-print" style={{ width: "100%", overflow: "hidden", ...style }}>
@@ -62,8 +49,9 @@ export default function AdSlot({ slot, style }: AdSlotProps) {
         style={{ display: "block" }}
         data-ad-client={ADSENSE_CLIENT}
         data-ad-slot={slotId}
-        data-ad-format="auto"
-        data-full-width-responsive="true"
+        data-ad-format={config.format}
+        data-ad-layout-key={config.layoutKey}
+        data-full-width-responsive={config.fullWidthResponsive ? "true" : undefined}
       />
     </div>
   );

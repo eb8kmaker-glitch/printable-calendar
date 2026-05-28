@@ -8,6 +8,7 @@ import MonthNav from "@/components/MonthNav";
 import DownloadButton from "@/components/DownloadButton";
 import AdSlot from "@/components/AdSlot";
 import Link from "next/link";
+import { buildHowToSchema } from "@/lib/seo-helpers";
 
 interface PageProps {
   params: Promise<{ country: string; year: string; month: string }>;
@@ -33,20 +34,23 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const config = getCountryConfig(country);
   if (!config) return {};
   const monthName = MONTH_NAMES[Number(month) - 1];
-  const title = `${monthName} ${year} Printable Calendar — ${config.name}`;
-  const description = `Free printable ${monthName} ${year} calendar for ${config.name} with public holidays. Download A4 PDF instantly.`;
+  const title = `${monthName} ${year} Printable Calendar — ${config.name} Public Holidays | PrintableCalendars`;
+  const description = `Free printable ${monthName} ${year} calendar for ${config.name} with official public holidays. Download as A4 PDF instantly, no login required.`;
   return {
     title,
     description,
     keywords: [
+      `${config.name} calendar ${monthName} ${year}`,
       `printable calendar ${monthName} ${year}`,
-      `${config.name} calendar ${year}`,
+      `${monthName} ${year} calendar PDF`,
       `${config.name} public holidays ${year}`,
-      `PDF calendar ${monthName} ${year}`,
+      `free printable monthly calendar`,
+      `${monthName} ${year} holiday calendar`,
     ],
-    openGraph: { title, description, type: "website" },
+    openGraph: { title, description, type: "website", siteName: "PrintableCalendars" },
+    twitter: { card: "summary_large_image", title, description },
     alternates: {
-      canonical: `/calendar/${country}/${year}/${month}`,
+      canonical: `https://printablecalendars.app/calendar/${country}/${year}/${month}`,
     },
   };
 }
@@ -68,19 +72,50 @@ export default async function CalendarPage({ params }: PageProps) {
   const monthEvents = getEventsByMonth(month).slice(0, 8);
 
   // Structured data
-  const jsonLd = {
+  const webPageSchema = {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    name: `${monthName} ${year} Printable Calendar — ${config.name}`,
-    description: `Free printable calendar for ${config.name}, ${monthName} ${year}`,
-    url: `https://printablecalendars.io/calendar/${country}/${year}/${month}`,
+    name: `Free ${monthName} ${year} Printable Calendar — ${config.name} PDF`,
+    description: `Free printable ${monthName} ${year} calendar for ${config.name} with public holidays. A4 landscape PDF.`,
+    url: `https://printablecalendars.app/calendar/${country}/${year}/${month}`,
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: "https://printablecalendars.app" },
+        { "@type": "ListItem", position: 2, name: config.name, item: `https://printablecalendars.app/calendar/${country}/${year}` },
+        { "@type": "ListItem", position: 3, name: `${monthName} ${year}`, item: `https://printablecalendars.app/calendar/${country}/${year}/${month}` },
+      ],
+    },
   };
+
+  const howToSchema = buildHowToSchema({
+    name: `How to download a free printable calendar for ${config.name} — ${monthName} ${year}`,
+    description: `Download a free A4 PDF calendar with ${config.name} public holidays in 3 steps. No login required.`,
+    steps: [
+      {
+        name: "Choose your country",
+        text: `Select ${config.name} from the country switcher at the top of the page.`,
+      },
+      {
+        name: "Navigate to the month",
+        text: `Use the month navigation arrows to go to ${monthName} ${year}.`,
+      },
+      {
+        name: "Download as PDF",
+        text: `Click the "Download PDF" button. The calendar downloads instantly as an A4 landscape PDF with all ${config.name} public holidays included. No account required.`,
+      },
+    ],
+  });
 
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
       />
 
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "32px 24px" }}>
@@ -204,6 +239,9 @@ export default async function CalendarPage({ params }: PageProps) {
             </div>
           </section>
         )}
+
+        {/* AdSense — Today's Events 섹션 하단 */}
+        <AdSlot slot="todays-events" style={{ marginTop: 24 }} />
 
         {/* World events this month */}
         {monthEvents.length > 0 && (

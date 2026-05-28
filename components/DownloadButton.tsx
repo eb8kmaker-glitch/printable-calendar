@@ -130,7 +130,7 @@ export default function DownloadButton({ country, year, month }: DownloadButtonP
                   textTransform: "capitalize",
                 }}
               >
-                {o === "landscape" ? "⬜ Landscape" : "▭ Portrait"}
+                {o === "landscape" ? "Landscape" : "Portrait"}
               </button>
             );
           })}

@@ -1,0 +1,60 @@
+# PrintableCalendars
+
+> Free printable monthly and annual calendars with official public holidays for USA, Japan, and South Korea. A4 PDF, instant download, no login required.
+
+## What this site offers
+
+- Monthly printable calendars by country and month (USA, Japan, South Korea)
+- Annual year-view calendars with all 12 months
+- Official public holiday data for each supported country
+- Cultural holiday guides (Chuseok, Golden Week, Thanksgiving, Ramadan, etc.)
+- World events calendar (100+ international observances)
+- Specialty planners: study planner, teacher planner, holiday planner, wedding countdown calendar
+
+## Key facts
+
+- Completely free — no account, no payment, no watermark
+- Calendars include official public holidays only (not observances or regional-only days)
+- PDF format: A4 landscape, optimized for both color and black-and-white printing
+- Holiday data sourced from the date-holidays open-source library
+- Supported countries: United States (US), Japan (JP), South Korea (KR)
+
+## How to get a calendar
+
+1. Go to /calendar/{country}/{year}/{month} — e.g. /calendar/us/2026/6
+2. The calendar displays with all public holidays marked
+3. Click "Download PDF" — downloads instantly, no login required
+
+## Site structure
+
+- /calendar/{country}/{year}/{month} — Monthly calendar page (US, JP, KR)
+- /calendar/{country}/{year} — Annual year-view calendar
+- /events — World events index (100+ international observances)
+- /events/{slug} — Individual world event with history and cultural context
+- /holidays — Cultural holidays index
+- /holidays/{slug} — In-depth cultural holiday guide
+- /study-planner — Printable study planner for students
+- /teacher-planner — Printable planner for teachers
+- /school-calendar-2026 — School year calendar 2026
+- /holiday-planner — Holiday and travel planner calendar
+- /wedding-countdown — Wedding countdown calendar
+- /ramadan-2026 — Ramadan 2026 calendar with dates
+- /about — About PrintableCalendars
+- /contact — Contact page
+
+## Frequently asked questions
+
+Q: Is PrintableCalendars free?
+A: Yes. All calendars are completely free — no account, no payment, no watermark.
+
+Q: Which countries are supported?
+A: USA, Japan, and South Korea. Australia, Canada, UK, and Germany are planned.
+
+Q: What file format?
+A: A4 landscape PDF, suitable for any home or office printer.
+
+Q: Do calendars include public holidays?
+A: Yes. All official public holidays for the selected country are included.
+
+Q: How do I download?
+A: Navigate to the calendar page and click "Download PDF". No login required.

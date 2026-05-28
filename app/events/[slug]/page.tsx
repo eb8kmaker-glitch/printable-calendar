@@ -11,7 +11,7 @@ import {
 import { SUPPORTED_COUNTRIES } from "@/lib/types";
 import { buildFaqSchema } from "@/lib/seo-helpers";
 
-const BASE_URL = "https://printablecalendars.io";
+const BASE_URL = "https://printablecalendars.app";
 
 interface PageProps {
   params: Promise<{ slug: string }>;

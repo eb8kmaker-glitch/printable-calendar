@@ -4,6 +4,8 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { organizationSchema } from "@/lib/seo-helpers";
+import { Analytics } from "@vercel/analytics/next";
 
 const ADSENSE_ID = "ca-pub-8254204287118850";
 
@@ -14,7 +16,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://printablecalendars.io"),
+  metadataBase: new URL("https://printablecalendars.app"),
   title: {
     default: "Free Printable Calendar — Download PDF by Country",
     template: "%s | PrintableCalendars",
@@ -23,11 +25,20 @@ export const metadata: Metadata = {
     "Download free printable monthly calendars with public holidays for USA, Japan, South Korea and more. A4 PDF, clean minimal design.",
   keywords: [
     "printable calendar",
-    "PDF calendar download",
-    "monthly calendar",
-    "public holidays",
     "free printable calendar 2026",
+    "printable calendar PDF",
+    "monthly calendar with holidays",
+    "annual calendar download",
+    "US calendar 2026",
+    "Japan calendar 2026",
+    "Korea calendar 2026",
+    "public holidays calendar",
+    "A4 calendar PDF",
   ],
+  authors: [{ name: "PrintableCalendars", url: "https://printablecalendars.app" }],
+  creator: "PrintableCalendars",
+  publisher: "PrintableCalendars",
+  category: "productivity",
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -62,9 +73,30 @@ export default function RootLayout({
         />
       </head>
       <body style={{ fontFamily: "'DM Sans', system-ui, sans-serif" }} className="antialiased">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
         <ThemeProvider>
           <Header />
           <main style={{ minHeight: "calc(100vh - 120px)" }}>{children}</main>
+          {/* Kakao AdFit — PC 728×90 (≥768px) / Mobile 320×50 (<768px) */}
+          <div className="no-print kakao-pc-wrap">
+            <ins
+              className="kakao_ad_area"
+              data-ad-unit="DAN-CoVdtClU3lNByMCT"
+              data-ad-width="728"
+              data-ad-height="90"
+            />
+          </div>
+          <div className="no-print kakao-mobile-wrap">
+            <ins
+              className="kakao_ad_area"
+              data-ad-unit="DAN-3RN3Rk3bpFXPgnnP"
+              data-ad-width="320"
+              data-ad-height="50"
+            />
+          </div>
           <Footer />
         </ThemeProvider>
         {/* Google AdSense — auto-ads */}
@@ -74,6 +106,9 @@ export default function RootLayout({
           crossOrigin="anonymous"
           strategy="afterInteractive"
         />
+        {/* Kakao AdFit */}
+        <Script src="//t1.kakaocdn.net/kas/static/ba.min.js" strategy="afterInteractive" />
+        <Analytics />
       </body>
     </html>
   );

@@ -1,9 +1,12 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { SUPPORTED_COUNTRIES, MONTH_NAMES } from "@/lib/types";
 import AdSlot from "@/components/AdSlot";
+import DynamicCalendarList from "@/components/DynamicCalendarList";
+import { buildFaqSchema } from "@/lib/seo-helpers";
+import DayCounter from "@/components/DayCounter";
+import type { DayMilestone } from "@/components/DayCounter";
 
-const BASE_URL = "https://printablecalendars.io";
+const BASE_URL = "https://printablecalendars.app";
 
 export const metadata: Metadata = {
   title: "Free Printable Teacher Planner Calendars — PDF Download",
@@ -33,6 +36,33 @@ export const metadata: Metadata = {
   },
   robots: { index: true, follow: true },
 };
+
+const TEACHER_MILESTONES: DayMilestone[] = [
+  { min: 0, max: 0, message: "Term complete. Well done." },
+  { min: 1, max: 13, message: "End of term — grades, reports, parent comms.", tip: "Batch similar tasks to save time." },
+  { min: 14, max: 29, message: "Final push — start wrapping up units.", tip: "Leave buffer time for unexpected delays." },
+  { min: 30, max: 59, message: "Mid-term — check in with struggling students now.", tip: "Small interventions now prevent big problems later." },
+  { min: 60, max: 99999, message: "Strong start — establish routines early.", tip: "First 2 weeks set the tone for the whole term." },
+];
+
+const TEACHER_FAQS = [
+  {
+    q: "What makes a printable teacher planner 2026 useful in the classroom?",
+    a: "A printed monthly calendar sits on your desk without requiring a screen, a password, or an internet connection. You can annotate it in pen, circle dates, and hand a copy to a substitute with no setup. For classroom planning, that physical permanence is often more reliable than a digital tool.",
+  },
+  {
+    q: "Can I use this as a free classroom calendar template?",
+    a: "Yes. All calendars are free to download, print, and use in a classroom setting. Each PDF includes the official public holidays for your country, a clean monthly grid, and landscape A4 layout with space to write lesson titles and notes beside each day.",
+  },
+  {
+    q: "Which countries' public holidays are included in the teacher planner?",
+    a: "Calendars are available for USA, United Kingdom, Australia, Canada, Japan, and South Korea. Each country's official public holidays are marked on the grid, so you can plan around school closures without cross-referencing a separate source.",
+  },
+  {
+    q: "How far ahead can I download teacher planner calendars?",
+    a: "You can download any month for the current year or the next year. The section above shows the next 8 months by default — just scroll to the country and month you need and click PDF.",
+  },
+];
 
 const CLASSROOM_USES = [
   {
@@ -65,17 +95,15 @@ export default function TeacherPlannerPage() {
   const now = new Date();
   const year = now.getFullYear();
   const currentMonth = now.getMonth() + 1;
+  const faqSchema = buildFaqSchema(TEACHER_FAQS.map((f) => ({ q: f.q, a: f.a })));
 
-  // Show the remaining months of the current academic year (next 8 months)
-  const plannerMonths = Array.from({ length: 8 }, (_, i) => {
-    const totalMonth = currentMonth + i;
-    const m = ((totalMonth - 1) % 12) + 1;
-    const y = year + Math.floor((totalMonth - 1) / 12);
-    return { month: m, year: y, name: MONTH_NAMES[m - 1] };
-  });
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "64px 24px" }}>
         <AdSlot slot="top-banner" style={{ marginBottom: 32 }} />
 
@@ -132,86 +160,20 @@ export default function TeacherPlannerPage() {
           </Link>
         </div>
 
-        {/* Month grid */}
-        <section style={{ marginBottom: 64 }}>
-          <h2
-            style={{
-              fontFamily: "'DM Mono', monospace",
-              fontSize: 11,
-              color: "var(--muted)",
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              marginBottom: 24,
-            }}
-          >
-            Download monthly planner PDFs
-          </h2>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-              gap: 16,
-            }}
-          >
-            {plannerMonths.map(({ month: m, year: y, name }) => (
-              <div
-                key={`${y}-${m}`}
-                style={{
-                  border: "1px solid var(--border)",
-                  borderRadius: 10,
-                  padding: "18px 20px",
-                }}
-              >
-                <p
-                  style={{
-                    fontFamily: "'EB Garamond', Georgia, serif",
-                    fontSize: 17,
-                    fontWeight: 400,
-                    marginBottom: 14,
-                  }}
-                >
-                  {name} {y}
-                </p>
-                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                  {SUPPORTED_COUNTRIES.map((c) => {
-                    const pdfUrl = `/api/pdf?country=${c.code.toLowerCase()}&year=${y}&month=${m}&size=A4&orientation=landscape&theme=light`;
-                    return (
-                      <div key={c.code} style={{ display: "flex", gap: 5 }}>
-                        <Link
-                          href={`/calendar/${c.code.toLowerCase()}/${y}/${m}`}
-                          style={{
-                            fontSize: 12,
-                            padding: "5px 12px",
-                            border: "1px solid var(--border)",
-                            borderRadius: 6,
-                            textDecoration: "none",
-                            color: "var(--fg)",
-                          }}
-                        >
-                          {c.code}
-                        </Link>
-                        <a
-                          href={pdfUrl}
-                          download={`teacher-planner-${c.code.toLowerCase()}-${y}-${String(m).padStart(2, "0")}.pdf`}
-                          style={{
-                            fontSize: 11,
-                            padding: "5px 10px",
-                            border: "1px solid var(--border)",
-                            borderRadius: 6,
-                            textDecoration: "none",
-                            color: "var(--muted)",
-                          }}
-                        >
-                          PDF
-                        </a>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
+        <DayCounter
+          targetLabel="End of Term"
+          storageKey="term-end"
+          milestones={TEACHER_MILESTONES}
+        />
+
+        <DynamicCalendarList
+          storageKey="term-end"
+          maxMonths={12}
+          badgeLabel="Last term month"
+          pdfHeaderText="Term Countdown"
+          pdfTargetLabel="Term End"
+          noDateHint="Set your term end date above to see your planner calendars."
+        />
 
         <AdSlot slot="pre-download" style={{ marginBottom: 48 }} />
 
@@ -268,6 +230,32 @@ export default function TeacherPlannerPage() {
               <p style={{ fontSize: 13, color: "var(--muted)", lineHeight: 1.6 }}>{desc}</p>
             </div>
           ))}
+        </section>
+
+        {/* FAQ */}
+        <section style={{ marginTop: 64, paddingTop: 40, borderTop: "1px solid var(--border)" }}>
+          <h2
+            style={{
+              fontFamily: "'EB Garamond', Georgia, serif",
+              fontSize: 28,
+              fontWeight: 400,
+              letterSpacing: "-0.01em",
+              marginBottom: 32,
+            }}
+          >
+            Frequently asked questions
+          </h2>
+          <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+            {TEACHER_FAQS.map((faq, i) => (
+              <div
+                key={i}
+                style={{ borderTop: "1px solid var(--border)", paddingTop: 20, paddingBottom: 20 }}
+              >
+                <p style={{ fontSize: 15, fontWeight: 500, marginBottom: 8 }}>{faq.q}</p>
+                <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.7 }}>{faq.a}</p>
+              </div>
+            ))}
+          </div>
         </section>
       </div>
     </>

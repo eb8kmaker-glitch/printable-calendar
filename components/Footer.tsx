@@ -16,7 +16,7 @@ export default function Footer() {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 32, marginBottom: 40 }}>
           {/* Brand */}
           <div>
-            <p style={{ fontFamily: "'EB Garamond', Georgia, serif", fontSize: 18, marginBottom: 10 }}>printcal</p>
+            <p style={{ fontFamily: "'EB Garamond', Georgia, serif", fontSize: 18, marginBottom: 10 }}>PrintableCalendars</p>
             <p style={{ fontSize: 13, color: "var(--muted)", lineHeight: 1.6, marginBottom: 14 }}>
               Free printable monthly calendars with public holidays. Download as A4 PDF.
             </p>
@@ -26,6 +26,7 @@ export default function Footer() {
                 ["/contact", "Contact"],
                 ["/events", "World Events"],
                 ["/holidays", "Cultural Holidays"],
+                ["/date-calculator", "Date Calculator"],
               ].map(([href, label]) => (
                 <Link key={href} href={href} style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
                   {label}

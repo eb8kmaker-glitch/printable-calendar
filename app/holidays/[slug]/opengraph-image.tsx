@@ -54,7 +54,7 @@ export default async function Image({
               letterSpacing: "0.02em",
             }}
           >
-            printcal
+            PrintableCalendars
           </span>
           {countryName && (
             <span
@@ -142,7 +142,7 @@ export default async function Image({
             letterSpacing: "0.04em",
           }}
         >
-          <span>History · traditions · free printable calendars — printablecalendars.io</span>
+          <span>History · traditions · free printable calendars — printablecalendars.app</span>
         </div>
       </div>
     ),
