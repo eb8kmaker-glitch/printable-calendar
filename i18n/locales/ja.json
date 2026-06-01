@@ -102,5 +102,25 @@
     "markTheDate": "カレンダーに記録",
     "downloadCta": "{year}年の無料印刷用カレンダーをダウンロードして、{event}を見逃さないようにしましょう。",
     "viewCalendar": "カレンダーを見る"
+  },
+  "dateCalculator": {
+    "title": "日付計算ツール",
+    "description": "日付間の日数計算、日数の加減算、カウントダウンができます。",
+    "tabBetween": "期間計算",
+    "tabAddSubtract": "日数の加減算",
+    "tabUntil": "カウントダウン",
+    "startDate": "開始日",
+    "endDate": "終了日",
+    "totalDays": "合計日数",
+    "weeks": "週",
+    "businessDays": "営業日",
+    "monFriOnly": "月〜金のみ",
+    "aboutTitle": "日付計算ツールについて",
+    "aboutBetweenTitle": "日付間の期間",
+    "aboutBetweenDesc": "2つの日付の間の正確な日数・週数・営業日数を計算します。",
+    "aboutAddTitle": "日数の加減算",
+    "aboutAddDesc": "開始日から日数を加算・減算して、未来または過去の日付を求めます。",
+    "aboutUntilTitle": "カウントダウン",
+    "aboutUntilDesc": "次のイベントや日付までの残り日数をカウントします。"
   }
 }

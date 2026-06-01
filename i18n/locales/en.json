@@ -102,5 +102,25 @@
     "markTheDate": "MARK THE DATE",
     "downloadCta": "Download a free printable calendar for {year} and never miss {event}.",
     "viewCalendar": "View Calendar"
+  },
+  "dateCalculator": {
+    "title": "Date Calculator",
+    "description": "Calculate days between dates, add or subtract days, and count down to upcoming events.",
+    "tabBetween": "Days Between",
+    "tabAddSubtract": "Add / Subtract",
+    "tabUntil": "Days Until",
+    "startDate": "Start date",
+    "endDate": "End date",
+    "totalDays": "Total days",
+    "weeks": "Weeks",
+    "businessDays": "Business days",
+    "monFriOnly": "Mon–Fri only",
+    "aboutTitle": "ABOUT DATE CALCULATOR",
+    "aboutBetweenTitle": "Days Between Dates",
+    "aboutBetweenDesc": "Calculate the exact number of days, weeks, and business days between any two dates.",
+    "aboutAddTitle": "Add or Subtract Days",
+    "aboutAddDesc": "Find a future or past date by adding or subtracting a number of days from any starting date.",
+    "aboutUntilTitle": "Days Until",
+    "aboutUntilDesc": "Count down the days until any upcoming date or event."
   }
 }

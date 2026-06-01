@@ -102,5 +102,25 @@
     "markTheDate": "달력에 표시하기",
     "downloadCta": "{year}년 무료 인쇄용 달력을 다운로드하고 {event}을(를) 놓치지 마세요.",
     "viewCalendar": "달력 보기"
+  },
+  "dateCalculator": {
+    "title": "날짜 계산기",
+    "description": "두 날짜 사이의 일수를 계산하거나, 날짜를 더하고 빼거나, 다가오는 날까지 카운트다운합니다.",
+    "tabBetween": "기간 계산",
+    "tabAddSubtract": "날짜 더하기/빼기",
+    "tabUntil": "D-Day 계산",
+    "startDate": "시작 날짜",
+    "endDate": "종료 날짜",
+    "totalDays": "총 일수",
+    "weeks": "주",
+    "businessDays": "영업일",
+    "monFriOnly": "월~금 기준",
+    "aboutTitle": "날짜 계산기 소개",
+    "aboutBetweenTitle": "두 날짜 사이의 기간",
+    "aboutBetweenDesc": "두 날짜 사이의 정확한 일수, 주, 영업일을 계산합니다.",
+    "aboutAddTitle": "날짜 더하기/빼기",
+    "aboutAddDesc": "시작 날짜에서 일수를 더하거나 빼서 미래 또는 과거 날짜를 찾습니다.",
+    "aboutUntilTitle": "D-Day 계산",
+    "aboutUntilDesc": "다가오는 날짜나 이벤트까지 남은 일수를 카운트다운합니다."
   }
 }
