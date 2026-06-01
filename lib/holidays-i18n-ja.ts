@@ -2,7 +2,7 @@ import type { HolidayI18nContent } from "./holidays-i18n";
 
 export const HOLIDAY_JA: Record<string, HolidayI18nContent> = {
   chuseok: {
-    name: "추석",
+    name: "秋夕",
     tagline: "収穫の満月を祝う三日間——感謝と家族とソンピョンが彩る秋夕。",
     dateLabel: "旧暦8月15日（9〜10月）",
     origin:
@@ -51,7 +51,7 @@ export const HOLIDAY_JA: Record<string, HolidayI18nContent> = {
   },
 
   seollal: {
-    name: "설날",
+    name: "ソルラル",
     tagline: "年長者へのお辞儀、トッククで始まる新年——설날の温かな風景。",
     dateLabel: "旧暦1月1日（1〜2月）",
     origin:
