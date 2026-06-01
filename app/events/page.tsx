@@ -328,19 +328,6 @@ export default async function EventsPage({ searchParams }: PageProps) {
                     {event.tagline}
                   </p>
 
-                  {/* Cultural context indicator */}
-                  {event.culturalContext && Object.keys(event.culturalContext).length > 0 && (
-                    <p
-                      style={{
-                        fontSize: 10,
-                        color: "var(--muted)",
-                        fontFamily: "'DM Mono', monospace",
-                        letterSpacing: "0.04em",
-                      }}
-                    >
-                      {Object.keys(event.culturalContext).join(" 쨌 ")} context
-                    </p>
-                  )}
                 </div>
               </Link>
             ))}
