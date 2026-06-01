@@ -2,7 +2,8 @@
   "nav": {
     "holidays": "공휴일",
     "events": "기념일",
-    "dateCalc": "날짜 계산"
+    "dateCalc": "날짜 계산",
+    "calendar": "달력"
   },
   "countries": {
     "us": "미국",
@@ -13,11 +14,28 @@
     "jp": "일본"
   },
   "months": {
-    "1": "1월","2": "2월","3": "3월","4": "4월",
-    "5": "5월","6": "6월","7": "7월","8": "8월",
-    "9": "9월","10": "10월","11": "11월","12": "12월"
+    "1": "1월",
+    "2": "2월",
+    "3": "3월",
+    "4": "4월",
+    "5": "5월",
+    "6": "6월",
+    "7": "7월",
+    "8": "8월",
+    "9": "9월",
+    "10": "10월",
+    "11": "11월",
+    "12": "12월"
   },
-  "weekdays": ["일","월","화","수","목","금","토"],
+  "weekdays": [
+    "일",
+    "월",
+    "화",
+    "수",
+    "목",
+    "금",
+    "토"
+  ],
   "calendar": {
     "yearView": "연간 보기",
     "monthlyView": "월간 보기",
@@ -45,6 +63,7 @@
     "viewThisMonth": "이번 달 보기 →",
     "thisMonth": "이번 달 →",
     "upcomingHolidays": "다가오는 공휴일",
+    "todaysEvents": "오늘의 기념일",
     "notableEvents": "주요 세계 기념일",
     "viewAll": "전체 보기 →",
     "pdfFeatureTitle": "PDF 다운로드",
@@ -73,49 +92,15 @@
     "ramadan": "{year} 라마단",
     "weddingCountdown": "웨딩 카운트다운"
   },
-  "dateCalculator": {
-    "title": "날짜 계산기",
-    "description": "두 날짜 사이의 일수를 계산하고, 날짜를 더하거나 빼고, 특정 날까지 카운트다운할 수 있습니다. 무료, 회원가입 불필요.",
-    "tabBetween": "날짜 사이 계산",
-    "tabAddSubtract": "날짜 더하기/빼기",
-    "tabUntil": "특정 날까지 남은 일수",
-    "startDate": "시작 날짜",
-    "endDate": "종료 날짜",
-    "totalDays": "총 일수",
-    "weeks": "주",
-    "businessDays": "영업일",
-    "monFriOnly": "월~금 기준",
-    "aboutTitle": "계산기 안내",
-    "aboutBetweenTitle": "날짜 사이 계산",
-    "aboutBetweenDesc": "두 날짜 사이의 총 일수, 주, 영업일을 계산합니다. 프로젝트 계획, 계약 기간, 마감일 관리에 유용합니다.",
-    "aboutAddTitle": "날짜 더하기/빼기",
-    "aboutAddDesc": "특정 날짜에서 일수를 더하거나 빼서 결과 날짜와 요일을 확인합니다. 일정 계획과 공지 기간 계산에 편리합니다.",
-    "aboutUntilTitle": "특정 날까지 남은 일수",
-    "aboutUntilDesc": "미래 날짜를 입력하면 일, 주, 월 단위로 D-day 카운트다운을 확인할 수 있습니다. 공휴일, 행사, 마감일 카운트다운에 유용합니다."
-  },
-  "events": {
-    "title": "국제 기념일 & 관련 행사",
-    "description": "세계의 주요 기념일, 문화 행사, 인식의 날, 축제 — 유래, 문화적 배경, 인쇄용 달력과 함께.",
-    "searchPlaceholder": "기념일 검색…",
-    "filterAll": "전체",
-    "noResults": "검색 결과가 없습니다."
-  },
-  "holidays": {
-    "title": "문화 공휴일",
-    "headline": "공휴일, 전통, 그리고 그 이야기들",
-    "description": "추석부터 골든위크, 추수감사절까지 — 세계에서 가장 널리 기념되는 공휴일의 유래, 역사, 음식, 문화를 탐험하세요. 각 항목은 해당 월의 무료 인쇄용 달력과 연결됩니다.",
-    "traditionalDishes": "전통 음식 {n}가지",
-    "activities": "활동 {n}가지",
-    "lunarLabel": "음력",
-    "relatedHolidays": "관련 공휴일",
-    "printableCalendars": "인쇄용 달력",
-    "downloadCta": "{holiday} 무료 인쇄용 달력 다운로드 — 모든 공휴일 포함.",
-    "faq": "자주 묻는 질문",
-    "origin": "유래",
+  "eventDetail": {
+    "about": "소개",
     "history": "역사",
-    "modernCelebration": "현대의 기념 방식",
-    "traditionalFoods": "전통 음식",
+    "whereObserved": "기념하는 곳",
     "howToParticipate": "참여 방법",
-    "travelTips": "여행 팁"
+    "faq": "자주 묻는 질문",
+    "relatedEvents": "관련 기념일",
+    "markTheDate": "달력에 표시하기",
+    "downloadCta": "{year}년 무료 인쇄용 달력을 다운로드하고 {event}을(를) 놓치지 마세요.",
+    "viewCalendar": "달력 보기"
   }
 }

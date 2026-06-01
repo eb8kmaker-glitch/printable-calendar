@@ -2,29 +2,29 @@
 
 import Link from "next/link";
 import { useTheme } from "./ThemeProvider";
-import { SUPPORTED_COUNTRIES } from "@/lib/types";
 
 interface NavLabels {
   holidays: string;
   events: string;
   dateCalc: string;
+  calendar: string;
 }
 
 interface HeaderProps {
   navLabels?: NavLabels;
   langSwitcher?: React.ReactNode;
+  calendarNavLink?: React.ReactNode;
 }
 
 const DEFAULT_NAV: NavLabels = {
   holidays: "Holidays",
   events: "Events",
   dateCalc: "Date Calc",
+  calendar: "Calendar",
 };
 
-export default function Header({ navLabels = DEFAULT_NAV, langSwitcher }: HeaderProps) {
+export default function Header({ navLabels = DEFAULT_NAV, langSwitcher, calendarNavLink }: HeaderProps) {
   const { theme, toggle } = useTheme();
-  const currentYear = new Date().getFullYear();
-  const currentMonth = new Date().getMonth() + 1;
 
   const linkStyle: React.CSSProperties = {
     fontSize: 13,
@@ -85,16 +85,8 @@ export default function Header({ navLabels = DEFAULT_NAV, langSwitcher }: Header
 
         {/* Nav */}
         <nav style={{ display: "flex", gap: 8, alignItems: "center" }}>
-          {SUPPORTED_COUNTRIES.map((c) => (
-            <Link
-              key={c.code}
-              href={`/calendar/${c.code.toLowerCase()}/${currentYear}/${currentMonth}`}
-              style={linkStyle}
-              {...hoverHandlers}
-            >
-              {c.code}
-            </Link>
-          ))}
+          {/* Calendar — locale-aware */}
+          {calendarNavLink}
 
           <Link href="/holidays" style={linkStyle} {...hoverHandlers}>
             {navLabels.holidays}
