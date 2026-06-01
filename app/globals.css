@@ -38,6 +38,23 @@ body {
   color: var(--fg);
 }
 
+:lang(ko) body {
+  font-family: 'Noto Sans KR', 'DM Sans', system-ui, sans-serif;
+  line-height: 1.8;
+}
+
+:lang(ko) p {
+  line-height: 1.9;
+  word-break: keep-all;
+}
+
+:lang(ko) h1,
+:lang(ko) h2,
+:lang(ko) h3 {
+  font-family: 'Nanum Myeongjo', 'EB Garamond', Georgia, serif;
+  word-break: keep-all;
+}
+
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);

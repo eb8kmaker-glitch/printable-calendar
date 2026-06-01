@@ -101,7 +101,8 @@
     "relatedEvents": "관련 기념일",
     "markTheDate": "달력에 표시하기",
     "downloadCta": "{year}년 무료 인쇄용 달력을 다운로드하고 {event}을(를) 놓치지 마세요.",
-    "viewCalendar": "달력 보기"
+    "viewCalendar": "달력 보기",
+    "culturalContext": "문화적 맥락"
   },
   "dateCalculator": {
     "title": "날짜 계산기",
@@ -140,5 +141,13 @@
     "printableCalendars": "인쇄용 달력",
     "downloadCta": "무료 인쇄용 달력을 다운로드하고 {holiday}을(를) 놓치지 마세요.",
     "relatedHolidays": "관련 공휴일"
+  },
+  "events": {
+    "title": "세계 기념일",
+    "headline": "국제 기념일 & 행사",
+    "description": "전 세계 주요 국제 기념일의 역사, 활동, 문화적 맥락을 살펴보세요.",
+    "searchPlaceholder": "기념일 검색…",
+    "filterAll": "전체",
+    "noResults": "검색 결과가 없습니다."
   }
 }

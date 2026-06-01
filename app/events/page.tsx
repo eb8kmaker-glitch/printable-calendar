@@ -8,6 +8,8 @@ import {
 } from "@/lib/events";
 import { getLocale } from "@/i18n/server";
 import { getTranslations } from "@/i18n";
+import { getLocalizedEvent } from "@/lib/events-i18n";
+import { getEventName } from "@/lib/events-translations";
 const BASE_URL = "https://printablecalendars.app";
 
 export const metadata: Metadata = {
@@ -59,7 +61,7 @@ export default async function EventsPage({ searchParams }: PageProps) {
     (a, b) => a.month * 100 + a.day - (b.month * 100 + b.day),
   );
 
-  const events = sorted.filter((e) => {
+  const filtered = sorted.filter((e) => {
     const matchesCategory = !activeCategory || e.category === activeCategory;
     const matchesQuery =
       !query ||
@@ -68,6 +70,7 @@ export default async function EventsPage({ searchParams }: PageProps) {
       CATEGORY_LABELS[e.category].toLowerCase().includes(query);
     return matchesCategory && matchesQuery;
   });
+  const events = await Promise.all(filtered.map((e) => getLocalizedEvent(e, locale)));
 
   const itemListJsonLd = {
     "@context": "https://schema.org",
@@ -306,7 +309,7 @@ export default async function EventsPage({ searchParams }: PageProps) {
                       lineHeight: 1.2,
                     }}
                   >
-                    {event.name}
+                    {getEventName(event.slug, locale, event.name)}
                   </h2>
 
                   {/* Tagline */}
