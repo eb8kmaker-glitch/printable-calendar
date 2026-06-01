@@ -3,11 +3,29 @@
 import Link from "next/link";
 import { useTheme } from "./ThemeProvider";
 import { SUPPORTED_COUNTRIES } from "@/lib/types";
+import { useState, useEffect } from "react";
+import { getTranslations } from "@/i18n";
+import type { Locale } from "@/i18n";
+
+function getCookieLocale(): Locale {
+  if (typeof document === 'undefined') return 'en';
+  const match = document.cookie.match(/(?:^|;\s*)preferred_lang=([^;]+)/);
+  const val = match?.[1];
+  if (val === 'ko' || val === 'ja' || val === 'en') return val;
+  return 'en';
+}
 
 export default function Header() {
   const { theme, toggle } = useTheme();
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth() + 1;
+  const [locale, setLocale] = useState<Locale>('en');
+
+  useEffect(() => {
+    setLocale(getCookieLocale());
+  }, []);
+
+  const i18n = getTranslations(locale);
 
   return (
     <header
@@ -92,7 +110,7 @@ export default function Header() {
               (e.target as HTMLElement).style.background = "transparent";
             }}
           >
-            Holidays
+            {i18n.nav.holidays}
           </Link>
           <Link
             href="/events"
@@ -113,7 +131,7 @@ export default function Header() {
               (e.target as HTMLElement).style.background = "transparent";
             }}
           >
-            Events
+            {i18n.nav.events}
           </Link>
           <Link
             href="/date-calculator"
@@ -134,7 +152,7 @@ export default function Header() {
               (e.target as HTMLElement).style.background = "transparent";
             }}
           >
-            Date Calc
+            {i18n.nav.dateCalc}
           </Link>
 
           {/* Theme toggle */}

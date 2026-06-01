@@ -1,0 +1,77 @@
+{
+  "nav": {
+    "holidays": "공휴일",
+    "events": "기념일",
+    "dateCalc": "날짜 계산"
+  },
+  "countries": {
+    "us": "미국",
+    "gb": "영국",
+    "au": "호주",
+    "ca": "캐나다",
+    "kr": "대한민국",
+    "jp": "일본"
+  },
+  "months": {
+    "1": "1월","2": "2월","3": "3월","4": "4월",
+    "5": "5월","6": "6월","7": "7월","8": "8월",
+    "9": "9월","10": "10월","11": "11월","12": "12월"
+  },
+  "weekdays": ["일","월","화","수","목","금","토"],
+  "calendar": {
+    "yearView": "연간 보기",
+    "monthlyView": "월간 보기",
+    "publicHolidays": "{country} 공휴일 — {year}년 {month}",
+    "worldEvents": "{month} 세계 기념일",
+    "browseAllEvents": "모든 세계 기념일 보기 →",
+    "downloadPdf": "↓ PDF 다운로드",
+    "generating": "생성 중…",
+    "landscape": "가로",
+    "portrait": "세로",
+    "light": "☀ 밝게",
+    "dark": "◑ 어둡게",
+    "lightRecommended": "☀ 밝게 — 인쇄 권장",
+    "darkRecommended": "◑ 어둡게 — 태블릿·디지털 최적",
+    "yearlyNote": " · A6는 연간 달력에 사용 불가",
+    "aboutTitle": "이 달력에 대하여",
+    "aboutText": "이 무료 {year}년 {month} {country} 달력에는 모든 공식 공휴일이 포함되어 있습니다. A3–A6 크기의 PDF로 다운로드하세요. 흑백 및 컬러 인쇄 모두에 최적화된 깔끔한 디자인입니다.",
+    "landscapePdf": "가로 PDF · 공휴일 포함 · 인쇄용",
+    "landscapePdfYearly": "가로 PDF · 12개월 한 페이지 · 공휴일 포함"
+  },
+  "home": {
+    "headline": "공휴일이 포함된 인쇄용 달력.",
+    "subheadline": "영원히 무료.",
+    "description": "미국, 영국, 호주, 캐나다, 일본, 대한민국의 공휴일이 포함된 월간 달력을 다운로드하세요. 깔끔한 A4 PDF, 로그인 불필요.",
+    "viewThisMonth": "이번 달 보기 →",
+    "thisMonth": "이번 달 →",
+    "upcomingHolidays": "다가오는 공휴일",
+    "todaysEvents": "오늘의 기념일",
+    "notableEvents": "주요 세계 기념일",
+    "viewAll": "전체 보기 →",
+    "pdfFeatureTitle": "PDF 다운로드",
+    "pdfFeature": "A4 가로, 인쇄용, 즉시 생성",
+    "holidaysFeatureTitle": "공휴일",
+    "holidaysFeature": "각 국가의 공식 공휴일 포함",
+    "designFeatureTitle": "미니멀 디자인",
+    "designFeature": "흑백·컬러 인쇄 모두 적합한 깔끔한 디자인",
+    "noSignupFeatureTitle": "가입 불필요",
+    "noSignupFeature": "완전 무료, 계정 불필요"
+  },
+  "footer": {
+    "tagline": "공휴일이 포함된 무료 인쇄용 월간 달력. A4 PDF로 다운로드.",
+    "about": "소개",
+    "contact": "문의",
+    "worldEvents": "세계 기념일",
+    "culturalHolidays": "문화 공휴일",
+    "dateCalculator": "날짜 계산기",
+    "copyright": "© {year} PrintableCalendars. 무료로 이용하세요.",
+    "sitemap": "사이트맵",
+    "planners": "플래너",
+    "studyPlanner": "학습 플래너",
+    "teacherPlanner": "교사 플래너",
+    "schoolCalendar": "{year} 학교 달력",
+    "holidayPlanner": "휴가 플래너",
+    "ramadan": "{year} 라마단",
+    "weddingCountdown": "웨딩 카운트다운"
+  }
+}

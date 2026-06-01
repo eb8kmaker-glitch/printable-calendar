@@ -1,0 +1,77 @@
+{
+  "nav": {
+    "holidays": "Holidays",
+    "events": "Events",
+    "dateCalc": "Date Calc"
+  },
+  "countries": {
+    "us": "United States",
+    "gb": "United Kingdom",
+    "au": "Australia",
+    "ca": "Canada",
+    "kr": "South Korea",
+    "jp": "Japan"
+  },
+  "months": {
+    "1": "January","2": "February","3": "March","4": "April",
+    "5": "May","6": "June","7": "July","8": "August",
+    "9": "September","10": "October","11": "November","12": "December"
+  },
+  "weekdays": ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
+  "calendar": {
+    "yearView": "Year view",
+    "monthlyView": "Monthly view",
+    "publicHolidays": "Public Holidays in {country} — {month} {year}",
+    "worldEvents": "World Events in {month}",
+    "browseAllEvents": "Browse all world events →",
+    "downloadPdf": "↓ Download PDF",
+    "generating": "Generating…",
+    "landscape": "Landscape",
+    "portrait": "Portrait",
+    "light": "☀ Light",
+    "dark": "◑ Dark",
+    "lightRecommended": "☀ Light — recommended for printing",
+    "darkRecommended": "◑ Dark — best for tablets & digital use",
+    "yearlyNote": " · A6 not available for yearly",
+    "aboutTitle": "About this printable calendar",
+    "aboutText": "This free printable {month} {year} calendar for {country} includes all official public holidays. Download as a PDF (A3–A6) in landscape format. The clean, minimal design is optimized for both black-and-white and color printing.",
+    "landscapePdf": "Landscape PDF · includes public holidays · print-ready",
+    "landscapePdfYearly": "Landscape PDF · all 12 months on one page · includes public holidays"
+  },
+  "home": {
+    "headline": "Printable calendars with public holidays.",
+    "subheadline": "Free forever.",
+    "description": "Download monthly calendars with public holidays for USA, UK, Australia, Canada, Japan, and South Korea. Clean A4 PDFs, no login required.",
+    "viewThisMonth": "View this month →",
+    "thisMonth": "This month →",
+    "upcomingHolidays": "Upcoming holidays",
+    "todaysEvents": "Today's Events",
+    "notableEvents": "Notable world events",
+    "viewAll": "View all →",
+    "pdfFeatureTitle": "PDF Download",
+    "pdfFeature": "A4 landscape, print-ready, instantly generated",
+    "holidaysFeatureTitle": "Public Holidays",
+    "holidaysFeature": "Official holidays for each country included",
+    "designFeatureTitle": "Minimal Design",
+    "designFeature": "Clean layout that works in B&W or color print",
+    "noSignupFeatureTitle": "No Sign-up",
+    "noSignupFeature": "Completely free, no account required"
+  },
+  "footer": {
+    "tagline": "Free printable monthly calendars with public holidays. Download as A4 PDF.",
+    "about": "About",
+    "contact": "Contact",
+    "worldEvents": "World Events",
+    "culturalHolidays": "Cultural Holidays",
+    "dateCalculator": "Date Calculator",
+    "copyright": "© {year} PrintableCalendars. Free to use.",
+    "sitemap": "Sitemap",
+    "planners": "Planners",
+    "studyPlanner": "Study Planner",
+    "teacherPlanner": "Teacher Planner",
+    "schoolCalendar": "School Calendar {year}",
+    "holidayPlanner": "Holiday Planner",
+    "ramadan": "Ramadan {year}",
+    "weddingCountdown": "Wedding Countdown"
+  }
+}
