@@ -58,6 +58,7 @@ export default async function HolidaysPage() {
   const localizedHolidays = await Promise.all(
     CULTURAL_HOLIDAYS.map((h) => getLocalizedHolidayContent(h, locale))
   );
+  const englishNames = Object.fromEntries(CULTURAL_HOLIDAYS.map((h) => [h.slug, h.name]));
 
   return (
     <>
@@ -171,19 +172,27 @@ export default async function HolidaysPage() {
                         }}
                       >
                         <div>
-                          {holiday.localName && holiday.localName !== holiday.name && (
-                            <p
-                              style={{
-                                fontFamily: "'EB Garamond', Georgia, serif",
-                                fontSize: 13,
-                                color: "var(--muted)",
-                                letterSpacing: "0.02em",
-                                marginBottom: 4,
-                              }}
-                            >
-                              {holiday.localName}
-                            </p>
-                          )}
+                          {(() => {
+                            const subTitle =
+                              holiday.localName && holiday.localName !== holiday.name
+                                ? holiday.localName
+                                : !holiday.localName && locale !== "en"
+                                  ? englishNames[holiday.slug]
+                                  : null;
+                            return subTitle ? (
+                              <p
+                                style={{
+                                  fontFamily: "'EB Garamond', Georgia, serif",
+                                  fontSize: 13,
+                                  color: "var(--muted)",
+                                  letterSpacing: "0.02em",
+                                  marginBottom: 4,
+                                }}
+                              >
+                                {subTitle}
+                              </p>
+                            ) : null;
+                          })()}
                           <h3
                             style={{
                               fontFamily: "'EB Garamond', Georgia, serif",
