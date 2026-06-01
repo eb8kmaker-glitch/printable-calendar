@@ -53,7 +53,7 @@ const itemListJsonLd = {
 export default async function HolidaysPage() {
   const locale = await getLocale();
   const i18n = getTranslations(locale);
-  const holidaysI18n = i18n.holidays as Record<string, string>;
+  const holidaysI18n = ((i18n as unknown as Record<string, Record<string, string>>).holidays ?? {});
 
   return (
     <>

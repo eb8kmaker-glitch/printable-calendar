@@ -58,7 +58,7 @@ export default async function HolidayContentPage({ params }: PageProps) {
 
   const locale = await getLocale();
   const i18n = getTranslations(locale);
-  const hi18n = i18n.holidays as Record<string, string>;
+  const hi18n = ((i18n as unknown as Record<string, Record<string, string>>).holidays ?? {});
 
   const currentYear = new Date().getFullYear();
 

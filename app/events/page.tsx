@@ -48,7 +48,7 @@ export default async function EventsPage({ searchParams }: PageProps) {
   const { category, q } = await searchParams;
   const locale = await getLocale();
   const i18n = getTranslations(locale);
-  const eventsI18n = i18n.events as Record<string, string>;
+  const eventsI18n = (i18n as unknown as Record<string, Record<string, string>>).events ?? {};
 
   const activeCategory = CATEGORIES.includes(category as EventCategory)
     ? (category as EventCategory)
