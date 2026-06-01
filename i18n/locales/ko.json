@@ -149,5 +149,71 @@
     "searchPlaceholder": "기념일 검색…",
     "filterAll": "전체",
     "noResults": "검색 결과가 없습니다."
+  },
+  "teacherPlanner": {
+    "eyebrow": "교사용",
+    "title": "인쇄용 교사 플래너",
+    "subtitle": "달력으로, 영원히 무료.",
+    "description": "미국, 일본, 한국의 공휴일이 포함된 수업 계획용 월간 달력. 책상용, 칠판용, 학부모 공유용으로 각각 인쇄하세요. 깔끔한 A4 가로형 PDF, 로그인 불필요, 구독 없음.",
+    "viewThisMonth": "이번 달 보기 →",
+    "countdownLabel": "학기 종료일",
+    "setDate": "날짜 설정",
+    "countdownHint": "날짜를 입력하면 카운트다운이 시작됩니다.",
+    "downloadByMonth": "월별 다운로드",
+    "downloadHint": "위에서 학기 종료일을 설정하면 플래너 달력이 표시됩니다.",
+    "howTeachersUse": "교사들이 인쇄 달력을 활용하는 방법",
+    "faqTitle": "자주 묻는 질문"
+  },
+  "studyPlanner": {
+    "eyebrow": "학생용",
+    "title": "인쇄용 학습 플래너",
+    "subtitle": "달력으로, 영원히 무료.",
+    "countdownLabel": "시험일",
+    "setDate": "날짜 설정",
+    "countdownHint": "날짜를 입력하면 카운트다운이 시작됩니다.",
+    "downloadByMonth": "월별 다운로드",
+    "downloadHint": "위에서 시험일을 설정하면 목록이 맞춤 표시됩니다.",
+    "howToUse": "인쇄 학습 달력 활용법",
+    "faqTitle": "자주 묻는 질문"
+  },
+  "holidayPlanner": {
+    "eyebrow": "휴가 계획",
+    "title": "휴가 플래너",
+    "subtitle": "모든 날을 알차게.",
+    "countdownLabel": "출발일",
+    "setDate": "날짜 설정",
+    "countdownHint": "날짜를 입력하면 카운트다운이 시작됩니다.",
+    "downloadByMonth": "월별 다운로드",
+    "downloadHint": "위에서 출발일을 설정하면 여행 달력이 표시됩니다.",
+    "holidayRichMonths": "2026년 공휴일이 많은 달",
+    "upcomingHolidays": "다가오는 공휴일",
+    "viewFull2026": "2026년 전체 달력 보기 →",
+    "howToMaximise": "휴가를 최대한 활용하는 법",
+    "faqTitle": "자주 묻는 질문"
+  },
+  "schoolCalendar": {
+    "eyebrow": "학년도 · 개학",
+    "title": "인쇄용 학교 달력",
+    "subtitle": "2026–2027",
+    "countdownLabel": "학기 마지막 날",
+    "setDate": "날짜 설정",
+    "countdownHint": "날짜를 입력하면 카운트다운이 시작됩니다.",
+    "downloadByMonth": "월별 다운로드",
+    "downloadHint": "위에서 학기 마지막 날을 설정하면 목록이 맞춤 표시됩니다.",
+    "faqTitle": "자주 묻는 질문"
+  },
+  "weddingCountdown": {
+    "eyebrow": "웨딩 플래닝",
+    "title": "웨딩 카운트다운",
+    "subtitle": "한 달씩, 차근차근.",
+    "viewThisMonth": "이번 달 시작 →",
+    "downloadPdf": "PDF 다운로드",
+    "countdownLabel": "결혼식 날짜",
+    "setDate": "날짜 설정",
+    "countdownHint": "날짜를 입력하면 카운트다운이 시작됩니다.",
+    "howToUse": "인쇄 카운트다운 달력 활용법",
+    "downloadByMonth": "월별 다운로드",
+    "downloadHint": "위에서 결혼식 날짜를 입력하면 목록이 맞춤 표시됩니다.",
+    "faqTitle": "자주 묻는 질문"
   }
 }

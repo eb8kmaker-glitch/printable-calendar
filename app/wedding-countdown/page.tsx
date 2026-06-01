@@ -5,6 +5,8 @@ import DynamicCalendarList from "@/components/DynamicCalendarList";
 import { buildFaqSchema } from "@/lib/seo-helpers";
 import DayCounter from "@/components/DayCounter";
 import type { DayMilestone } from "@/components/DayCounter";
+import { getLocale } from "@/i18n/server";
+import { getTranslations } from "@/i18n";
 
 export const dynamic = "force-static";
 const BASE_URL = "https://printablecalendars.app";
@@ -116,7 +118,10 @@ const PLANNING_MILESTONES: { monthsBefore: number; tasks: string[] }[] = [
   },
 ];
 
-export default function WeddingCountdownPage() {
+export default async function WeddingCountdownPage() {
+  const locale = await getLocale();
+  const i18n = getTranslations(locale);
+  const p = (i18n as unknown as Record<string, Record<string, string>>).weddingCountdown ?? {};
   const now = new Date();
   const year = now.getFullYear();
   const currentMonth = now.getMonth() + 1;
@@ -143,7 +148,7 @@ export default function WeddingCountdownPage() {
               marginBottom: 12,
             }}
           >
-            Wedding Planning
+            {p.eyebrow ?? "Wedding Planning"}
           </p>
           <h1
             style={{
@@ -155,9 +160,9 @@ export default function WeddingCountdownPage() {
               marginBottom: 20,
             }}
           >
-            Wedding countdown
+            {p.title ?? "Wedding countdown"}
             <br />
-            <span style={{ opacity: 0.4 }}>month by month.</span>
+            <span style={{ opacity: 0.4 }}>{p.subtitle ?? "month by month."}</span>
           </h1>
           <p style={{ fontSize: 15, color: "var(--muted)", lineHeight: 1.65, marginBottom: 28 }}>
             Download a free printable monthly calendar for each month leading
@@ -182,7 +187,7 @@ export default function WeddingCountdownPage() {
                 fontWeight: 500,
               }}
             >
-              Start this month ??            </Link>
+              {p.viewThisMonth ?? "Start this month →"}</Link>
             <a
               href={`/api/pdf?country=us&year=${year}&month=${currentMonth}&size=A4&orientation=landscape&theme=light`}
               download={`wedding-countdown-us-${year}-${String(currentMonth).padStart(2, "0")}.pdf`}
@@ -198,13 +203,13 @@ export default function WeddingCountdownPage() {
                 fontSize: 14,
               }}
             >
-              Download PDF
+              {p.downloadPdf ?? "Download PDF"}
             </a>
           </div>
         </div>
 
         <DayCounter
-          targetLabel="Wedding Day"
+          targetLabel={p.countdownLabel ?? "Wedding Day"}
           storageKey="wedding-date"
           milestones={WEDDING_MILESTONES}
         />
@@ -228,7 +233,7 @@ export default function WeddingCountdownPage() {
               marginBottom: 16,
             }}
           >
-            How to use a printed countdown calendar
+            {p.howToUse ?? "How to use a printed countdown calendar"}
           </h2>
           <div
             style={{
@@ -321,7 +326,8 @@ export default function WeddingCountdownPage() {
                           flexShrink: 0,
                         }}
                       >
-                        ??                      </span>
+                        –
+                      </span>
                       {task}
                     </li>
                   ))}
@@ -337,7 +343,7 @@ export default function WeddingCountdownPage() {
           badgeLabel="Wedding month"
           pdfHeaderText="Wedding Countdown"
           pdfTargetLabel="Wedding Day"
-          noDateHint="Enter your wedding date above to customize this list."
+          noDateHint={p.downloadHint ?? "Enter your wedding date above to customize this list."}
         />
 
         <AdSlot slot="pre-download" style={{ marginBottom: 32 }} />
@@ -353,7 +359,7 @@ export default function WeddingCountdownPage() {
               marginBottom: 32,
             }}
           >
-            Frequently asked questions
+            {p.faqTitle ?? "Frequently asked questions"}
           </h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
             {WEDDING_FAQS.map((faq, i) => (

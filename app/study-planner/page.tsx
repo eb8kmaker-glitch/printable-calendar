@@ -5,6 +5,8 @@ import DynamicCalendarList from "@/components/DynamicCalendarList";
 import { buildFaqSchema } from "@/lib/seo-helpers";
 import DayCounter from "@/components/DayCounter";
 import type { DayMilestone } from "@/components/DayCounter";
+import { getLocale } from "@/i18n/server";
+import { getTranslations } from "@/i18n";
 
 export const dynamic = "force-static";
 const BASE_URL = "https://printablecalendars.app";
@@ -44,7 +46,7 @@ const STUDY_MILESTONES: DayMilestone[] = [
   { min: 7, max: 13, message: "One week out —review, don't learn new material.", tip: "Simulate exam conditions at least once." },
   { min: 14, max: 29, message: "Final stretch —active recall every day.", tip: "Sleep matters more than extra hours now." },
   { min: 30, max: 59, message: "Halfway there —review weak areas first.", tip: "Practice tests are more effective than re-reading." },
-  { min: 60, max: 99999, message: "Plenty of time —build your schedule now.", tip: "Study 1— hours daily beats cramming." },
+  { min: 60, max: 99999, message: "Plenty of time —build your schedule now.", tip: "Study 1–2 hours daily beats cramming." },
 ];
 
 const STUDY_FAQS = [
@@ -79,7 +81,10 @@ const STUDY_TIPS = [
   ["Leave buffer weeks", "Block the week before every major exam or deadline as review time —not new-content time."],
 ];
 
-export default function StudyPlannerPage() {
+export default async function StudyPlannerPage() {
+  const locale = await getLocale();
+  const i18n = getTranslations(locale);
+  const p = (i18n as unknown as Record<string, Record<string, string>>).studyPlanner ?? {};
   const now = new Date();
   const year = now.getFullYear();
   const month = now.getMonth() + 1;
@@ -127,7 +132,7 @@ export default function StudyPlannerPage() {
               marginBottom: 12,
             }}
           >
-            For Students
+            {p.eyebrow ?? "For Students"}
           </p>
           <h1
             style={{
@@ -139,12 +144,12 @@ export default function StudyPlannerPage() {
               marginBottom: 20,
             }}
           >
-            Printable study planner
+            {p.title ?? "Printable study planner"}
             <br />
-            <span style={{ opacity: 0.4 }}>calendars, free forever.</span>
+            <span style={{ opacity: 0.4 }}>{p.subtitle ?? "calendars, free forever."}</span>
           </h1>
           <p style={{ fontSize: 15, color: "var(--muted)", lineHeight: 1.65, marginBottom: 28 }}>
-            Monthly calendars designed for students. Map out your semester ??            exams, deadlines, readings, and study blocks ??on a clean A4
+            Monthly calendars designed for students. Map out your semester — exams, deadlines, readings, and study blocks — on a clean A4
             printout you can write on. Includes public holidays for USA, Japan,
             and South Korea. No account required.
           </p>
@@ -163,11 +168,11 @@ export default function StudyPlannerPage() {
               fontWeight: 500,
             }}
           >
-            View this month ??          </Link>
+            View this month →</Link>
         </div>
 
         <DayCounter
-          targetLabel="Exam Date"
+          targetLabel={p.countdownLabel ?? "Exam Date"}
           storageKey="exam-date"
           milestones={STUDY_MILESTONES}
         />
@@ -178,7 +183,7 @@ export default function StudyPlannerPage() {
           badgeLabel="Exam month"
           pdfHeaderText="Exam Countdown"
           pdfTargetLabel="Exam Day"
-          noDateHint="Set your exam date above to customize this calendar list."
+          noDateHint={p.downloadHint ?? "Set your exam date above to customize this list."}
           urlParamName="target"
         />
 
@@ -195,7 +200,7 @@ export default function StudyPlannerPage() {
               marginBottom: 32,
             }}
           >
-            How to use a printed study calendar
+            {p.howToUse ?? "How to use a printed study calendar"}
           </h2>
           <div
             style={{
@@ -253,7 +258,7 @@ export default function StudyPlannerPage() {
               marginBottom: 32,
             }}
           >
-            Frequently asked questions
+            {p.faqTitle ?? "Frequently asked questions"}
           </h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
             {STUDY_FAQS.map((faq, i) => (

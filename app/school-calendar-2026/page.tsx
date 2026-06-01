@@ -6,6 +6,8 @@ import DynamicCalendarList from "@/components/DynamicCalendarList";
 import { buildFaqSchema } from "@/lib/seo-helpers";
 import DayCounter from "@/components/DayCounter";
 import type { DayMilestone } from "@/components/DayCounter";
+import { getLocale } from "@/i18n/server";
+import { getTranslations } from "@/i18n";
 
 export const dynamic = "force-static";
 const BASE_URL = "https://printablecalendars.app";
@@ -13,7 +15,7 @@ const BASE_URL = "https://printablecalendars.app";
 export const metadata: Metadata = {
   title: "Printable School Calendar 2026 —Academic Year PDF Download",
   description:
-    "Download a free printable school calendar for the 2026—027 academic year. Monthly PDFs with public holidays for USA, Japan, and South Korea. Perfect for students, parents, and teachers.",
+    "Download a free printable school calendar for the 2026–2027 academic year. Monthly PDFs with public holidays for USA, Japan, and South Korea. Perfect for students, parents, and teachers.",
   keywords: [
     "printable school calendar 2026",
     "academic calendar 2026 2027",
@@ -26,7 +28,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Printable School Calendar 2026 | PrintableCalendars",
     description:
-      "Free printable monthly school calendars for the 2026—027 academic year. Includes public holidays.",
+      "Free printable monthly school calendars for the 2026–2027 academic year. Includes public holidays.",
     url: `${BASE_URL}/school-calendar-2026`,
     type: "website",
     siteName: "PrintableCalendars",
@@ -34,7 +36,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Printable School Calendar 2026 | PrintableCalendars",
-    description: "Free academic year calendars for 2026—027. Monthly PDF download, includes holidays.",
+    description: "Free academic year calendars for 2026–2027. Monthly PDF download, includes holidays.",
   },
   robots: { index: true, follow: true },
 };
@@ -138,7 +140,7 @@ const ACADEMIC_YEARS: Record<string, { label: string; months: { year: number; mo
   },
 };
 
-const COUNTRY_FLAG: Record<string, string> = { US: "?눣?눡", GB: "?눐?눉", AU: "?눇?눣", CA: "?눊?눇", KR: "?눖?눟", JP: "?눓?눝" };
+const COUNTRY_FLAG: Record<string, string> = { US: "", GB: "", AU: "", CA: "", KR: "", JP: "" };
 
 const SCHOOL_MILESTONES: DayMilestone[] = [
   { min: 0, max: 0, message: "School's out!" },
@@ -154,7 +156,7 @@ const SCHOOL_FAQS = [
     a: "A printable school calendar is a monthly PDF you can download and print for each month of the academic year. It includes the official public holidays for your country and a clean grid layout you can annotate with exam dates, school events, and holidays.",
   },
   {
-    q: "When does the 2026—027 academic year start in different countries?",
+    q: "When does the 2026–2027 academic year start in different countries?",
     a: "In the US and Canada, schools typically return in August or September. UK schools start in September. Australian schools follow a four-term year beginning in February. Japanese schools start in April. South Korean schools begin in March.",
   },
   {
@@ -167,13 +169,16 @@ const SCHOOL_FAQS = [
   },
 ];
 
-export default function SchoolCalendar2026Page() {
+export default async function SchoolCalendar2026Page() {
+  const locale = await getLocale();
+  const i18n = getTranslations(locale);
+  const p = (i18n as unknown as Record<string, Record<string, string>>).schoolCalendar ?? {};
   const faqSchema = buildFaqSchema(SCHOOL_FAQS.map((f) => ({ q: f.q, a: f.a })));
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebPage",
     name: "Printable School Calendar 2026 —Academic Year",
-    description: "Free monthly school calendars for the 2026—027 academic year.",
+    description: "Free monthly school calendars for the 2026–2027 academic year.",
     url: `${BASE_URL}/school-calendar-2026`,
   };
 
@@ -203,7 +208,7 @@ export default function SchoolCalendar2026Page() {
               marginBottom: 12,
             }}
           >
-            Academic Year 쨌 2026??027
+            {p.eyebrow ?? "Academic Year · 2026–2027"}
           </p>
           <h1
             style={{
@@ -215,12 +220,12 @@ export default function SchoolCalendar2026Page() {
               marginBottom: 20,
             }}
           >
-            Printable school calendar
+            {p.title ?? "Printable school calendar"}
             <br />
-            <span style={{ opacity: 0.4 }}>2026 ??2027</span>
+            <span style={{ opacity: 0.4 }}>{p.subtitle ?? "2026–2027"}</span>
           </h1>
           <p style={{ fontSize: 15, color: "var(--muted)", lineHeight: 1.65 }}>
-            Free monthly calendars covering the full academic year ??from back-to-school
+            Free monthly calendars covering the full academic year —from back-to-school
             through graduation. Each PDF includes official public holidays for
             your country, a clean grid layout, and print-optimised margins for
             writing in class schedules and exam dates.
@@ -228,7 +233,7 @@ export default function SchoolCalendar2026Page() {
         </div>
 
         <DayCounter
-          targetLabel="Last Day of School"
+          targetLabel={p.countdownLabel ?? "Last Day of School"}
           storageKey="school-end"
           milestones={SCHOOL_MILESTONES}
         />
@@ -239,7 +244,7 @@ export default function SchoolCalendar2026Page() {
           badgeLabel="Last school month"
           pdfHeaderText="School Countdown"
           pdfTargetLabel="School End"
-          noDateHint="Set your last day of school above to customize this list."
+          noDateHint={p.downloadHint ?? "Set your last day of school above to customize this list."}
         />
 
         {/* Per-country academic year sections */}
@@ -369,7 +374,7 @@ export default function SchoolCalendar2026Page() {
           }}
         >
           {[
-            ["School year differences", "US, UK, and Canadian schools typically start in August?밪eptember. Australian schools run February?밆ecember. Japanese schools begin in April. Korean schools start in March. Each section above reflects the correct academic calendar."],
+            ["School year differences", "US, UK, and Canadian schools typically start in August–September. Australian schools run February–December. Japanese schools begin in April. Korean schools start in March. Each section above reflects the correct academic calendar."],
             ["Holiday coverage", "All calendars include official public holidays —critical for planning school closures, exam scheduling, and extracurricular events."],
             ["Print-ready PDF", "Download as A4 landscape. The minimalist design works perfectly in black and white —ideal for school bulletin boards and planners."],
             ["No login required", "All calendars are completely free. No account, no email, no subscription. Just download and print."],
@@ -392,7 +397,7 @@ export default function SchoolCalendar2026Page() {
               marginBottom: 32,
             }}
           >
-            Frequently asked questions
+            {p.faqTitle ?? "Frequently asked questions"}
           </h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
             {SCHOOL_FAQS.map((faq, i) => (
