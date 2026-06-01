@@ -122,5 +122,23 @@
     "aboutAddDesc": "Find a future or past date by adding or subtracting a number of days from any starting date.",
     "aboutUntilTitle": "Days Until",
     "aboutUntilDesc": "Count down the days until any upcoming date or event."
+  },
+  "holidays": {
+    "title": "CULTURAL HOLIDAYS",
+    "headline": "Holidays Around the World",
+    "description": "Explore the history, food, and traditions of major cultural holidays across Japan, South Korea, and the United States.",
+    "lunarLabel": "Lunar",
+    "traditionalDishes": "{n} traditional dishes",
+    "activities": "{n} activities",
+    "origin": "ORIGIN",
+    "history": "HISTORY",
+    "modernCelebration": "MODERN CELEBRATION",
+    "traditionalFoods": "TRADITIONAL FOODS",
+    "howToParticipate": "HOW TO PARTICIPATE",
+    "travelTips": "TRAVEL TIPS",
+    "faq": "FREQUENTLY ASKED QUESTIONS",
+    "printableCalendars": "PRINTABLE CALENDARS",
+    "downloadCta": "Download a free printable calendar and never miss {holiday}.",
+    "relatedHolidays": "RELATED HOLIDAYS"
   }
 }
