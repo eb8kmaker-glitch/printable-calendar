@@ -2,6 +2,7 @@ import type { HolidayI18nContent } from "./holidays-i18n";
 
 export const HOLIDAY_KO: Record<string, HolidayI18nContent> = {
   chuseok: {
+    name: "추석",
     tagline: "한가위 보름달 아래, 감사와 가족과 송편이 함께하는 사흘.",
     dateLabel: "음력 8월 15일 (9~10월)",
     origin:
@@ -50,6 +51,7 @@ export const HOLIDAY_KO: Record<string, HolidayI18nContent> = {
   },
 
   seollal: {
+    name: "설날",
     tagline: "세배와 떡국으로 시작하는 새해, 설날의 따뜻한 풍경.",
     dateLabel: "음력 1월 1일 (1~2월)",
     origin:
@@ -98,6 +100,7 @@ export const HOLIDAY_KO: Record<string, HolidayI18nContent> = {
   },
 
   "liberation-day-korea": {
+    name: "광복절",
     tagline: "빛을 되찾은 날 — 해방과 대한민국 탄생을 기념하는 광복절.",
     dateLabel: "8월 15일 (고정)",
     origin:
@@ -135,6 +138,7 @@ export const HOLIDAY_KO: Record<string, HolidayI18nContent> = {
   },
 
   "golden-week": {
+    name: "골든 위크",
     tagline: "여행과 문화와 축제가 어우러진 일본 최대의 황금 연휴.",
     dateLabel: "4월 말~5월 초 (4/29~5/6)",
     origin:
@@ -178,6 +182,7 @@ export const HOLIDAY_KO: Record<string, HolidayI18nContent> = {
   },
 
   obon: {
+    name: "오봉",
     tagline: "등불과 함께 조상의 영혼을 맞이하고 배웅하는 일본의 명절.",
     dateLabel: "8월 13~16일 (대부분 지역)",
     origin:
@@ -221,6 +226,7 @@ export const HOLIDAY_KO: Record<string, HolidayI18nContent> = {
   },
 
   shogatsu: {
+    name: "쇼가쓰",
     tagline: "의식과 가족과 새로운 시작으로 채워지는 일본의 가장 신성한 명절.",
     dateLabel: "1월 1~3일 (공휴일 1/1~1/3)",
     origin:
@@ -264,6 +270,7 @@ export const HOLIDAY_KO: Record<string, HolidayI18nContent> = {
   },
 
   thanksgiving: {
+    name: "추수감사절",
     tagline: "가을을 정의하는 감사의 만찬 — 칠면조, 가족, 그리고 오랜 전통.",
     dateLabel: "11월 넷째 목요일",
     origin:
@@ -312,6 +319,7 @@ export const HOLIDAY_KO: Record<string, HolidayI18nContent> = {
   },
 
   "independence-day": {
+    name: "독립기념일",
     tagline: "미국의 생일 — 7월 4일, 독립기념일의 불꽃이 하늘을 수놓는다.",
     dateLabel: "7월 4일 (고정)",
     origin:

@@ -171,57 +171,29 @@ export default async function HolidaysPage() {
                         }}
                       >
                         <div>
-                          {locale !== "en" && holiday.localName ? (
-                            <>
-                              <h3
-                                style={{
-                                  fontFamily: "'EB Garamond', Georgia, serif",
-                                  fontSize: 22,
-                                  fontWeight: 400,
-                                  lineHeight: 1.2,
-                                  marginBottom: 2,
-                                }}
-                              >
-                                {holiday.localName}
-                              </h3>
-                              <p
-                                style={{
-                                  fontFamily: "'DM Mono', monospace",
-                                  fontSize: 11,
-                                  color: "var(--muted)",
-                                  letterSpacing: "0.03em",
-                                }}
-                              >
-                                {holiday.name}
-                              </p>
-                            </>
-                          ) : (
-                            <>
-                              {holiday.localName && (
-                                <p
-                                  style={{
-                                    fontFamily: "'EB Garamond', Georgia, serif",
-                                    fontSize: 13,
-                                    color: "var(--muted)",
-                                    letterSpacing: "0.02em",
-                                    marginBottom: 4,
-                                  }}
-                                >
-                                  {holiday.localName}
-                                </p>
-                              )}
-                              <h3
-                                style={{
-                                  fontFamily: "'EB Garamond', Georgia, serif",
-                                  fontSize: 22,
-                                  fontWeight: 400,
-                                  lineHeight: 1.2,
-                                }}
-                              >
-                                {holiday.name}
-                              </h3>
-                            </>
+                          {holiday.localName && holiday.localName !== holiday.name && (
+                            <p
+                              style={{
+                                fontFamily: "'EB Garamond', Georgia, serif",
+                                fontSize: 13,
+                                color: "var(--muted)",
+                                letterSpacing: "0.02em",
+                                marginBottom: 4,
+                              }}
+                            >
+                              {holiday.localName}
+                            </p>
                           )}
+                          <h3
+                            style={{
+                              fontFamily: "'EB Garamond', Georgia, serif",
+                              fontSize: 22,
+                              fontWeight: 400,
+                              lineHeight: 1.2,
+                            }}
+                          >
+                            {holiday.name}
+                          </h3>
                         </div>
                         {holiday.isLunar && (
                           <span
