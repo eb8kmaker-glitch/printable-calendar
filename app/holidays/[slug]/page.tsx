@@ -5,6 +5,7 @@ import {
   CULTURAL_HOLIDAYS,
   getHolidayContentBySlug,
 } from "@/lib/holidays-content";
+import { getLocalizedHolidayContent } from "@/lib/holidays-i18n";
 import { SUPPORTED_COUNTRIES } from "@/lib/types";
 import { buildFaqSchema } from "@/lib/seo-helpers";
 import { getLocale } from "@/i18n/server";
@@ -53,12 +54,13 @@ const COUNTRY_FLAG: Record<string, string> = { US: "🇺🇸", KR: "🇰🇷", J
 
 export default async function HolidayContentPage({ params }: PageProps) {
   const { slug } = await params;
-  const holiday = getHolidayContentBySlug(slug);
-  if (!holiday) notFound();
+  const baseHoliday = getHolidayContentBySlug(slug);
+  if (!baseHoliday) notFound();
 
   const locale = await getLocale();
   const i18n = getTranslations(locale);
   const hi18n = ((i18n as unknown as Record<string, Record<string, string>>).holidays ?? {});
+  const holiday = await getLocalizedHolidayContent(baseHoliday, locale);
 
   const currentYear = new Date().getFullYear();
 

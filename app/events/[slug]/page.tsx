@@ -13,6 +13,7 @@ import { buildFaqSchema } from "@/lib/seo-helpers";
 import { getLocale } from "@/i18n/server";
 import { getTranslations, t } from "@/i18n";
 import { getEventName } from "@/lib/events-translations";
+import { getLocalizedEvent } from "@/lib/events-i18n";
 
 const BASE_URL = "https://printablecalendars.app";
 
@@ -65,10 +66,11 @@ const COUNTRY_LABEL: Record<string, string> = {
 
 export default async function EventDetailPage({ params }: PageProps) {
   const { slug } = await params;
-  const event = getEventBySlug(slug);
-  if (!event) notFound();
+  const baseEvent = getEventBySlug(slug);
+  if (!baseEvent) notFound();
 
   const locale = await getLocale();
+  const event = await getLocalizedEvent(baseEvent, locale);
   const i18n = getTranslations(locale);
   const ed = i18n.eventDetail as Record<string, string>;
   const displayName = getEventName(slug, locale, event.name);

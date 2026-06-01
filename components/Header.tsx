@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { useTheme } from "./ThemeProvider";
 
 interface NavLabels {
@@ -8,12 +9,19 @@ interface NavLabels {
   events: string;
   dateCalc: string;
   calendar: string;
+  planners: string;
+}
+
+interface PlannerLink {
+  href: string;
+  label: string;
 }
 
 interface HeaderProps {
   navLabels?: NavLabels;
   langSwitcher?: React.ReactNode;
   calendarNavLink?: React.ReactNode;
+  plannerLinks?: PlannerLink[];
 }
 
 const DEFAULT_NAV: NavLabels = {
@@ -21,10 +29,12 @@ const DEFAULT_NAV: NavLabels = {
   events: "Events",
   dateCalc: "Date Calc",
   calendar: "Calendar",
+  planners: "Planners",
 };
 
-export default function Header({ navLabels = DEFAULT_NAV, langSwitcher, calendarNavLink }: HeaderProps) {
+export default function Header({ navLabels = DEFAULT_NAV, langSwitcher, calendarNavLink, plannerLinks = [] }: HeaderProps) {
   const { theme, toggle } = useTheme();
+  const [plannersOpen, setPlannersOpen] = useState(false);
 
   const linkStyle: React.CSSProperties = {
     fontSize: 13,
@@ -97,6 +107,79 @@ export default function Header({ navLabels = DEFAULT_NAV, langSwitcher, calendar
           <Link href="/date-calculator" style={linkStyle} {...hoverHandlers}>
             {navLabels.dateCalc}
           </Link>
+
+          {/* Planners dropdown */}
+          {plannerLinks.length > 0 && (
+            <div
+              style={{ position: "relative" }}
+              onMouseEnter={() => setPlannersOpen(true)}
+              onMouseLeave={() => setPlannersOpen(false)}
+            >
+              <button
+                style={{
+                  ...linkStyle,
+                  background: "transparent",
+                  border: "none",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 4,
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLElement).style.color = "var(--fg)";
+                  (e.currentTarget as HTMLElement).style.background = "var(--header-bg)";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLElement).style.color = "var(--muted)";
+                  (e.currentTarget as HTMLElement).style.background = "transparent";
+                }}
+              >
+                {navLabels.planners}
+                <span style={{ fontSize: 9, opacity: 0.6 }}>▾</span>
+              </button>
+              {plannersOpen && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "100%",
+                    right: 0,
+                    background: "var(--bg)",
+                    border: "1px solid var(--border)",
+                    borderRadius: 8,
+                    padding: "6px 0",
+                    minWidth: 180,
+                    boxShadow: "0 4px 16px rgba(0,0,0,0.1)",
+                    zIndex: 100,
+                  }}
+                >
+                  {plannerLinks.map((pl) => (
+                    <Link
+                      key={pl.href}
+                      href={pl.href}
+                      style={{
+                        display: "block",
+                        padding: "7px 16px",
+                        fontSize: 13,
+                        color: "var(--muted)",
+                        textDecoration: "none",
+                        transition: "background 0.1s, color 0.1s",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = "var(--header-bg)";
+                        e.currentTarget.style.color = "var(--fg)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = "transparent";
+                        e.currentTarget.style.color = "var(--muted)";
+                      }}
+                    >
+                      {pl.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Lang switcher slot */}
           {langSwitcher && (

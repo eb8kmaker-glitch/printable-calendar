@@ -90,6 +90,7 @@ export default async function RootLayout({
               events: i18n.nav.events,
               dateCalc: i18n.nav.dateCalc,
               calendar: (i18n.nav as Record<string, string>).calendar ?? "Calendar",
+              planners: (i18n.footer as Record<string, string>).planners ?? "Planners",
             }}
             calendarNavLink={
               <CalendarNavLink
@@ -100,6 +101,13 @@ export default async function RootLayout({
             langSwitcher={
               <LangSwitcher currentLocale={locale} />
             }
+            plannerLinks={[
+              { href: "/study-planner", label: (i18n.footer as Record<string, string>).studyPlanner ?? "Study Planner" },
+              { href: "/teacher-planner", label: (i18n.footer as Record<string, string>).teacherPlanner ?? "Teacher Planner" },
+              { href: "/holiday-planner", label: (i18n.footer as Record<string, string>).holidayPlanner ?? "Holiday Planner" },
+              { href: "/school-calendar-2026", label: ((i18n.footer as Record<string, string>).schoolCalendar ?? "School Calendar {year}").replace("{year}", "2026") },
+              { href: "/wedding-countdown", label: (i18n.footer as Record<string, string>).weddingCountdown ?? "Wedding Countdown" },
+            ]}
           />
           <main style={{ minHeight: "calc(100vh - 120px)" }}>{children}</main>
           <Footer
