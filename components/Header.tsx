@@ -3,29 +3,48 @@
 import Link from "next/link";
 import { useTheme } from "./ThemeProvider";
 import { SUPPORTED_COUNTRIES } from "@/lib/types";
-import { useState, useEffect } from "react";
-import { getTranslations } from "@/i18n";
-import type { Locale } from "@/i18n";
 
-function getCookieLocale(): Locale {
-  if (typeof document === 'undefined') return 'en';
-  const match = document.cookie.match(/(?:^|;\s*)preferred_lang=([^;]+)/);
-  const val = match?.[1];
-  if (val === 'ko' || val === 'ja' || val === 'en') return val;
-  return 'en';
+interface NavLabels {
+  holidays: string;
+  events: string;
+  dateCalc: string;
 }
 
-export default function Header() {
+interface HeaderProps {
+  navLabels?: NavLabels;
+  langSwitcher?: React.ReactNode;
+}
+
+const DEFAULT_NAV: NavLabels = {
+  holidays: "Holidays",
+  events: "Events",
+  dateCalc: "Date Calc",
+};
+
+export default function Header({ navLabels = DEFAULT_NAV, langSwitcher }: HeaderProps) {
   const { theme, toggle } = useTheme();
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth() + 1;
-  const [locale, setLocale] = useState<Locale>('en');
 
-  useEffect(() => {
-    setLocale(getCookieLocale());
-  }, []);
+  const linkStyle: React.CSSProperties = {
+    fontSize: 13,
+    color: "var(--muted)",
+    textDecoration: "none",
+    padding: "4px 10px",
+    borderRadius: 6,
+    transition: "color 0.15s, background 0.15s",
+  };
 
-  const i18n = getTranslations(locale);
+  const hoverHandlers = {
+    onMouseEnter: (e: React.MouseEvent<HTMLElement>) => {
+      (e.target as HTMLElement).style.color = "var(--fg)";
+      (e.target as HTMLElement).style.background = "var(--header-bg)";
+    },
+    onMouseLeave: (e: React.MouseEvent<HTMLElement>) => {
+      (e.target as HTMLElement).style.color = "var(--muted)";
+      (e.target as HTMLElement).style.background = "transparent";
+    },
+  };
 
   return (
     <header
@@ -70,97 +89,36 @@ export default function Header() {
             <Link
               key={c.code}
               href={`/calendar/${c.code.toLowerCase()}/${currentYear}/${currentMonth}`}
-              style={{
-                fontSize: 13,
-                color: "var(--muted)",
-                textDecoration: "none",
-                padding: "4px 10px",
-                borderRadius: 6,
-                transition: "color 0.15s, background 0.15s",
-              }}
-              onMouseEnter={(e) => {
-                (e.target as HTMLElement).style.color = "var(--fg)";
-                (e.target as HTMLElement).style.background = "var(--header-bg)";
-              }}
-              onMouseLeave={(e) => {
-                (e.target as HTMLElement).style.color = "var(--muted)";
-                (e.target as HTMLElement).style.background = "transparent";
-              }}
+              style={linkStyle}
+              {...hoverHandlers}
             >
               {c.code}
             </Link>
           ))}
 
-          <Link
-            href="/holidays"
-            style={{
-              fontSize: 13,
-              color: "var(--muted)",
-              textDecoration: "none",
-              padding: "4px 10px",
-              borderRadius: 6,
-              transition: "color 0.15s, background 0.15s",
-            }}
-            onMouseEnter={(e) => {
-              (e.target as HTMLElement).style.color = "var(--fg)";
-              (e.target as HTMLElement).style.background = "var(--header-bg)";
-            }}
-            onMouseLeave={(e) => {
-              (e.target as HTMLElement).style.color = "var(--muted)";
-              (e.target as HTMLElement).style.background = "transparent";
-            }}
-          >
-            {i18n.nav.holidays}
+          <Link href="/holidays" style={linkStyle} {...hoverHandlers}>
+            {navLabels.holidays}
           </Link>
-          <Link
-            href="/events"
-            style={{
-              fontSize: 13,
-              color: "var(--muted)",
-              textDecoration: "none",
-              padding: "4px 10px",
-              borderRadius: 6,
-              transition: "color 0.15s, background 0.15s",
-            }}
-            onMouseEnter={(e) => {
-              (e.target as HTMLElement).style.color = "var(--fg)";
-              (e.target as HTMLElement).style.background = "var(--header-bg)";
-            }}
-            onMouseLeave={(e) => {
-              (e.target as HTMLElement).style.color = "var(--muted)";
-              (e.target as HTMLElement).style.background = "transparent";
-            }}
-          >
-            {i18n.nav.events}
+          <Link href="/events" style={linkStyle} {...hoverHandlers}>
+            {navLabels.events}
           </Link>
-          <Link
-            href="/date-calculator"
-            style={{
-              fontSize: 13,
-              color: "var(--muted)",
-              textDecoration: "none",
-              padding: "4px 10px",
-              borderRadius: 6,
-              transition: "color 0.15s, background 0.15s",
-            }}
-            onMouseEnter={(e) => {
-              (e.target as HTMLElement).style.color = "var(--fg)";
-              (e.target as HTMLElement).style.background = "var(--header-bg)";
-            }}
-            onMouseLeave={(e) => {
-              (e.target as HTMLElement).style.color = "var(--muted)";
-              (e.target as HTMLElement).style.background = "transparent";
-            }}
-          >
-            {i18n.nav.dateCalc}
+          <Link href="/date-calculator" style={linkStyle} {...hoverHandlers}>
+            {navLabels.dateCalc}
           </Link>
+
+          {/* Lang switcher slot */}
+          {langSwitcher && (
+            <div style={{ display: "flex", alignItems: "center", marginLeft: 4 }}>
+              {langSwitcher}
+            </div>
+          )}
 
           {/* Theme toggle */}
           <button
             onClick={toggle}
             aria-label="Toggle theme"
             style={{
-              marginLeft: 8,
+              marginLeft: 4,
               width: 36,
               height: 36,
               display: "flex",

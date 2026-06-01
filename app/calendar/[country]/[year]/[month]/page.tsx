@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
 import { getHolidays, buildCalendarDays, getCountryConfig } from "@/lib/holidays";
 import { MONTH_NAMES, SUPPORTED_COUNTRIES } from "@/lib/types";
 import { getEventsByMonth, formatEventDate, CATEGORY_LABELS } from "@/lib/events";
@@ -11,25 +10,13 @@ import LangSwitcher from "@/components/LangSwitcher";
 import AdSlot from "@/components/AdSlot";
 import Link from "next/link";
 import { buildHowToSchema } from "@/lib/seo-helpers";
-import { getLocaleFromCountry, getTranslations, t } from "@/i18n";
+import { getLocale } from "@/i18n/server";
+import { getTranslations, t } from "@/i18n";
 import type { Locale } from "@/i18n";
+import { headers } from "next/headers";
 
 interface PageProps {
   params: Promise<{ country: string; year: string; month: string }>;
-}
-
-const VALID_OVERRIDES: Record<string, Locale[]> = {
-  kr: ['ko', 'en'],
-  jp: ['ja', 'en'],
-}
-
-async function resolveLocale(country: string): Promise<Locale> {
-  const cookieStore = await cookies();
-  const saved = cookieStore.get('preferred_lang')?.value as Locale | undefined;
-  const defaultLocale = getLocaleFromCountry(country);
-  const valid = VALID_OVERRIDES[country];
-  if (saved && valid?.includes(saved)) return saved;
-  return defaultLocale;
 }
 
 export async function generateStaticParams() {
@@ -52,7 +39,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const config = getCountryConfig(country);
   if (!config) return {};
 
-  const locale = await resolveLocale(country);
+  const locale = await getLocale();
   const i18n = getTranslations(locale);
   const monthName = (i18n.months as Record<string, string>)[String(parseInt(month))] ?? MONTH_NAMES[Number(month) - 1];
   const countryName = (i18n.countries as Record<string, string>)[country] ?? config.name;
@@ -77,7 +64,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       `${monthName} ${year} calendar PDF`,
       `${countryName} public holidays ${year}`,
       `free printable monthly calendar`,
-      `${monthName} ${year} holiday calendar`,
     ],
     openGraph: { title: titles[locale], description: descriptions[locale], type: "website", siteName: "PrintableCalendars" },
     twitter: { card: "summary_large_image", title: titles[locale], description: descriptions[locale] },
@@ -103,17 +89,19 @@ export default async function CalendarPage({ params }: PageProps) {
     notFound();
   }
 
-  const locale = await resolveLocale(country);
+  const locale = await getLocale();
   const i18n = getTranslations(locale);
   const monthName = (i18n.months as Record<string, string>)[String(month)] ?? MONTH_NAMES[month - 1];
   const countryName = (i18n.countries as Record<string, string>)[country] ?? config.name;
+
+  const headersList = await headers();
+  const currentPath = headersList.get("x-invoke-path") || `/calendar/${country}/${year}/${month}`;
 
   const holidays = getHolidays(config.code, year);
   const days = buildCalendarDays(year, month, holidays);
   const monthHolidays = days.filter((d) => d.holiday && d.isCurrentMonth);
   const monthEvents = getEventsByMonth(month).slice(0, 8);
 
-  // Structured data (always in English for schema.org)
   const enMonthName = MONTH_NAMES[month - 1];
   const webPageSchema = {
     "@context": "https://schema.org",
@@ -141,18 +129,12 @@ export default async function CalendarPage({ params }: PageProps) {
     ],
   });
 
-  const weekdayAbbrs = (i18n.weekdays as string[]).map((d) => d.slice(0, 1));
+  const weekdayAbbrs = (i18n.weekdays as string[]).map((d) => d.slice(0, 2));
 
   return (
-    <div lang={locale}>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
-      />
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }} />
 
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "32px 24px" }}>
         <AdSlot slot="top-banner" style={{ marginBottom: 24 }} />
@@ -160,14 +142,7 @@ export default async function CalendarPage({ params }: PageProps) {
         {/* Toolbar */}
         <div
           className="no-print"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            marginBottom: 28,
-            flexWrap: "wrap",
-            gap: 12,
-          }}
+          style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 28, flexWrap: "wrap", gap: 12 }}
         >
           {/* Country switcher */}
           <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
@@ -178,15 +153,11 @@ export default async function CalendarPage({ params }: PageProps) {
                   key={c.code}
                   href={`/calendar/${c.code.toLowerCase()}/${year}/${month}`}
                   style={{
-                    fontSize: 12,
-                    padding: "5px 12px",
-                    border: "1px solid var(--border)",
-                    borderRadius: 20,
-                    textDecoration: "none",
+                    fontSize: 12, padding: "5px 12px", border: "1px solid var(--border)",
+                    borderRadius: 20, textDecoration: "none",
                     color: c.code.toLowerCase() === country ? "var(--bg)" : "var(--muted)",
                     background: c.code.toLowerCase() === country ? "var(--fg)" : "transparent",
-                    transition: "all 0.15s",
-                    fontWeight: 500,
+                    transition: "all 0.15s", fontWeight: 500,
                   }}
                 >
                   {label}
@@ -196,14 +167,9 @@ export default async function CalendarPage({ params }: PageProps) {
           </div>
 
           <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-            <LangSwitcher country={country} currentLocale={locale} />
             <Link
               href={`/calendar/${country}/${year}`}
-              style={{
-                fontSize: 12, padding: "5px 12px",
-                border: "1px solid var(--border)", borderRadius: 8,
-                textDecoration: "none", color: "var(--muted)",
-              }}
+              style={{ fontSize: 12, padding: "5px 12px", border: "1px solid var(--border)", borderRadius: 8, textDecoration: "none", color: "var(--muted)" }}
             >
               {i18n.calendar.yearView}
             </Link>
@@ -225,19 +191,8 @@ export default async function CalendarPage({ params }: PageProps) {
 
         {/* Holiday list */}
         {monthHolidays.length > 0 && (
-          <section
-            className="no-print"
-            style={{ marginTop: 40, padding: 24, border: "1px solid var(--border)", borderRadius: 10 }}
-          >
-            <h2
-              style={{
-                fontFamily: "'EB Garamond', Georgia, serif",
-                fontSize: 20,
-                fontWeight: 400,
-                marginBottom: 16,
-                color: "var(--fg)",
-              }}
-            >
+          <section className="no-print" style={{ marginTop: 40, padding: 24, border: "1px solid var(--border)", borderRadius: 10 }}>
+            <h2 style={{ fontFamily: "'EB Garamond', Georgia, serif", fontSize: 20, fontWeight: 400, marginBottom: 16, color: "var(--fg)" }}>
               {t(i18n.calendar.publicHolidays, { country: countryName, month: monthName, year })}
             </h2>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -260,19 +215,8 @@ export default async function CalendarPage({ params }: PageProps) {
 
         {/* World events */}
         {monthEvents.length > 0 && (
-          <section
-            className="no-print"
-            style={{ marginTop: 32, padding: 24, border: "1px solid var(--border)", borderRadius: 10 }}
-          >
-            <h2
-              style={{
-                fontFamily: "'EB Garamond', Georgia, serif",
-                fontSize: 20,
-                fontWeight: 400,
-                marginBottom: 16,
-                color: "var(--fg)",
-              }}
-            >
+          <section className="no-print" style={{ marginTop: 32, padding: 24, border: "1px solid var(--border)", borderRadius: 10 }}>
+            <h2 style={{ fontFamily: "'EB Garamond', Georgia, serif", fontSize: 20, fontWeight: 400, marginBottom: 16, color: "var(--fg)" }}>
               {t(i18n.calendar.worldEvents, { month: monthName })}
             </h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 10 }}>
@@ -280,11 +224,7 @@ export default async function CalendarPage({ params }: PageProps) {
                 <Link
                   key={event.slug}
                   href={`/events/${event.slug}`}
-                  style={{
-                    display: "flex", justifyContent: "space-between", alignItems: "flex-start",
-                    gap: 12, padding: "10px 14px", border: "1px solid var(--border)",
-                    borderRadius: 8, textDecoration: "none", color: "inherit",
-                  }}
+                  style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, padding: "10px 14px", border: "1px solid var(--border)", borderRadius: 8, textDecoration: "none", color: "inherit" }}
                 >
                   <span style={{ fontSize: 13, lineHeight: 1.4 }}>{event.name}</span>
                   <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, color: "var(--holiday)", whiteSpace: "nowrap", flexShrink: 0, paddingTop: 2 }}>
@@ -293,10 +233,7 @@ export default async function CalendarPage({ params }: PageProps) {
                 </Link>
               ))}
             </div>
-            <Link
-              href="/events"
-              style={{ display: "inline-block", marginTop: 14, fontSize: 12, color: "var(--muted)", textDecoration: "none", borderBottom: "1px solid var(--border)", paddingBottom: 1 }}
-            >
+            <Link href="/events" style={{ display: "inline-block", marginTop: 14, fontSize: 12, color: "var(--muted)", textDecoration: "none", borderBottom: "1px solid var(--border)", paddingBottom: 1 }}>
               {i18n.calendar.browseAllEvents}
             </Link>
           </section>
@@ -305,21 +242,13 @@ export default async function CalendarPage({ params }: PageProps) {
         <AdSlot slot="pre-download" style={{ margin: "32px 0" }} />
 
         {/* Download section */}
-        <div
-          className="no-print"
-          style={{ textAlign: "center", padding: "32px 0", borderTop: "1px solid var(--border)" }}
-        >
-          <p style={{ fontSize: 13, color: "var(--muted)", marginBottom: 16 }}>
-            {i18n.calendar.landscapePdf}
-          </p>
+        <div className="no-print" style={{ textAlign: "center", padding: "32px 0", borderTop: "1px solid var(--border)" }}>
+          <p style={{ fontSize: 13, color: "var(--muted)", marginBottom: 16 }}>{i18n.calendar.landscapePdf}</p>
           <DownloadButton country={country} year={year} month={month} locale={locale} />
         </div>
 
         {/* SEO text */}
-        <section
-          className="no-print"
-          style={{ marginTop: 48, paddingTop: 32, borderTop: "1px solid var(--border)" }}
-        >
+        <section className="no-print" style={{ marginTop: 48, paddingTop: 32, borderTop: "1px solid var(--border)" }}>
           <h2 style={{ fontFamily: "'EB Garamond', Georgia, serif", fontSize: 22, fontWeight: 400, marginBottom: 12 }}>
             {i18n.calendar.aboutTitle}
           </h2>
@@ -328,6 +257,6 @@ export default async function CalendarPage({ params }: PageProps) {
           </p>
         </section>
       </div>
-    </div>
+    </>
   );
 }
