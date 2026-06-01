@@ -15,7 +15,7 @@ const BASE_URL = "https://printablecalendars.app";
 export const metadata: Metadata = {
   title: "World Events & International Days",
   description:
-    "Browse international observances and world events ??from Earth Day to World Mental Health Day. Explore history, cultural context, activities, and free printable calendars.",
+    "Browse international observances and world events —from Earth Day to World Mental Health Day. Explore history, cultural context, activities, and free printable calendars.",
   alternates: {
     canonical: `${BASE_URL}/events`,
     languages: {
@@ -328,19 +328,6 @@ export default async function EventsPage({ searchParams }: PageProps) {
                     {event.tagline}
                   </p>
 
-                  {/* Cultural context indicator */}
-                  {event.culturalContext && Object.keys(event.culturalContext).length > 0 && (
-                    <p
-                      style={{
-                        fontSize: 10,
-                        color: "var(--muted)",
-                        fontFamily: "'DM Mono', monospace",
-                        letterSpacing: "0.04em",
-                      }}
-                    >
-                      {Object.keys(event.culturalContext).join(" 쨌 ")} context
-                    </p>
-                  )}
                 </div>
               </Link>
             ))}

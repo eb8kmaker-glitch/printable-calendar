@@ -31,9 +31,9 @@ const RAMADAN_2027 = {
 };
 
 export const metadata: Metadata = {
-  title: "Ramadan Calendar 2026 ??Free Printable PDF",
+  title: "Ramadan Calendar 2026 —Free Printable PDF",
   description:
-    "Ramadan 2026 dates: February 18 ??March 19, 2026. Download a free printable calendar for Ramadan 2026. Plan your fasting schedule, prayer times, and Eid al-Fitr.",
+    "Ramadan 2026 dates: February 18 —March 19, 2026. Download a free printable calendar for Ramadan 2026. Plan your fasting schedule, prayer times, and Eid al-Fitr.",
   keywords: [
     "Ramadan calendar 2026",
     "Ramadan 2026 dates",
@@ -45,9 +45,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: `${BASE_URL}/ramadan-2026` },
   openGraph: {
-    title: "Ramadan Calendar 2026 ??Free Printable PDF",
+    title: "Ramadan Calendar 2026 —Free Printable PDF",
     description:
-      "Ramadan 2026: February 18 ??March 19. Download a free printable monthly calendar to plan your fasting month.",
+      "Ramadan 2026: February 18 —March 19. Download a free printable monthly calendar to plan your fasting month.",
     url: `${BASE_URL}/ramadan-2026`,
     type: "website",
     siteName: "PrintableCalendars",
@@ -62,8 +62,8 @@ export const metadata: Metadata = {
 
 const RAMADAN_MILESTONES: DayMilestone[] = [
   { min: 0, max: 0, message: "Eid Mubarak!" },
-  { min: 1, max: 9, message: "The final days ??Laylat al-Qadr is near.", tip: "Increase worship in the last odd nights." },
-  { min: 10, max: 19, message: "The middle third ??stay consistent.", tip: "Increase Quran recitation in the last 10 days." },
+  { min: 1, max: 9, message: "The final days —Laylat al-Qadr is near.", tip: "Increase worship in the last odd nights." },
+  { min: 10, max: 19, message: "The middle third —stay consistent.", tip: "Increase Quran recitation in the last 10 days." },
   { min: 20, max: 99999, message: "The month of reflection has begun.", tip: "Set your intention (niyyah) each night." },
 ];
 
@@ -111,7 +111,7 @@ const RAMADAN_FAQS = [
   },
   {
     q: "Can I download a Ramadan 2026 calendar printable for free?",
-    a: "Yes. Calendars for February and March 2026 ??the two months that span Ramadan ??are available as free A4 landscape PDFs. Click the PDF button next to your country to download instantly with no account required.",
+    a: "Yes. Calendars for February and March 2026 —the two months that span Ramadan —are available as free A4 landscape PDFs. Click the PDF button next to your country to download instantly with no account required.",
   },
   {
     q: "What are the Ramadan 2026 dates I should mark on my calendar?",
@@ -119,14 +119,14 @@ const RAMADAN_FAQS = [
   },
   {
     q: "When is Ramadan 2027?",
-    a: "Ramadan 2027 is expected to run from approximately February 7 to March 8, 2027. Because the Islamic calendar is lunar, Ramadan shifts about 10??1 days earlier each year on the Gregorian calendar.",
+    a: "Ramadan 2027 is expected to run from approximately February 7 to March 8, 2027. Because the Islamic calendar is lunar, Ramadan shifts about 10—1 days earlier each year on the Gregorian calendar.",
   },
 ];
 
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebPage",
-  name: "Ramadan Calendar 2026 ??Free Printable PDF",
+  name: "Ramadan Calendar 2026 —Free Printable PDF",
   description: "Ramadan 2026 dates and free printable calendar download.",
   url: `${BASE_URL}/ramadan-2026`,
 };
