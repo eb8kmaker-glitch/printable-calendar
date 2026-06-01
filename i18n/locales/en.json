@@ -2,7 +2,8 @@
   "nav": {
     "holidays": "Holidays",
     "events": "Events",
-    "dateCalc": "Date Calc"
+    "dateCalc": "Date Calc",
+    "calendar": "Calendar"
   },
   "countries": {
     "us": "United States",
@@ -13,11 +14,28 @@
     "jp": "Japan"
   },
   "months": {
-    "1": "January","2": "February","3": "March","4": "April",
-    "5": "May","6": "June","7": "July","8": "August",
-    "9": "September","10": "October","11": "November","12": "December"
+    "1": "January",
+    "2": "February",
+    "3": "March",
+    "4": "April",
+    "5": "May",
+    "6": "June",
+    "7": "July",
+    "8": "August",
+    "9": "September",
+    "10": "October",
+    "11": "November",
+    "12": "December"
   },
-  "weekdays": ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
+  "weekdays": [
+    "Sun",
+    "Mon",
+    "Tue",
+    "Wed",
+    "Thu",
+    "Fri",
+    "Sat"
+  ],
   "calendar": {
     "yearView": "Year view",
     "monthlyView": "Monthly view",
@@ -45,6 +63,7 @@
     "viewThisMonth": "View this month →",
     "thisMonth": "This month →",
     "upcomingHolidays": "Upcoming holidays",
+    "todaysEvents": "Today's Events",
     "notableEvents": "Notable world events",
     "viewAll": "View all →",
     "pdfFeatureTitle": "PDF Download",
@@ -73,49 +92,15 @@
     "ramadan": "Ramadan {year}",
     "weddingCountdown": "Wedding Countdown"
   },
-  "dateCalculator": {
-    "title": "Date Calculator",
-    "description": "Calculate days between dates, add or subtract days, and count down to any date. Free, no sign-up.",
-    "tabBetween": "Days Between Dates",
-    "tabAddSubtract": "Add / Subtract Days",
-    "tabUntil": "Days Until a Date",
-    "startDate": "Start Date",
-    "endDate": "End Date",
-    "totalDays": "Total Days",
-    "weeks": "Weeks",
-    "businessDays": "Business Days",
-    "monFriOnly": "Mon–Fri only",
-    "aboutTitle": "About these calculators",
-    "aboutBetweenTitle": "Days Between Dates",
-    "aboutBetweenDesc": "Count the total days, weeks, and business days between any two dates. Useful for project planning, contract durations, and deadline tracking.",
-    "aboutAddTitle": "Add / Subtract Days",
-    "aboutAddDesc": "Start from any date and add or subtract a number of days to find the resulting date and day of the week. Handy for scheduling and notice periods.",
-    "aboutUntilTitle": "Days Until a Date",
-    "aboutUntilDesc": "Enter a future date to see the D-day countdown in days, weeks, and months. Great for countdowns to holidays, events, or deadlines."
-  },
-  "events": {
-    "title": "International Days & Observances",
-    "description": "Every notable world event, cultural observance, awareness day, and celebration — with origin stories, cultural context, and printable calendars.",
-    "searchPlaceholder": "Search events…",
-    "filterAll": "All",
-    "noResults": "No events found."
-  },
-  "holidays": {
-    "title": "Cultural Holidays",
-    "headline": "Holidays, traditions & the stories behind them",
-    "description": "From Chuseok to Golden Week to Thanksgiving — explore the origin, history, food, and culture of the world's most celebrated holidays. Each entry links to a free printable calendar for the relevant month.",
-    "traditionalDishes": "{n} traditional dishes",
-    "activities": "{n} activities",
-    "lunarLabel": "Lunar",
-    "relatedHolidays": "Related Holidays",
-    "printableCalendars": "Printable Calendars",
-    "downloadCta": "Download a free printable calendar for {holiday} — includes all public holidays.",
-    "faq": "Frequently asked questions",
-    "origin": "Origin",
-    "history": "History",
-    "modernCelebration": "Modern Celebration",
-    "traditionalFoods": "Traditional Foods",
-    "howToParticipate": "How to Participate",
-    "travelTips": "Travel Tips"
+  "eventDetail": {
+    "about": "ABOUT",
+    "history": "HISTORY",
+    "whereObserved": "WHERE IT'S OBSERVED",
+    "howToParticipate": "HOW TO PARTICIPATE",
+    "faq": "FREQUENTLY ASKED QUESTIONS",
+    "relatedEvents": "RELATED EVENTS",
+    "markTheDate": "MARK THE DATE",
+    "downloadCta": "Download a free printable calendar for {year} and never miss {event}.",
+    "viewCalendar": "View Calendar"
   }
 }

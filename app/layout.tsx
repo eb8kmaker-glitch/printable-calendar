@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import LangSwitcher from "@/components/LangSwitcher";
+import CalendarNavLink from "@/components/CalendarNavLink";
 import { organizationSchema } from "@/lib/seo-helpers";
 import { Analytics } from "@vercel/analytics/next";
 import { getLocale } from "@/i18n/server";
@@ -88,7 +89,14 @@ export default async function RootLayout({
               holidays: i18n.nav.holidays,
               events: i18n.nav.events,
               dateCalc: i18n.nav.dateCalc,
+              calendar: (i18n.nav as Record<string, string>).calendar ?? "Calendar",
             }}
+            calendarNavLink={
+              <CalendarNavLink
+                currentLocale={locale}
+                label={(i18n.nav as Record<string, string>).calendar ?? "Calendar"}
+              />
+            }
             langSwitcher={
               <LangSwitcher currentLocale={locale} />
             }
