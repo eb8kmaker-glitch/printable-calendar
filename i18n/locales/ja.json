@@ -1,0 +1,77 @@
+{
+  "nav": {
+    "holidays": "祝日",
+    "events": "イベント",
+    "dateCalc": "日付計算"
+  },
+  "countries": {
+    "us": "アメリカ",
+    "gb": "イギリス",
+    "au": "オーストラリア",
+    "ca": "カナダ",
+    "kr": "韓国",
+    "jp": "日本"
+  },
+  "months": {
+    "1": "1月","2": "2月","3": "3月","4": "4月",
+    "5": "5月","6": "6月","7": "7月","8": "8月",
+    "9": "9月","10": "10月","11": "11月","12": "12月"
+  },
+  "weekdays": ["日","月","火","水","木","金","土"],
+  "calendar": {
+    "yearView": "年間表示",
+    "monthlyView": "月間表示",
+    "publicHolidays": "{country}の祝日 — {year}年{month}",
+    "worldEvents": "{month}の世界イベント",
+    "browseAllEvents": "すべての世界イベントを見る →",
+    "downloadPdf": "↓ PDFをダウンロード",
+    "generating": "生成中…",
+    "landscape": "横向き",
+    "portrait": "縦向き",
+    "light": "☀ ライト",
+    "dark": "◑ ダーク",
+    "lightRecommended": "☀ ライト — 印刷推奨",
+    "darkRecommended": "◑ ダーク — タブレット・デジタル向け",
+    "yearlyNote": " · A6は年間カレンダー非対応",
+    "aboutTitle": "このカレンダーについて",
+    "aboutText": "この無料の{year}年{month}{country}カレンダーには、すべての公式祝日が含まれています。A3〜A6サイズのPDFでダウンロードできます。モノクロ・カラー印刷どちらにも対応したシンプルなデザインです。",
+    "landscapePdf": "横向きPDF · 祝日入り · 印刷用",
+    "landscapePdfYearly": "横向きPDF · 12ヶ月1ページ · 祝日入り"
+  },
+  "home": {
+    "headline": "祝日入り印刷用カレンダー。",
+    "subheadline": "ずっと無料。",
+    "description": "アメリカ、イギリス、オーストラリア、カナダ、日本、韓国の祝日入り月間カレンダーをダウンロード。A4 PDF、ログイン不要。",
+    "viewThisMonth": "今月を見る →",
+    "thisMonth": "今月 →",
+    "upcomingHolidays": "近日中の祝日",
+    "todaysEvents": "本日のイベント",
+    "notableEvents": "注目の世界イベント",
+    "viewAll": "すべて見る →",
+    "pdfFeatureTitle": "PDFダウンロード",
+    "pdfFeature": "A4横向き、印刷用、即時生成",
+    "holidaysFeatureTitle": "祝日",
+    "holidaysFeature": "各国の公式祝日を収録",
+    "designFeatureTitle": "シンプルデザイン",
+    "designFeature": "モノクロ・カラー対応のすっきりしたレイアウト",
+    "noSignupFeatureTitle": "登録不要",
+    "noSignupFeature": "完全無料、アカウント不要"
+  },
+  "footer": {
+    "tagline": "祝日入り無料印刷用月間カレンダー。A4 PDFでダウンロード。",
+    "about": "概要",
+    "contact": "お問い合わせ",
+    "worldEvents": "世界イベント",
+    "culturalHolidays": "文化的祝日",
+    "dateCalculator": "日付計算ツール",
+    "copyright": "© {year} PrintableCalendars. 無料でご利用いただけます。",
+    "sitemap": "サイトマップ",
+    "planners": "プランナー",
+    "studyPlanner": "学習プランナー",
+    "teacherPlanner": "教師プランナー",
+    "schoolCalendar": "{year}年学校カレンダー",
+    "holidayPlanner": "休暇プランナー",
+    "ramadan": "{year}年ラマダン",
+    "weddingCountdown": "ウェディングカウントダウン"
+  }
+}
