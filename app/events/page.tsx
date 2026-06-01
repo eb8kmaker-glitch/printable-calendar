@@ -15,7 +15,7 @@ const BASE_URL = "https://printablecalendars.app";
 export const metadata: Metadata = {
   title: "World Events & International Days",
   description:
-    "Browse international observances and world events ??from Earth Day to World Mental Health Day. Explore history, cultural context, activities, and free printable calendars.",
+    "Browse international observances and world events —from Earth Day to World Mental Health Day. Explore history, cultural context, activities, and free printable calendars.",
   alternates: {
     canonical: `${BASE_URL}/events`,
     languages: {

@@ -10,7 +10,7 @@ export const dynamic = "force-static";
 const BASE_URL = "https://printablecalendars.app";
 
 export const metadata: Metadata = {
-  title: "Wedding Countdown Printable Calendar ??Plan Month by Month",
+  title: "Wedding Countdown Printable Calendar —Plan Month by Month",
   description:
     "Download free printable monthly calendars to count down to your wedding day. Plan vendor meetings, dress fittings, and deadlines month by month. A4 PDF, instant download.",
   keywords: [
@@ -60,11 +60,11 @@ const WEDDING_FAQS = [
 const WEDDING_MILESTONES: DayMilestone[] = [
   { min: 0, max: 0, message: "Today is your wedding day." },
   { min: 1, max: 6, message: "This is it. You're ready.", tip: "Sleep. Everything is handled." },
-  { min: 7, max: 29, message: "Almost there ??delegate, pack, breathe.", tip: "Hand off day-of coordination to someone you trust." },
+  { min: 7, max: 29, message: "Almost there —delegate, pack, breathe.", tip: "Hand off day-of coordination to someone you trust." },
   { min: 30, max: 89, message: "Final fittings, payments, and last confirmations.", tip: "Write your vows this week." },
   { min: 90, max: 179, message: "Send formal invitations and finalise your vendors.", tip: "Confirm headcount with caterer 6 weeks out." },
-  { min: 180, max: 364, message: "Big decisions time ??photographer, caterer, dress.", tip: "Send save-the-dates now." },
-  { min: 365, max: 99999, message: "Start early ??book your venue and set a date.", tip: "Popular venues book up 18 months out." },
+  { min: 180, max: 364, message: "Big decisions time —photographer, caterer, dress.", tip: "Send save-the-dates now." },
+  { min: 365, max: 99999, message: "Start early —book your venue and set a date.", tip: "Popular venues book up 18 months out." },
 ];
 
 // Month-by-month wedding planning milestones
@@ -240,8 +240,8 @@ export default function WeddingCountdownPage() {
             {[
               ["Print one month at a time", "Download the calendar for each upcoming month. Write in vendor calls, tastings, and fittings as they are booked."],
               ["Write deadlines in red", "Mark payment deadlines, RSVP cutoffs, and contract signing dates in a contrasting colour so they are impossible to miss."],
-              ["Post it somewhere visible", "Pin the current month on the fridge or bathroom mirror ??not buried in a planner. Daily visibility is the point."],
-              ["Share with your partner", "Print two copies ??one for each of you. Independently reviewing the same month catches missed items before they become problems."],
+              ["Post it somewhere visible", "Pin the current month on the fridge or bathroom mirror —not buried in a planner. Daily visibility is the point."],
+              ["Share with your partner", "Print two copies —one for each of you. Independently reviewing the same month catches missed items before they become problems."],
             ].map(([title, desc]) => (
               <div key={title}>
                 <p style={{ fontSize: 14, fontWeight: 500, marginBottom: 6 }}>{title}</p>

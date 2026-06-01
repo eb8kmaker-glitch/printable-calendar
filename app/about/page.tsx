@@ -7,7 +7,7 @@ export const dynamic = "force-static";
 const BASE_URL = "https://printablecalendars.app";
 
 export const metadata: Metadata = {
-  title: "About PrintableCalendars ??Free Printable Calendar PDFs",
+  title: "About PrintableCalendars —Free Printable Calendar PDFs",
   description:
     "PrintableCalendars makes free, clean printable monthly calendars with public holidays for the USA, Japan, and South Korea. No account required. Download A4 PDF instantly.",
   alternates: { canonical: `${BASE_URL}/about` },
@@ -232,8 +232,8 @@ export default function AboutPage() {
           </p>
           <ul style={{ listStyle: "none", padding: 0, margin: "16px 0 16px", display: "flex", flexDirection: "column", gap: 12 }}>
             {[
-              ["/events", "World Events", "100+ international observances ??from Earth Day to World Mental Health Day. Each entry has a history, cultural context for our three supported countries, and a list of activities."],
-              ["/holidays", "Cultural Holidays", "In-depth guides to major cultural holidays like Chuseok, Golden Week, and Thanksgiving ??origin, history, traditional food, and travel tips."],
+              ["/events", "World Events", "100+ international observances —from Earth Day to World Mental Health Day. Each entry has a history, cultural context for our three supported countries, and a list of activities."],
+              ["/holidays", "Cultural Holidays", "In-depth guides to major cultural holidays like Chuseok, Golden Week, and Thanksgiving —origin, history, traditional food, and travel tips."],
             ].map(([href, title, desc]) => (
               <li key={href as string} style={{ display: "flex", gap: 12 }}>
                 <span
@@ -268,7 +268,7 @@ export default function AboutPage() {
         <Section label="What we are working on">
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             {[
-              "More countries ??Australia, Canada, UK, Germany",
+              "More countries —Australia, Canada, UK, Germany",
               "Weekly and bi-weekly calendar layouts",
               "Printable yearly overview (all 12 months on one page)",
               "More cultural holiday guides (Diwali, Lunar New Year for additional countries)",

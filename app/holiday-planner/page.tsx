@@ -12,7 +12,7 @@ export const dynamic = "force-static";
 const BASE_URL = "https://printablecalendars.app";
 
 export const metadata: Metadata = {
-  title: "Holiday Planner ??Map Your Time Off with Printable Calendars",
+  title: "Holiday Planner —Map Your Time Off with Printable Calendars",
   description:
     "Plan your vacation and time off around public holidays in the USA, Japan, and South Korea. See upcoming holidays month by month and download free printable PDF calendars.",
   keywords: [
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Holiday Planner | PrintableCalendars",
     description:
-      "See all public holidays in the USA, Japan, and South Korea ??and download printable monthly calendars to plan your time off.",
+      "See all public holidays in the USA, Japan, and South Korea —and download printable monthly calendars to plan your time off.",
     url: `${BASE_URL}/holiday-planner`,
     type: "website",
     siteName: "PrintableCalendars",
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Holiday Planner | PrintableCalendars",
-    description: "Plan time off around public holidays ??free printable calendar PDFs for USA, Japan, and South Korea.",
+    description: "Plan time off around public holidays —free printable calendar PDFs for USA, Japan, and South Korea.",
   },
   robots: { index: true, follow: true },
 };
@@ -44,11 +44,11 @@ const COUNTRY_FLAG: Record<string, string> = { US: "?눣?눡", GB: "?눐?눉", A
 
 const HOLIDAY_MILESTONES: DayMilestone[] = [
   { min: 0, max: 0, message: "Today you leave. Safe travels." },
-  { min: 1, max: 6, message: "Last check ??confirm all bookings.", tip: "Charge all devices tonight." },
+  { min: 1, max: 6, message: "Last check —confirm all bookings.", tip: "Charge all devices tonight." },
   { min: 7, max: 13, message: "Pack light, prepare documents.", tip: "Digital copies of passport and bookings in email." },
-  { min: 14, max: 29, message: "Finalise ??travel insurance, itinerary, currency.", tip: "Notify your bank before you travel." },
-  { min: 30, max: 89, message: "Mid-planning ??check visa requirements now.", tip: "Some visas take 4?? weeks to process." },
-  { min: 90, max: 99999, message: "Early planning ??flights and accommodation first.", tip: "Booking 3+ months out saves 20??0%." },
+  { min: 14, max: 29, message: "Finalise —travel insurance, itinerary, currency.", tip: "Notify your bank before you travel." },
+  { min: 30, max: 89, message: "Mid-planning —check visa requirements now.", tip: "Some visas take 4— weeks to process." },
+  { min: 90, max: 99999, message: "Early planning —flights and accommodation first.", tip: "Booking 3+ months out saves 20—0%." },
 ];
 
 const HOLIDAY_PLANNER_FAQS = [
@@ -72,9 +72,9 @@ const HOLIDAY_PLANNER_FAQS = [
 
 const PLANNING_TIPS = [
   ["Bridge days", "When a holiday falls on Tuesday or Thursday, taking the adjacent Monday or Friday creates a 4-day weekend with just one vacation day."],
-  ["Cluster around long weekends", "Plan trips to start the day after a holiday ??airlines and hotels are cheaper than on the holiday itself."],
-  ["Book early for peak periods", "Golden Week (JP), Chuseok (KR), Thanksgiving (US), and Christmas block up 3?? months in advance."],
-  ["Check neighbouring country calendars", "If you work remotely, US holidays can be great times to travel to Japan or Korea ??prices drop as local tourism falls."],
+  ["Cluster around long weekends", "Plan trips to start the day after a holiday —airlines and hotels are cheaper than on the holiday itself."],
+  ["Book early for peak periods", "Golden Week (JP), Chuseok (KR), Thanksgiving (US), and Christmas block up 3— months in advance."],
+  ["Check neighbouring country calendars", "If you work remotely, US holidays can be great times to travel to Japan or Korea —prices drop as local tourism falls."],
 ];
 
 export default function HolidayPlannerPage() {

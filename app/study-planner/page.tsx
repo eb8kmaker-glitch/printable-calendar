@@ -10,7 +10,7 @@ export const dynamic = "force-static";
 const BASE_URL = "https://printablecalendars.app";
 
 export const metadata: Metadata = {
-  title: "Free Printable Study Planner Calendars ??PDF Download",
+  title: "Free Printable Study Planner Calendars —PDF Download",
   description:
     "Download free printable monthly study planner calendars. Track assignments, exam dates, and deadlines. Clean A4 PDF design, no login required.",
   keywords: [
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Free Printable Study Planner Calendars | PrintableCalendars",
     description:
-      "Monthly calendars for students ??track assignments, exams, and deadlines. Instant PDF download.",
+      "Monthly calendars for students —track assignments, exams, and deadlines. Instant PDF download.",
     url: `${BASE_URL}/study-planner`,
     type: "website",
     siteName: "PrintableCalendars",
@@ -33,24 +33,24 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Free Printable Study Planner Calendars | PrintableCalendars",
-    description: "Monthly study calendars with holidays ??free PDF download for students.",
+    description: "Monthly study calendars with holidays —free PDF download for students.",
   },
   robots: { index: true, follow: true },
 };
 
 const STUDY_MILESTONES: DayMilestone[] = [
   { min: 0, max: 0, message: "Exam day. You've got this." },
-  { min: 1, max: 6, message: "Almost there ??stay calm, trust your prep.", tip: "Light review only. Rest is productive." },
-  { min: 7, max: 13, message: "One week out ??review, don't learn new material.", tip: "Simulate exam conditions at least once." },
-  { min: 14, max: 29, message: "Final stretch ??active recall every day.", tip: "Sleep matters more than extra hours now." },
-  { min: 30, max: 59, message: "Halfway there ??review weak areas first.", tip: "Practice tests are more effective than re-reading." },
-  { min: 60, max: 99999, message: "Plenty of time ??build your schedule now.", tip: "Study 1?? hours daily beats cramming." },
+  { min: 1, max: 6, message: "Almost there —stay calm, trust your prep.", tip: "Light review only. Rest is productive." },
+  { min: 7, max: 13, message: "One week out —review, don't learn new material.", tip: "Simulate exam conditions at least once." },
+  { min: 14, max: 29, message: "Final stretch —active recall every day.", tip: "Sleep matters more than extra hours now." },
+  { min: 30, max: 59, message: "Halfway there —review weak areas first.", tip: "Practice tests are more effective than re-reading." },
+  { min: 60, max: 99999, message: "Plenty of time —build your schedule now.", tip: "Study 1— hours daily beats cramming." },
 ];
 
 const STUDY_FAQS = [
   {
     q: "What is a printable study planner 2026?",
-    a: "A printable study planner is a monthly calendar you download as a PDF and print at home. It gives you a physical grid to write in exam dates, assignment deadlines, and study blocks ??without needing an app or an account.",
+    a: "A printable study planner is a monthly calendar you download as a PDF and print at home. It gives you a physical grid to write in exam dates, assignment deadlines, and study blocks —without needing an app or an account.",
   },
   {
     q: "How do I use a free study schedule template effectively?",
@@ -72,11 +72,11 @@ const STUDY_FAQS = [
 
 const STUDY_TIPS = [
   ["Block exam weeks first", "Add exam dates as soon as they are announced. Everything else schedules around them."],
-  ["Plan in monthly chunks", "A monthly calendar gives you the right resolution ??detailed enough to plan, broad enough to see the whole semester."],
+  ["Plan in monthly chunks", "A monthly calendar gives you the right resolution —detailed enough to plan, broad enough to see the whole semester."],
   ["Use the margins", "Our calendars have clean margins. Write deadlines, readings, or study goals directly on the printed sheet."],
-  ["Print black and white", "Our minimal design is optimised for B&W printing ??saves ink, stays readable."],
+  ["Print black and white", "Our minimal design is optimised for B&W printing —saves ink, stays readable."],
   ["One calendar per subject", "Some students print a calendar per course and annotate separately, then combine into a master view."],
-  ["Leave buffer weeks", "Block the week before every major exam or deadline as review time ??not new-content time."],
+  ["Leave buffer weeks", "Block the week before every major exam or deadline as review time —not new-content time."],
 ];
 
 export default function StudyPlannerPage() {
@@ -231,7 +231,7 @@ export default function StudyPlannerPage() {
         >
           {[
             ["A4 landscape PDF", "Print on any home printer. Fits standard letter and A4 paper."],
-            ["Public holidays included", "Never miss a holiday exam date ??all official holidays shown."],
+            ["Public holidays included", "Never miss a holiday exam date —all official holidays shown."],
             ["Minimal design", "Clean grid leaves space for your notes, annotations, and highlights."],
             ["Free, no account", "No sign-up. No email. Just download and print."],
           ].map(([title, desc]) => (

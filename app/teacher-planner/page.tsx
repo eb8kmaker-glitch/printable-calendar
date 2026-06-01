@@ -10,7 +10,7 @@ export const dynamic = "force-static";
 const BASE_URL = "https://printablecalendars.app";
 
 export const metadata: Metadata = {
-  title: "Free Printable Teacher Planner Calendars ??PDF Download",
+  title: "Free Printable Teacher Planner Calendars —PDF Download",
   description:
     "Free printable monthly teacher planner calendars with public holidays. Plan lessons, mark parent-teacher nights, and track school events. A4 PDF, clean design, instant download.",
   keywords: [
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Free Printable Teacher Planner Calendars | PrintableCalendars",
     description:
-      "Monthly teacher planners with public holidays ??free A4 PDF download. Plan your whole school year.",
+      "Monthly teacher planners with public holidays —free A4 PDF download. Plan your whole school year.",
     url: `${BASE_URL}/teacher-planner`,
     type: "website",
     siteName: "PrintableCalendars",
@@ -33,17 +33,17 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Free Printable Teacher Planner Calendars | PrintableCalendars",
-    description: "Teacher planner calendars with holidays ??free monthly PDF download.",
+    description: "Teacher planner calendars with holidays —free monthly PDF download.",
   },
   robots: { index: true, follow: true },
 };
 
 const TEACHER_MILESTONES: DayMilestone[] = [
   { min: 0, max: 0, message: "Term complete. Well done." },
-  { min: 1, max: 13, message: "End of term ??grades, reports, parent comms.", tip: "Batch similar tasks to save time." },
-  { min: 14, max: 29, message: "Final push ??start wrapping up units.", tip: "Leave buffer time for unexpected delays." },
-  { min: 30, max: 59, message: "Mid-term ??check in with struggling students now.", tip: "Small interventions now prevent big problems later." },
-  { min: 60, max: 99999, message: "Strong start ??establish routines early.", tip: "First 2 weeks set the tone for the whole term." },
+  { min: 1, max: 13, message: "End of term —grades, reports, parent comms.", tip: "Batch similar tasks to save time." },
+  { min: 14, max: 29, message: "Final push —start wrapping up units.", tip: "Leave buffer time for unexpected delays." },
+  { min: 30, max: 59, message: "Mid-term —check in with struggling students now.", tip: "Small interventions now prevent big problems later." },
+  { min: 60, max: 99999, message: "Strong start —establish routines early.", tip: "First 2 weeks set the tone for the whole term." },
 ];
 
 const TEACHER_FAQS = [
@@ -61,14 +61,14 @@ const TEACHER_FAQS = [
   },
   {
     q: "How far ahead can I download teacher planner calendars?",
-    a: "You can download any month for the current year or the next year. The section above shows the next 8 months by default ??just scroll to the country and month you need and click PDF.",
+    a: "You can download any month for the current year or the next year. The section above shows the next 8 months by default —just scroll to the country and month you need and click PDF.",
   },
 ];
 
 const CLASSROOM_USES = [
   {
     title: "Lesson planning overview",
-    desc: "Print a month at a time and block curriculum units in coloured pen. A monthly view is the right resolution for most lesson planning ??detailed enough to schedule, broad enough to see the arc.",
+    desc: "Print a month at a time and block curriculum units in coloured pen. A monthly view is the right resolution for most lesson planning —detailed enough to schedule, broad enough to see the arc.",
   },
   {
     title: "Parent-teacher communication",
@@ -76,15 +76,15 @@ const CLASSROOM_USES = [
   },
   {
     title: "Student behaviour tracking",
-    desc: "Some teachers print a small monthly calendar per student to track daily participation, homework completion, or positive behaviour ??a visual record families appreciate.",
+    desc: "Some teachers print a small monthly calendar per student to track daily participation, homework completion, or positive behaviour —a visual record families appreciate.",
   },
   {
     title: "Holiday awareness",
-    desc: "All calendars include official public holidays ??so you never accidentally schedule a test on a holiday. Helpful especially in countries with variable lunar holidays (Korea's Chuseok, Japan's shifting observances).",
+    desc: "All calendars include official public holidays —so you never accidentally schedule a test on a holiday. Helpful especially in countries with variable lunar holidays (Korea's Chuseok, Japan's shifting observances).",
   },
   {
     title: "Substitute lesson handoff",
-    desc: "Leave a printed month on your desk with lessons marked. A substitute can see at a glance where the class should be ??no login required, no app to figure out.",
+    desc: "Leave a printed month on your desk with lessons marked. A substitute can see at a glance where the class should be —no login required, no app to figure out.",
   },
   {
     title: "Staff room planner",
@@ -221,9 +221,9 @@ export default function TeacherPlannerPage() {
         >
           {[
             ["Landscape A4 layout", "Plenty of horizontal space for writing lesson titles and notes beside each date."],
-            ["Official holidays", "All public holidays included ??no missed planning around closures."],
+            ["Official holidays", "All public holidays included —no missed planning around closures."],
             ["B&W optimised", "Prints cleanly on any school photocopier or inkjet printer."],
-            ["Instant & free", "No account, no forms ??just click and download."],
+            ["Instant & free", "No account, no forms —just click and download."],
           ].map(([title, desc]) => (
             <div key={title}>
               <p style={{ fontWeight: 500, fontSize: 14, marginBottom: 6 }}>{title}</p>

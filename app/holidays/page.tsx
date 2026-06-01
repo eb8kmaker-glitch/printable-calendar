@@ -11,9 +11,9 @@ import { getLocalizedHolidayContent } from "@/lib/holidays-i18n";
 const BASE_URL = "https://printablecalendars.app";
 
 export const metadata: Metadata = {
-  title: "Cultural Holidays ??History, Traditions & Printable Calendars",
+  title: "Cultural Holidays —History, Traditions & Printable Calendars",
   description:
-    "Explore the history, food, and traditions of major cultural holidays in Japan, South Korea, and the United States ??from Chuseok to Thanksgiving. Download free printable calendars.",
+    "Explore the history, food, and traditions of major cultural holidays in Japan, South Korea, and the United States —from Chuseok to Thanksgiving. Download free printable calendars.",
   alternates: {
     canonical: `${BASE_URL}/holidays`,
     languages: { en: `${BASE_URL}/holidays`, "x-default": `${BASE_URL}/holidays` },
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Cultural Holidays | PrintableCalendars",
     description:
-      "History and traditions of major holidays in Japan, South Korea, and the USA ??with free printable calendars.",
+      "History and traditions of major holidays in Japan, South Korea, and the USA —with free printable calendars.",
   },
   robots: { index: true, follow: true },
 };
@@ -40,7 +40,7 @@ const FLAG: Record<string, string> = { US: "🇺🇸", KR: "🇰🇷", JP: "🇯
 const itemListJsonLd = {
   "@context": "https://schema.org",
   "@type": "ItemList",
-  name: "Cultural Holidays ??History & Traditions",
+  name: "Cultural Holidays —History & Traditions",
   url: `${BASE_URL}/holidays`,
   numberOfItems: CULTURAL_HOLIDAYS.length,
   itemListElement: CULTURAL_HOLIDAYS.map((h, i) => ({
