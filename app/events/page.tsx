@@ -152,7 +152,7 @@ export default async function EventsPage({ searchParams }: PageProps) {
             <input
               name="q"
               defaultValue={q ?? ""}
-              placeholder="Search events??
+              placeholder="Search events…"
               autoComplete="off"
               style={{
                 height: 36,
