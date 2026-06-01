@@ -122,5 +122,23 @@
     "aboutAddDesc": "開始日から日数を加算・減算して、未来または過去の日付を求めます。",
     "aboutUntilTitle": "カウントダウン",
     "aboutUntilDesc": "次のイベントや日付までの残り日数をカウントします。"
+  },
+  "holidays": {
+    "title": "文化的祝日",
+    "headline": "世界の祝日",
+    "description": "日本・韓国・アメリカの主要な文化的祝日の歴史、料理、伝統を探りましょう。",
+    "lunarLabel": "旧暦",
+    "traditionalDishes": "伝統料理 {n}品",
+    "activities": "アクティビティ {n}件",
+    "origin": "起源",
+    "history": "歴史",
+    "modernCelebration": "現代の祝い方",
+    "traditionalFoods": "伝統料理",
+    "howToParticipate": "参加方法",
+    "travelTips": "旅行のヒント",
+    "faq": "よくある質問",
+    "printableCalendars": "印刷用カレンダー",
+    "downloadCta": "無料の印刷用カレンダーをダウンロードして、{holiday}を見逃さないようにしましょう。",
+    "relatedHolidays": "関連する祝日"
   }
 }

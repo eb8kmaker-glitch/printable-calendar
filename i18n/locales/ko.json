@@ -122,5 +122,23 @@
     "aboutAddDesc": "시작 날짜에서 일수를 더하거나 빼서 미래 또는 과거 날짜를 찾습니다.",
     "aboutUntilTitle": "D-Day 계산",
     "aboutUntilDesc": "다가오는 날짜나 이벤트까지 남은 일수를 카운트다운합니다."
+  },
+  "holidays": {
+    "title": "문화 공휴일",
+    "headline": "세계의 공휴일",
+    "description": "일본, 대한민국, 미국의 주요 문화 공휴일의 역사, 음식, 전통을 살펴보세요.",
+    "lunarLabel": "음력",
+    "traditionalDishes": "전통 음식 {n}가지",
+    "activities": "활동 {n}가지",
+    "origin": "기원",
+    "history": "역사",
+    "modernCelebration": "현대적 기념 방식",
+    "traditionalFoods": "전통 음식",
+    "howToParticipate": "참여 방법",
+    "travelTips": "여행 팁",
+    "faq": "자주 묻는 질문",
+    "printableCalendars": "인쇄용 달력",
+    "downloadCta": "무료 인쇄용 달력을 다운로드하고 {holiday}을(를) 놓치지 마세요.",
+    "relatedHolidays": "관련 공휴일"
   }
 }
