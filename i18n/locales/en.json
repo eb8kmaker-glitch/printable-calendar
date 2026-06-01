@@ -101,7 +101,8 @@
     "relatedEvents": "RELATED EVENTS",
     "markTheDate": "MARK THE DATE",
     "downloadCta": "Download a free printable calendar for {year} and never miss {event}.",
-    "viewCalendar": "View Calendar"
+    "viewCalendar": "View Calendar",
+    "culturalContext": "CULTURAL CONTEXT"
   },
   "dateCalculator": {
     "title": "Date Calculator",
@@ -140,5 +141,13 @@
     "printableCalendars": "PRINTABLE CALENDARS",
     "downloadCta": "Download a free printable calendar and never miss {holiday}.",
     "relatedHolidays": "RELATED HOLIDAYS"
+  },
+  "events": {
+    "title": "WORLD EVENTS",
+    "headline": "International Days & Observances",
+    "description": "Explore the history, activities, and cultural context of major international days and observances worldwide.",
+    "searchPlaceholder": "Search events…",
+    "filterAll": "All",
+    "noResults": "No events match your search."
   }
 }

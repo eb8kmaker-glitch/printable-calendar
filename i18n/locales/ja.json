@@ -101,7 +101,8 @@
     "relatedEvents": "関連イベント",
     "markTheDate": "カレンダーに記録",
     "downloadCta": "{year}年の無料印刷用カレンダーをダウンロードして、{event}を見逃さないようにしましょう。",
-    "viewCalendar": "カレンダーを見る"
+    "viewCalendar": "カレンダーを見る",
+    "culturalContext": "文化的背景"
   },
   "dateCalculator": {
     "title": "日付計算ツール",
@@ -140,5 +141,13 @@
     "printableCalendars": "印刷用カレンダー",
     "downloadCta": "無料の印刷用カレンダーをダウンロードして、{holiday}を見逃さないようにしましょう。",
     "relatedHolidays": "関連する祝日"
+  },
+  "events": {
+    "title": "世界のイベント",
+    "headline": "国際デー＆記念日",
+    "description": "世界の主要な国際デーや記念日の歴史、活動、文化的背景を探りましょう。",
+    "searchPlaceholder": "イベントを検索…",
+    "filterAll": "すべて",
+    "noResults": "検索結果がありません。"
   }
 }

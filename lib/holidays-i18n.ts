@@ -2,6 +2,7 @@ import type { CulturalHoliday } from "./holidays-content";
 
 export interface HolidayI18nContent {
   tagline?: string;
+  dateLabel?: string;
   origin?: string;
   history?: string;
   culture?: string;
@@ -56,6 +57,7 @@ export async function getLocalizedHolidayContent(
   return {
     ...holiday,
     ...(t.tagline !== undefined && { tagline: t.tagline }),
+    ...(t.dateLabel !== undefined && { dateLabel: t.dateLabel }),
     ...(t.origin !== undefined && { origin: t.origin }),
     ...(t.history !== undefined && { history: t.history }),
     ...(t.culture !== undefined && { culture: t.culture }),

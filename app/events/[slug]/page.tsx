@@ -288,7 +288,7 @@ export default async function EventDetailPage({ params }: PageProps) {
         {/* Cultural context — US / KR / JP */}
         {hasCultural && (
           <section style={{ marginBottom: 48 }}>
-            <SectionLabel>Cultural Context</SectionLabel>{/* not in i18n table – kept as-is */}
+            <SectionLabel>{ed.culturalContext ?? "CULTURAL CONTEXT"}</SectionLabel>
             <div
               style={{
                 display: "grid",
