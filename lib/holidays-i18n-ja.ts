@@ -2,6 +2,7 @@ import type { HolidayI18nContent } from "./holidays-i18n";
 
 export const HOLIDAY_JA: Record<string, HolidayI18nContent> = {
   chuseok: {
+    name: "추석",
     tagline: "収穫の満月を祝う三日間——感謝と家族とソンピョンが彩る秋夕。",
     dateLabel: "旧暦8月15日（9〜10月）",
     origin:
@@ -50,6 +51,7 @@ export const HOLIDAY_JA: Record<string, HolidayI18nContent> = {
   },
 
   seollal: {
+    name: "설날",
     tagline: "年長者へのお辞儀、トッククで始まる新年——설날の温かな風景。",
     dateLabel: "旧暦1月1日（1〜2月）",
     origin:
@@ -98,6 +100,7 @@ export const HOLIDAY_JA: Record<string, HolidayI18nContent> = {
   },
 
   "liberation-day-korea": {
+    name: "光復節",
     tagline: "光を取り戻した日——解放と大韓民国の誕生を祝う光復節。",
     dateLabel: "8月15日（固定）",
     origin:
@@ -135,6 +138,7 @@ export const HOLIDAY_JA: Record<string, HolidayI18nContent> = {
   },
 
   "golden-week": {
+    name: "ゴールデンウィーク",
     tagline: "旅と文化と祝祭が重なる、日本最大のゴールデンウィーク。",
     dateLabel: "4月下旬〜5月上旬（4/29〜5/6）",
     origin:
@@ -178,6 +182,7 @@ export const HOLIDAY_JA: Record<string, HolidayI18nContent> = {
   },
 
   obon: {
+    name: "お盆",
     tagline: "提灯の灯りとともに先祖の霊を迎え、送り出す日本の祭り。",
     dateLabel: "8月13〜16日（多くの地域）",
     origin:
@@ -221,6 +226,7 @@ export const HOLIDAY_JA: Record<string, HolidayI18nContent> = {
   },
 
   shogatsu: {
+    name: "正月",
     tagline: "儀式と家族と新たな始まりに満ちた、日本で最も神聖な祝日。",
     dateLabel: "1月1〜3日（祝日 1/1〜1/3）",
     origin:
@@ -264,6 +270,7 @@ export const HOLIDAY_JA: Record<string, HolidayI18nContent> = {
   },
 
   thanksgiving: {
+    name: "感謝祭",
     tagline: "秋を象徴する感謝の祝宴——七面鳥、家族、そして長年の伝統。",
     dateLabel: "11月第4木曜日",
     origin:
@@ -312,6 +319,7 @@ export const HOLIDAY_JA: Record<string, HolidayI18nContent> = {
   },
 
   "independence-day": {
+    name: "独立記念日",
     tagline: "アメリカの誕生日——7月4日、独立記念日の花火が夜空を彩る。",
     dateLabel: "7月4日（固定）",
     origin:
