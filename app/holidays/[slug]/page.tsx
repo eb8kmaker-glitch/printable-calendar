@@ -7,6 +7,8 @@ import {
 } from "@/lib/holidays-content";
 import { SUPPORTED_COUNTRIES } from "@/lib/types";
 import { buildFaqSchema } from "@/lib/seo-helpers";
+import { getLocale } from "@/i18n/server";
+import { getTranslations } from "@/i18n";
 
 const BASE_URL = "https://printablecalendars.app";
 
@@ -53,6 +55,10 @@ export default async function HolidayContentPage({ params }: PageProps) {
   const { slug } = await params;
   const holiday = getHolidayContentBySlug(slug);
   if (!holiday) notFound();
+
+  const locale = await getLocale();
+  const i18n = getTranslations(locale);
+  const hi18n = i18n.holidays as Record<string, string>;
 
   const currentYear = new Date().getFullYear();
 
@@ -179,7 +185,7 @@ export default async function HolidayContentPage({ params }: PageProps) {
                   padding: "2px 8px",
                 }}
               >
-                Lunar calendar
+                {hi18n.lunarLabel}
               </span>
             )}
           </div>
@@ -227,7 +233,7 @@ export default async function HolidayContentPage({ params }: PageProps) {
 
         {/* Origin */}
         <section style={{ marginBottom: 48 }}>
-          <Label>Origin</Label>
+          <Label>{hi18n.origin}</Label>
           <p style={{ fontSize: 15, lineHeight: 1.85, color: "var(--fg)" }}>
             {holiday.origin}
           </p>
@@ -235,7 +241,7 @@ export default async function HolidayContentPage({ params }: PageProps) {
 
         {/* History */}
         <section style={{ marginBottom: 48 }}>
-          <Label>History</Label>
+          <Label>{hi18n.history}</Label>
           <p style={{ fontSize: 15, lineHeight: 1.85, color: "var(--fg)" }}>
             {holiday.history}
           </p>
@@ -243,7 +249,7 @@ export default async function HolidayContentPage({ params }: PageProps) {
 
         {/* Modern Culture */}
         <section style={{ marginBottom: 48 }}>
-          <Label>Modern Celebration</Label>
+          <Label>{hi18n.modernCelebration}</Label>
           <p style={{ fontSize: 15, lineHeight: 1.85, color: "var(--fg)" }}>
             {holiday.culture}
           </p>
@@ -251,7 +257,7 @@ export default async function HolidayContentPage({ params }: PageProps) {
 
         {/* Traditional Foods */}
         <section style={{ marginBottom: 48 }}>
-          <Label>Traditional Foods</Label>
+          <Label>{hi18n.traditionalFoods}</Label>
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             {holiday.food.map((item, i) => (
               <div
@@ -274,7 +280,7 @@ export default async function HolidayContentPage({ params }: PageProps) {
 
         {/* Activities */}
         <section style={{ marginBottom: 48 }}>
-          <Label>How to Participate</Label>
+          <Label>{hi18n.howToParticipate}</Label>
           <ul
             style={{
               listStyle: "none",
@@ -310,7 +316,7 @@ export default async function HolidayContentPage({ params }: PageProps) {
 
         {/* Travel Tips */}
         <section style={{ marginBottom: 56 }}>
-          <Label>Travel Tips</Label>
+          <Label>{hi18n.travelTips}</Label>
           <div
             style={{
               background: "var(--header-bg, rgba(0,0,0,0.03))",
@@ -327,7 +333,7 @@ export default async function HolidayContentPage({ params }: PageProps) {
 
         {/* FAQ */}
         <section style={{ marginBottom: 56 }}>
-          <Label>Frequently asked questions</Label>
+          <Label>{hi18n.faq}</Label>
           <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
             {faqs.map((faq, i) => (
               <details
@@ -375,7 +381,7 @@ export default async function HolidayContentPage({ params }: PageProps) {
             marginBottom: 48,
           }}
         >
-          <Label>Printable Calendars</Label>
+          <Label>{hi18n.printableCalendars}</Label>
           <p
             style={{
               fontFamily: "'EB Garamond', Georgia, serif",
@@ -385,8 +391,7 @@ export default async function HolidayContentPage({ params }: PageProps) {
               marginBottom: 20,
             }}
           >
-            Download a free printable calendar for {holiday.name} — includes
-            all public holidays.
+            {hi18n.downloadCta?.replace("{holiday}", holiday.name)}
           </p>
 
           <div
@@ -466,7 +471,7 @@ export default async function HolidayContentPage({ params }: PageProps) {
         {/* Related */}
         {holiday.relatedSlugs.length > 0 && (
           <section>
-            <Label>Related Holidays</Label>
+            <Label>{hi18n.relatedHolidays}</Label>
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {holiday.relatedSlugs.map((s) => {
                 const related = getHolidayContentBySlug(s);

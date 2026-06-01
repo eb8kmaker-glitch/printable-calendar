@@ -45,7 +45,6 @@
     "viewThisMonth": "今月を見る →",
     "thisMonth": "今月 →",
     "upcomingHolidays": "近日中の祝日",
-    "todaysEvents": "本日のイベント",
     "notableEvents": "注目の世界イベント",
     "viewAll": "すべて見る →",
     "pdfFeatureTitle": "PDFダウンロード",
@@ -73,5 +72,50 @@
     "holidayPlanner": "休暇プランナー",
     "ramadan": "{year}年ラマダン",
     "weddingCountdown": "ウェディングカウントダウン"
+  },
+  "dateCalculator": {
+    "title": "日付計算ツール",
+    "description": "2つの日付の間の日数を計算し、日数の加減算や特定の日までのカウントダウンができます。無料、会員登録不要。",
+    "tabBetween": "2つの日付の間",
+    "tabAddSubtract": "日数の加減算",
+    "tabUntil": "特定の日まで",
+    "startDate": "開始日",
+    "endDate": "終了日",
+    "totalDays": "合計日数",
+    "weeks": "週",
+    "businessDays": "営業日",
+    "monFriOnly": "月〜金のみ",
+    "aboutTitle": "各計算ツールについて",
+    "aboutBetweenTitle": "2つの日付の間",
+    "aboutBetweenDesc": "任意の2つの日付の間の合計日数、週数、営業日数を計算します。プロジェクト計画、契約期間、締め切り管理に役立ちます。",
+    "aboutAddTitle": "日数の加減算",
+    "aboutAddDesc": "任意の日付から日数を加算または減算して、結果の日付と曜日を求めます。スケジュール管理や予告期間の計算に便利です。",
+    "aboutUntilTitle": "特定の日まで",
+    "aboutUntilDesc": "将来の日付を入力すると、日・週・月単位でDデーカウントダウンが表示されます。祝日、イベント、締め切りのカウントダウンに最適です。"
+  },
+  "events": {
+    "title": "国際デーと記念日",
+    "description": "世界の主要な記念日、文化的行事、啓発デー、お祝い — 由来、文化的背景、印刷用カレンダーとともに。",
+    "searchPlaceholder": "イベントを検索…",
+    "filterAll": "すべて",
+    "noResults": "イベントが見つかりません。"
+  },
+  "holidays": {
+    "title": "文化的祝日",
+    "headline": "祝日、伝統、そしてその背景にある物語",
+    "description": "チュソクからゴールデンウィーク、感謝祭まで — 世界で最も広く祝われる祝日の起源、歴史、食文化を探りましょう。各エントリは関連月の無料印刷用カレンダーにリンクしています。",
+    "traditionalDishes": "伝統料理 {n}品",
+    "activities": "アクティビティ {n}件",
+    "lunarLabel": "旧暦",
+    "relatedHolidays": "関連祝日",
+    "printableCalendars": "印刷用カレンダー",
+    "downloadCta": "{holiday}の無料印刷用カレンダーをダウンロード — すべての祝日を収録。",
+    "faq": "よくある質問",
+    "origin": "由来",
+    "history": "歴史",
+    "modernCelebration": "現代の祝い方",
+    "traditionalFoods": "伝統料理",
+    "howToParticipate": "参加方法",
+    "travelTips": "旅行のヒント"
   }
 }
