@@ -6,8 +6,8 @@ import {
   formatEventDate,
   type EventCategory,
 } from "@/lib/events";
-
-export const dynamic = "force-static";
+import { getLocale } from "@/i18n/server";
+import { getTranslations } from "@/i18n";
 const BASE_URL = "https://printablecalendars.app";
 
 export const metadata: Metadata = {
@@ -46,6 +46,9 @@ interface PageProps {
 
 export default async function EventsPage({ searchParams }: PageProps) {
   const { category, q } = await searchParams;
+  const locale = await getLocale();
+  const i18n = getTranslations(locale);
+  const eventsI18n = i18n.events as Record<string, string>;
 
   const activeCategory = CATEGORIES.includes(category as EventCategory)
     ? (category as EventCategory)
@@ -102,7 +105,7 @@ export default async function EventsPage({ searchParams }: PageProps) {
               marginBottom: 12,
             }}
           >
-            World Events
+            {eventsI18n.title}
           </p>
           <h1
             style={{
@@ -114,7 +117,7 @@ export default async function EventsPage({ searchParams }: PageProps) {
               marginBottom: 16,
             }}
           >
-            International Days &amp; Observances
+            {eventsI18n.title}
           </h1>
           <p
             style={{
@@ -124,9 +127,7 @@ export default async function EventsPage({ searchParams }: PageProps) {
               maxWidth: 560,
             }}
           >
-            Discover the stories behind the world&apos;s most celebrated
-            international days ??their history, global reach, cultural context,
-            and how you can participate.
+            {eventsI18n.description}
           </p>
         </div>
 
@@ -152,7 +153,7 @@ export default async function EventsPage({ searchParams }: PageProps) {
             <input
               name="q"
               defaultValue={q ?? ""}
-              placeholder="Search events…"
+              placeholder={eventsI18n.searchPlaceholder}
               autoComplete="off"
               style={{
                 height: 36,
@@ -181,7 +182,7 @@ export default async function EventsPage({ searchParams }: PageProps) {
                 fontSize: 13,
               }}
             >
-              Search
+              {eventsI18n.searchPlaceholder?.split("…")[0] ?? "Search"}
             </button>
           </form>
 
@@ -191,7 +192,7 @@ export default async function EventsPage({ searchParams }: PageProps) {
               href={query ? `/events?q=${encodeURIComponent(query)}` : "/events"}
               style={pillStyle(!activeCategory)}
             >
-              All
+              {eventsI18n.filterAll}
             </Link>
             {CATEGORIES.map((cat) => {
               const href = query
@@ -237,11 +238,7 @@ export default async function EventsPage({ searchParams }: PageProps) {
         {/* Event grid */}
         {events.length === 0 ? (
           <p style={{ fontSize: 14, color: "var(--muted)", paddingTop: 24 }}>
-            No events found. Try a different search or{" "}
-            <Link href="/events" style={{ color: "var(--fg)" }}>
-              browse all
-            </Link>
-            .
+            {eventsI18n.noResults}
           </p>
         ) : (
           <div

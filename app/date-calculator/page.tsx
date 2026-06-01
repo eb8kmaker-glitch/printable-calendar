@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import DateCalculator from "./DateCalculator";
+import { getLocale } from "@/i18n/server";
+import { getTranslations } from "@/i18n";
+import type { DateCalcI18n } from "./DateCalculator";
 
 const BASE_URL = "https://printablecalendars.app";
 
@@ -24,6 +27,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function DateCalculatorPage() {
-  return <DateCalculator />;
+export default async function DateCalculatorPage() {
+  const locale = await getLocale();
+  const i18n = getTranslations(locale);
+  return <DateCalculator i18n={i18n.dateCalculator as unknown as DateCalcI18n} />;
 }

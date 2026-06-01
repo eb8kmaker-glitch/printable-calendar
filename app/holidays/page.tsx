@@ -5,8 +5,8 @@ import {
   COUNTRY_ORDER,
   COUNTRY_FULL_NAMES,
 } from "@/lib/holidays-content";
-
-export const dynamic = "force-static";
+import { getLocale } from "@/i18n/server";
+import { getTranslations, t } from "@/i18n";
 const BASE_URL = "https://printablecalendars.app";
 
 export const metadata: Metadata = {
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const FLAG: Record<string, string> = { US: "?눣?눡", KR: "?눖?눟", JP: "?눓?눝" };
+const FLAG: Record<string, string> = { US: "🇺🇸", KR: "🇰🇷", JP: "🇯🇵" };
 
 const itemListJsonLd = {
   "@context": "https://schema.org",
@@ -50,7 +50,11 @@ const itemListJsonLd = {
   })),
 };
 
-export default function HolidaysPage() {
+export default async function HolidaysPage() {
+  const locale = await getLocale();
+  const i18n = getTranslations(locale);
+  const holidaysI18n = i18n.holidays as Record<string, string>;
+
   return (
     <>
       <script
@@ -71,7 +75,7 @@ export default function HolidaysPage() {
               marginBottom: 12,
             }}
           >
-            Cultural Holidays
+            {holidaysI18n.title}
           </p>
           <h1
             style={{
@@ -84,7 +88,7 @@ export default function HolidaysPage() {
               maxWidth: 600,
             }}
           >
-            Holidays, traditions &amp; the stories behind them
+            {holidaysI18n.headline}
           </h1>
           <p
             style={{
@@ -94,10 +98,7 @@ export default function HolidaysPage() {
               maxWidth: 560,
             }}
           >
-            From Chuseok to Golden Week to Thanksgiving ??explore the origin,
-            history, food, and culture of the world&apos;s most celebrated
-            holidays. Each entry links to a free printable calendar for the
-            relevant month.
+            {holidaysI18n.description}
           </p>
         </div>
 
@@ -203,7 +204,7 @@ export default function HolidaysPage() {
                               marginTop: 2,
                             }}
                           >
-                            Lunar
+                            {holidaysI18n.lunarLabel}
                           </span>
                         )}
                       </div>
@@ -243,8 +244,8 @@ export default function HolidaysPage() {
                           marginTop: 4,
                         }}
                       >
-                        {holiday.food.length} traditional dishes 쨌{" "}
-                        {holiday.activities.length} activities
+                        {t(holidaysI18n.traditionalDishes, { n: holiday.food.length })} ·{" "}
+                        {t(holidaysI18n.activities, { n: holiday.activities.length })}
                       </p>
                     </div>
                   </Link>

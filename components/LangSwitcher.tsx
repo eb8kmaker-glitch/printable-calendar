@@ -1,3 +1,6 @@
+'use client'
+
+import { usePathname } from 'next/navigation'
 import { setLang } from '@/app/actions/setLang'
 import type { Locale } from '@/i18n'
 
@@ -7,19 +10,15 @@ const LANG_LABELS: Record<Locale, string> = {
   ja: '日本語',
 }
 
-export default function LangSwitcher({
-  currentLocale,
-  currentPath,
-}: {
-  currentLocale: Locale
-  currentPath: string
-}) {
+export default function LangSwitcher({ currentLocale }: { currentLocale: Locale }) {
+  const pathname = usePathname()
+
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
       {(['en', 'ko', 'ja'] as Locale[]).map((lang) => (
         <form action={setLang} key={lang}>
           <input type="hidden" name="lang" value={lang} />
-          <input type="hidden" name="referer" value={currentPath} />
+          <input type="hidden" name="returnTo" value={pathname} />
           <button
             type="submit"
             style={{

@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
-import { headers } from "next/headers";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import Header from "@/components/Header";
@@ -67,8 +66,6 @@ export default async function RootLayout({
 }) {
   const locale = await getLocale();
   const i18n = getTranslations(locale);
-  const headersList = await headers();
-  const currentPath = headersList.get("x-invoke-path") || "/";
 
   return (
     <html lang={locale} suppressHydrationWarning>
@@ -93,7 +90,7 @@ export default async function RootLayout({
               dateCalc: i18n.nav.dateCalc,
             }}
             langSwitcher={
-              <LangSwitcher currentLocale={locale} currentPath={currentPath} />
+              <LangSwitcher currentLocale={locale} />
             }
           />
           <main style={{ minHeight: "calc(100vh - 120px)" }}>{children}</main>
