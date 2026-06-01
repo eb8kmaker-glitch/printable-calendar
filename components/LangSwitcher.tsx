@@ -1,42 +1,44 @@
-'use client'
+import { setLang } from '@/app/actions/setLang'
+import type { Locale } from '@/i18n'
 
-const COUNTRY_PAIRS: Record<string, { native: string; nativeLabel: string; enLabel: string }> = {
-  kr: { native: 'ko', nativeLabel: '한국어', enLabel: 'English' },
-  jp: { native: 'ja', nativeLabel: '日本語', enLabel: 'English' },
+const LANG_LABELS: Record<Locale, string> = {
+  en: 'EN',
+  ko: '한국어',
+  ja: '日本語',
 }
 
-interface LangSwitcherProps {
-  country: string;
-  currentLocale: string;
-}
-
-export default function LangSwitcher({ country, currentLocale }: LangSwitcherProps) {
-  const pair = COUNTRY_PAIRS[country]
-  if (!pair) return null
-
-  const isNative = currentLocale === pair.native
-
-  function toggle() {
-    const newLang = isNative ? 'en' : pair.native
-    document.cookie = `preferred_lang=${newLang};path=/;max-age=31536000`
-    window.location.reload()
-  }
-
+export default function LangSwitcher({
+  currentLocale,
+  currentPath,
+}: {
+  currentLocale: Locale
+  currentPath: string
+}) {
   return (
-    <button
-      onClick={toggle}
-      style={{
-        fontSize: 12,
-        padding: "5px 12px",
-        borderRadius: 8,
-        border: "1px solid var(--border)",
-        background: "transparent",
-        color: "var(--muted)",
-        cursor: "pointer",
-        transition: "color 0.15s",
-      }}
-    >
-      {isNative ? pair.enLabel : pair.nativeLabel}
-    </button>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+      {(['en', 'ko', 'ja'] as Locale[]).map((lang) => (
+        <form action={setLang} key={lang}>
+          <input type="hidden" name="lang" value={lang} />
+          <input type="hidden" name="referer" value={currentPath} />
+          <button
+            type="submit"
+            style={{
+              padding: '3px 8px',
+              borderRadius: 6,
+              border: 'none',
+              background: 'transparent',
+              cursor: 'pointer',
+              fontSize: 12,
+              fontWeight: currentLocale === lang ? 600 : 400,
+              color: currentLocale === lang ? 'var(--fg)' : 'var(--muted)',
+              opacity: currentLocale === lang ? 1 : 0.5,
+              transition: 'opacity 0.15s',
+            }}
+          >
+            {LANG_LABELS[lang]}
+          </button>
+        </form>
+      ))}
+    </div>
   )
 }
