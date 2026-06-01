@@ -30,5 +30,5 @@ export const metadata: Metadata = {
 export default async function DateCalculatorPage() {
   const locale = await getLocale();
   const i18n = getTranslations(locale);
-  return <DateCalculator i18n={i18n.dateCalculator as unknown as DateCalcI18n} />;
+  return <DateCalculator i18n={(i18n as unknown as Record<string, unknown>).dateCalculator as DateCalcI18n} />;
 }
