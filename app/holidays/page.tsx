@@ -7,6 +7,7 @@ import {
 } from "@/lib/holidays-content";
 import { getLocale } from "@/i18n/server";
 import { getTranslations, t } from "@/i18n";
+import { getLocalizedHolidayContent } from "@/lib/holidays-i18n";
 const BASE_URL = "https://printablecalendars.app";
 
 export const metadata: Metadata = {
@@ -54,6 +55,9 @@ export default async function HolidaysPage() {
   const locale = await getLocale();
   const i18n = getTranslations(locale);
   const holidaysI18n = ((i18n as unknown as Record<string, Record<string, string>>).holidays ?? {});
+  const localizedHolidays = await Promise.all(
+    CULTURAL_HOLIDAYS.map((h) => getLocalizedHolidayContent(h, locale))
+  );
 
   return (
     <>
@@ -104,7 +108,7 @@ export default async function HolidaysPage() {
 
         {/* Country sections */}
         {COUNTRY_ORDER.map((countryCode) => {
-          const holidays = CULTURAL_HOLIDAYS.filter((h) => h.country === countryCode);
+          const holidays = localizedHolidays.filter((h) => h.country === countryCode);
           if (holidays.length === 0) return null;
           return (
             <section key={countryCode} style={{ marginBottom: 64 }}>
@@ -170,10 +174,10 @@ export default async function HolidaysPage() {
                           {holiday.localName && (
                             <p
                               style={{
-                                fontFamily: "'DM Mono', monospace",
-                                fontSize: 11,
+                                fontFamily: "'EB Garamond', Georgia, serif",
+                                fontSize: 13,
                                 color: "var(--muted)",
-                                letterSpacing: "0.04em",
+                                letterSpacing: "0.02em",
                                 marginBottom: 4,
                               }}
                             >
