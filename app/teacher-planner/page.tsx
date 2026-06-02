@@ -5,6 +5,8 @@ import DynamicCalendarList from "@/components/DynamicCalendarList";
 import { buildFaqSchema } from "@/lib/seo-helpers";
 import DayCounter from "@/components/DayCounter";
 import type { DayMilestone } from "@/components/DayCounter";
+import { getLocale } from "@/i18n/server";
+import { getTranslations } from "@/i18n";
 
 export const dynamic = "force-static";
 const BASE_URL = "https://printablecalendars.app";
@@ -92,7 +94,10 @@ const CLASSROOM_USES = [
   },
 ];
 
-export default function TeacherPlannerPage() {
+export default async function TeacherPlannerPage() {
+  const locale = await getLocale();
+  const i18n = getTranslations(locale);
+  const p = (i18n as unknown as Record<string, Record<string, string>>).teacherPlanner ?? {};
   const now = new Date();
   const year = now.getFullYear();
   const currentMonth = now.getMonth() + 1;
@@ -120,7 +125,7 @@ export default function TeacherPlannerPage() {
               marginBottom: 12,
             }}
           >
-            For Teachers
+            {p.eyebrow ??"For Teachers"}
           </p>
           <h1
             style={{
@@ -132,15 +137,12 @@ export default function TeacherPlannerPage() {
               marginBottom: 20,
             }}
           >
-            Printable teacher planner
+            {p.title ??"Printable teacher planner"}
             <br />
-            <span style={{ opacity: 0.4 }}>calendars, free forever.</span>
+            <span style={{ opacity: 0.4 }}>{p.subtitle ??"calendars, free forever."}</span>
           </h1>
           <p style={{ fontSize: 15, color: "var(--muted)", lineHeight: 1.65, marginBottom: 28 }}>
-            Monthly calendars for classroom planning ??with public holidays for
-            USA, Japan, and South Korea. Print one for your desk, one for the
-            board, and one to share with parents. Clean A4 landscape PDF, no
-            login, no subscription.
+            {p.description ??"Monthly calendars for classroom planning with public holidays for USA, Japan, and South Korea. Print one for your desk, one for the board, and one to share with parents. Clean A4 landscape PDF, no login, no subscription."}
           </p>
           <Link
             href={`/calendar/us/${year}/${currentMonth}`}
@@ -157,7 +159,8 @@ export default function TeacherPlannerPage() {
               fontWeight: 500,
             }}
           >
-            View this month ??          </Link>
+            {p.viewThisMonth ??"View this month →"}
+          </Link>
         </div>
 
         <DayCounter
@@ -188,7 +191,7 @@ export default function TeacherPlannerPage() {
               marginBottom: 32,
             }}
           >
-            How teachers use printed calendars
+            {p.howTeachersUse ??"How teachers use printed calendars"}
           </h2>
           <div
             style={{
@@ -243,7 +246,7 @@ export default function TeacherPlannerPage() {
               marginBottom: 32,
             }}
           >
-            Frequently asked questions
+            {p.faqTitle ??"Frequently asked questions"}
           </h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
             {TEACHER_FAQS.map((faq, i) => (

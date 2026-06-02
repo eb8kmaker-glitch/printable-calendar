@@ -149,5 +149,71 @@
     "searchPlaceholder": "Search events…",
     "filterAll": "All",
     "noResults": "No events match your search."
+  },
+  "teacherPlanner": {
+    "eyebrow": "FOR TEACHERS",
+    "title": "Printable teacher planner",
+    "subtitle": "calendars, free forever.",
+    "description": "Monthly calendars for classroom planning with public holidays for USA, Japan, and South Korea. Print one for your desk, one for the board, and one to share with parents. Clean A4 landscape PDF, no login, no subscription.",
+    "viewThisMonth": "View this month →",
+    "countdownLabel": "END OF TERM",
+    "setDate": "SET DATE",
+    "countdownHint": "Enter your date to start the countdown.",
+    "downloadByMonth": "DOWNLOAD BY MONTH",
+    "downloadHint": "Set your term end date above to see your planner calendars.",
+    "howTeachersUse": "How teachers use printed calendars",
+    "faqTitle": "Frequently asked questions"
+  },
+  "studyPlanner": {
+    "eyebrow": "FOR STUDENTS",
+    "title": "Printable study planner",
+    "subtitle": "calendars, free forever.",
+    "countdownLabel": "EXAM DATE",
+    "setDate": "SET DATE",
+    "countdownHint": "Enter your date to start the countdown.",
+    "downloadByMonth": "DOWNLOAD BY MONTH",
+    "downloadHint": "Set your exam date above to customize this list.",
+    "howToUse": "How to use a printed study calendar",
+    "faqTitle": "Frequently asked questions"
+  },
+  "holidayPlanner": {
+    "eyebrow": "TIME OFF PLANNING",
+    "title": "Holiday planner",
+    "subtitle": "make every day count.",
+    "countdownLabel": "DEPARTURE DATE",
+    "setDate": "SET DATE",
+    "countdownHint": "Enter your date to start the countdown.",
+    "downloadByMonth": "DOWNLOAD BY MONTH",
+    "downloadHint": "Set your departure date above to see your trip calendars.",
+    "holidayRichMonths": "HOLIDAY-RICH MONTHS IN 2026",
+    "upcomingHolidays": "UPCOMING PUBLIC HOLIDAYS",
+    "viewFull2026": "View full 2026 calendar →",
+    "howToMaximise": "How to maximise your time off",
+    "faqTitle": "Frequently asked questions"
+  },
+  "schoolCalendar": {
+    "eyebrow": "ACADEMIC YEAR · BACK TO SCHOOL",
+    "title": "Printable school calendar",
+    "subtitle": "2026–2027",
+    "countdownLabel": "LAST DAY OF SCHOOL",
+    "setDate": "SET DATE",
+    "countdownHint": "Enter your date to start the countdown.",
+    "downloadByMonth": "DOWNLOAD BY MONTH",
+    "downloadHint": "Set your last day of school above to customize this list.",
+    "faqTitle": "Frequently asked questions"
+  },
+  "weddingCountdown": {
+    "eyebrow": "WEDDING PLANNING",
+    "title": "Wedding countdown",
+    "subtitle": "month by month.",
+    "viewThisMonth": "Start this month →",
+    "downloadPdf": "Download PDF",
+    "countdownLabel": "WEDDING DAY",
+    "setDate": "SET DATE",
+    "countdownHint": "Enter your date to start the countdown.",
+    "howToUse": "HOW TO USE A PRINTED COUNTDOWN CALENDAR",
+    "downloadByMonth": "DOWNLOAD BY MONTH",
+    "downloadHint": "Enter your wedding date above to customize this list.",
+    "faqTitle": "Frequently asked questions"
   }
 }
