@@ -40,37 +40,6 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const STUDY_MILESTONES: DayMilestone[] = [
-  { min: 0, max: 0, message: "Exam day. You've got this." },
-  { min: 1, max: 6, message: "Almost there —stay calm, trust your prep.", tip: "Light review only. Rest is productive." },
-  { min: 7, max: 13, message: "One week out —review, don't learn new material.", tip: "Simulate exam conditions at least once." },
-  { min: 14, max: 29, message: "Final stretch —active recall every day.", tip: "Sleep matters more than extra hours now." },
-  { min: 30, max: 59, message: "Halfway there —review weak areas first.", tip: "Practice tests are more effective than re-reading." },
-  { min: 60, max: 99999, message: "Plenty of time —build your schedule now.", tip: "Study 1–2 hours daily beats cramming." },
-];
-
-const STUDY_FAQS = [
-  {
-    q: "What is a printable study planner 2026?",
-    a: "A printable study planner is a monthly calendar you download as a PDF and print at home. It gives you a physical grid to write in exam dates, assignment deadlines, and study blocks —without needing an app or an account.",
-  },
-  {
-    q: "How do I use a free study schedule template effectively?",
-    a: "Start by filling in fixed commitments: exam dates, submission deadlines, and class times. Then work backwards to schedule study blocks. Print one month at a time so you can annotate directly on paper. Many students colour-code by subject.",
-  },
-  {
-    q: "Do the study planner calendars include public holidays?",
-    a: "Yes. Every calendar includes official public holidays for your chosen country (USA, UK, Australia, Canada, Japan, or South Korea), so you never accidentally schedule a study session on a day your library or campus is closed.",
-  },
-  {
-    q: "Can I download a study planner for a specific month?",
-    a: "Yes. Choose any month and country from the grid above, then click View to preview or PDF to download instantly. No login or payment is required.",
-  },
-  {
-    q: "What paper size are the study planner PDFs?",
-    a: "All calendars download as A4 landscape PDF. They also print well on US Letter paper with minimal scaling. The clean, minimal design works in both colour and black-and-white.",
-  },
-];
 
 export default async function StudyPlannerPage() {
   const locale = await getLocale();
@@ -79,6 +48,27 @@ export default async function StudyPlannerPage() {
   const now = new Date();
   const year = now.getFullYear();
   const month = now.getMonth() + 1;
+
+  const STUDY_MILESTONES: DayMilestone[] = [
+    { min: 0, max: 0, message: p.ms0msg ?? "Exam day. You've got this." },
+    { min: 1, max: 6, message: p.ms1msg ?? "Almost there — stay calm, trust your prep.", tip: p.ms1tip ?? "Light review only. Rest is productive." },
+    { min: 7, max: 13, message: p.ms2msg ?? "One week out — review, don't learn new material.", tip: p.ms2tip ?? "Simulate exam conditions at least once." },
+    { min: 14, max: 29, message: p.ms3msg ?? "Final stretch — active recall every day.", tip: p.ms3tip ?? "Sleep matters more than extra hours now." },
+    { min: 30, max: 59, message: p.ms4msg ?? "Halfway there — review weak areas first.", tip: p.ms4tip ?? "Practice tests are more effective than re-reading." },
+    { min: 60, max: 99999, message: p.ms5msg ?? "Plenty of time — build your schedule now.", tip: p.ms5tip ?? "Study 1–2 hours daily beats cramming." },
+  ];
+
+  const EN_FAQ = [
+    { q: "What is a printable study planner 2026?", a: "A printable study planner is a monthly calendar you download as a PDF and print at home. It gives you a physical grid to write in exam dates, assignment deadlines, and study blocks — without needing an app or an account." },
+    { q: "How do I use a free study schedule template effectively?", a: "Start by filling in fixed commitments: exam dates, submission deadlines, and class times. Then work backwards to schedule study blocks. Print one month at a time so you can annotate directly on paper. Many students colour-code by subject." },
+    { q: "Do the study planner calendars include public holidays?", a: "Yes. Every calendar includes official public holidays for your chosen country (USA, UK, Australia, Canada, Japan, or South Korea), so you never accidentally schedule a study session on a day your library or campus is closed." },
+    { q: "Can I download a study planner for a specific month?", a: "Yes. Choose any month and country from the grid above, then click View to preview or PDF to download instantly. No login or payment is required." },
+    { q: "What paper size are the study planner PDFs?", a: "All calendars download as A4 landscape PDF. They also print well on US Letter paper with minimal scaling. The clean, minimal design works in both colour and black-and-white." },
+  ];
+  const STUDY_FAQS = EN_FAQ.map((item, i) => ({
+    q: p[`faq${i + 1}q`] ?? item.q,
+    a: p[`faq${i + 1}a`] ?? item.a,
+  }));
 
   const STUDY_TIPS_I18N = [
     [p.tip1Title ?? "Block exam weeks first", p.tip1Body ?? "Add exam dates as soon as they are announced. Everything else schedules around them."],
@@ -144,7 +134,7 @@ export default async function StudyPlannerPage() {
           <h1
             style={{
               fontFamily: "'EB Garamond', Georgia, serif",
-              fontSize: "clamp(32px, 5vw, 56px)",
+              fontSize: "clamp(30px, 5vw, 52px)",
               fontWeight: 400,
               letterSpacing: "-0.02em",
               lineHeight: 1.1,
