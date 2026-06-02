@@ -1,16 +1,18 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import type { Metadata } from "next";
 import { SUPPORTED_COUNTRIES } from "@/lib/types";
 import AdSlot from "@/components/AdSlot";
 import { buildFaqSchema } from "@/lib/seo-helpers";
 import DayCounter from "@/components/DayCounter";
 import type { DayMilestone } from "@/components/DayCounter";
+import { getLocale } from "@/i18n/server";
+import { getTranslations } from "@/i18n";
 
 export const dynamic = "force-static";
 const BASE_URL = "https://printablecalendars.app";
 
-// Ramadan 2026: approx Feb 18 —Mar 19, 2026
-// Ramadan 2027: approx Feb 7 —Mar 8, 2027
+// Ramadan 2026: approx Feb 18 — Mar 19, 2026
+// Ramadan 2027: approx Feb 7 — Mar 8, 2027
 const RAMADAN_2026 = {
   start: "February 18, 2026",
   end: "March 19, 2026",
@@ -131,7 +133,10 @@ const jsonLd = {
   url: `${BASE_URL}/ramadan-2026`,
 };
 
-export default function Ramadan2026Page() {
+export default async function Ramadan2026Page() {
+  const locale = await getLocale();
+  const i18n = getTranslations(locale);
+  const p = (i18n as unknown as Record<string, Record<string, string>>).ramadanPlanner ?? {};
   const faqSchema = buildFaqSchema(RAMADAN_FAQS.map((f) => ({ q: f.q, a: f.a })));
   return (
     <>
@@ -159,7 +164,7 @@ export default function Ramadan2026Page() {
               marginBottom: 12,
             }}
           >
-            Islamic Calendar · 2026
+            {p.eyebrow ?? "Islamic Calendar · 2026"}
           </p>
           <h1
             style={{
@@ -171,7 +176,7 @@ export default function Ramadan2026Page() {
               marginBottom: 20,
             }}
           >
-            Ramadan Calendar 2026
+            {p.title ?? "Ramadan Calendar 2026"}
           </h1>
           <p style={{ fontSize: 15, color: "var(--muted)", lineHeight: 1.65, maxWidth: 560 }}>
             Ramadan 2026 runs from approximately{" "}
@@ -196,12 +201,12 @@ export default function Ramadan2026Page() {
               letterSpacing: "0.03em",
             }}
           >
-            Note: exact start date depends on the moon sighting and may vary by 1–2 days by location.
+            {p.moonNote ?? "Note: exact start date depends on the moon sighting and may vary by 1–2 days by location."}
           </p>
         </div>
 
         <DayCounter
-          targetLabel="End of Ramadan (Eid)"
+          targetLabel={p.endOfRamadan ?? "End of Ramadan (Eid)"}
           storageKey="ramadan-start"
           milestones={RAMADAN_MILESTONES}
           defaultDate="2026-03-20"
@@ -220,10 +225,10 @@ export default function Ramadan2026Page() {
           }}
         >
           {[
-            ["First day of Ramadan", RAMADAN_2026.start],
-            ["Last day of Ramadan", RAMADAN_2026.end],
-            ["Eid al-Fitr (approx.)", RAMADAN_2026.eidAlFitr],
-            ["Duration", `${RAMADAN_2026.daysCount} days (29 or 30)`],
+            [p.firstDay ?? "First day of Ramadan", RAMADAN_2026.start],
+            [p.lastDay ?? "Last day of Ramadan", RAMADAN_2026.end],
+            [p.eidApprox ?? "Eid al-Fitr (approx.)", RAMADAN_2026.eidAlFitr],
+            [p.duration ?? "Duration", `${RAMADAN_2026.daysCount} days (29 or 30)`],
           ].map(([label, value]) => (
             <div key={label}>
               <p
@@ -257,12 +262,12 @@ export default function Ramadan2026Page() {
               marginBottom: 24,
             }}
           >
-            Download Ramadan 2026 Calendars
+            {p.downloadTitle ?? "Download Ramadan 2026 Calendars"}
           </h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             {[
-              { month: RAMADAN_2026.startMonth, label: "February 2026", note: "Start of Ramadan" },
-              { month: RAMADAN_2026.endMonth, label: "March 2026", note: "End of Ramadan · Eid al-Fitr" },
+              { month: RAMADAN_2026.startMonth, label: "February 2026", note: p.startOfRamadan ?? "Start of Ramadan" },
+              { month: RAMADAN_2026.endMonth, label: "March 2026", note: p.endOfRamadan ?? "End of Ramadan · Eid al-Fitr" },
             ].map(({ month, label, note }) => (
               <div
                 key={month}
@@ -330,7 +335,7 @@ export default function Ramadan2026Page() {
               marginBottom: 20,
             }}
           >
-            About Ramadan
+            {p.aboutTitle ?? "About Ramadan"}
           </h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 16, maxWidth: 700 }}>
             <p style={{ fontSize: 15, lineHeight: 1.85, color: "var(--fg)" }}>
@@ -369,7 +374,7 @@ export default function Ramadan2026Page() {
               marginBottom: 16,
             }}
           >
-            Planning ahead —Ramadan 2027
+            {p.planningAhead ?? "Planning ahead — Ramadan 2027"}
           </h2>
           <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.65, marginBottom: 20 }}>
             Ramadan 2027 is expected to begin around{" "}
@@ -410,7 +415,7 @@ export default function Ramadan2026Page() {
               marginBottom: 32,
             }}
           >
-            Frequently asked questions
+            {p.faqTitle ?? "Frequently asked questions"}
           </h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
             {RAMADAN_FAQS.map((faq, i) => (
@@ -428,4 +433,3 @@ export default function Ramadan2026Page() {
     </>
   );
 }
-

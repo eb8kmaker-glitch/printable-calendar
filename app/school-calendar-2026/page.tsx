@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import type { Metadata } from "next";
 import { SUPPORTED_COUNTRIES, MONTH_NAMES } from "@/lib/types";
 import AdSlot from "@/components/AdSlot";
@@ -181,6 +181,13 @@ export default async function SchoolCalendar2026Page() {
     description: "Free monthly school calendars for the 2026–2027 academic year.",
     url: `${BASE_URL}/school-calendar-2026`,
   };
+
+  const FEATURES_I18N = [
+    [p.feat1Title ?? "School year differences", p.feat1Body ?? "US school years run August–May; Japanese and Korean school years run April–March."],
+    [p.feat2Title ?? "Holiday coverage", p.feat2Body ?? "All public holidays for USA, Japan, and South Korea are marked."],
+    [p.feat3Title ?? "Print-ready PDF", p.feat3Body ?? "A4 landscape format, optimised for home and office printers."],
+    [p.feat4Title ?? "No login required", p.feat4Body ?? "Download instantly without creating an account."],
+  ];
 
   return (
     <>
@@ -373,12 +380,7 @@ export default async function SchoolCalendar2026Page() {
             gap: 28,
           }}
         >
-          {[
-            ["School year differences", "US, UK, and Canadian schools typically start in August–September. Australian schools run February–December. Japanese schools begin in April. Korean schools start in March. Each section above reflects the correct academic calendar."],
-            ["Holiday coverage", "All calendars include official public holidays —critical for planning school closures, exam scheduling, and extracurricular events."],
-            ["Print-ready PDF", "Download as A4 landscape. The minimalist design works perfectly in black and white —ideal for school bulletin boards and planners."],
-            ["No login required", "All calendars are completely free. No account, no email, no subscription. Just download and print."],
-          ].map(([title, desc]) => (
+          {FEATURES_I18N.map(([title, desc]) => (
             <div key={title}>
               <p style={{ fontWeight: 500, fontSize: 14, marginBottom: 6 }}>{title}</p>
               <p style={{ fontSize: 13, color: "var(--muted)", lineHeight: 1.65 }}>{desc}</p>
@@ -415,4 +417,3 @@ export default async function SchoolCalendar2026Page() {
     </>
   );
 }
-

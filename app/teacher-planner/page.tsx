@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import type { Metadata } from "next";
 import AdSlot from "@/components/AdSlot";
 import DynamicCalendarList from "@/components/DynamicCalendarList";
@@ -67,33 +67,6 @@ const TEACHER_FAQS = [
   },
 ];
 
-const CLASSROOM_USES = [
-  {
-    title: "Lesson planning overview",
-    desc: "Print a month at a time and block curriculum units in coloured pen. A monthly view is the right resolution for most lesson planning —detailed enough to schedule, broad enough to see the arc.",
-  },
-  {
-    title: "Parent-teacher communication",
-    desc: "Pin a printed calendar on the classroom board with parent-teacher nights, report card dates, and field trips circled. Parents who miss digital notices often catch printed ones.",
-  },
-  {
-    title: "Student behaviour tracking",
-    desc: "Some teachers print a small monthly calendar per student to track daily participation, homework completion, or positive behaviour —a visual record families appreciate.",
-  },
-  {
-    title: "Holiday awareness",
-    desc: "All calendars include official public holidays —so you never accidentally schedule a test on a holiday. Helpful especially in countries with variable lunar holidays (Korea's Chuseok, Japan's shifting observances).",
-  },
-  {
-    title: "Substitute lesson handoff",
-    desc: "Leave a printed month on your desk with lessons marked. A substitute can see at a glance where the class should be —no login required, no app to figure out.",
-  },
-  {
-    title: "Staff room planner",
-    desc: "Print and laminate a monthly calendar for the staff room. Use a dry-erase marker to mark staff meetings, professional development days, and shared responsibilities.",
-  },
-];
-
 export default async function TeacherPlannerPage() {
   const locale = await getLocale();
   const i18n = getTranslations(locale);
@@ -103,6 +76,21 @@ export default async function TeacherPlannerPage() {
   const currentMonth = now.getMonth() + 1;
   const faqSchema = buildFaqSchema(TEACHER_FAQS.map((f) => ({ q: f.q, a: f.a })));
 
+  const CLASSROOM_USES_I18N = [
+    { title: p.use1Title ?? "Lesson planning overview", desc: p.use1Body ?? "Map all school days, public holidays, and exam periods at the start of each term." },
+    { title: p.use2Title ?? "Parent–teacher communication", desc: p.use2Body ?? "Share a printed calendar with parents to keep everyone informed of key dates." },
+    { title: p.use3Title ?? "Student behaviour tracking", desc: p.use3Body ?? "Note attendance patterns and behaviour incidents on a printed monthly sheet." },
+    { title: p.use4Title ?? "Holiday awareness", desc: p.use4Body ?? "Never schedule tests or major assignments on or immediately after public holidays." },
+    { title: p.use5Title ?? "Substitute lesson handoff", desc: p.use5Body ?? "Leave a printed calendar with your lesson plan dates so substitutes can follow along." },
+    { title: p.use6Title ?? "Staff room planner", desc: p.use6Body ?? "Post a large printed calendar in the staff room to coordinate department-wide events." },
+  ];
+
+  const FEATURES_I18N = [
+    [p.feat1Title ?? "Landscape A4 layout", p.feat1Body ?? "Designed to be pinned to the wall or laid flat on a desk."],
+    [p.feat2Title ?? "Official holidays", p.feat2Body ?? "USA, Japan, and South Korea public holidays marked on every month."],
+    [p.feat3Title ?? "B&W optimised", p.feat3Body ?? "Prints cleanly in greyscale — no expensive colour ink required."],
+    [p.feat4Title ?? "Instant & free", p.feat4Body ?? "No account, no subscription. Download as many months as you need."],
+  ];
 
   return (
     <>
@@ -125,7 +113,7 @@ export default async function TeacherPlannerPage() {
               marginBottom: 12,
             }}
           >
-            {p.eyebrow ??"For Teachers"}
+            {p.eyebrow ?? "For Teachers"}
           </p>
           <h1
             style={{
@@ -137,12 +125,12 @@ export default async function TeacherPlannerPage() {
               marginBottom: 20,
             }}
           >
-            {p.title ??"Printable teacher planner"}
+            {p.title ?? "Printable teacher planner"}
             <br />
-            <span style={{ opacity: 0.4 }}>{p.subtitle ??"calendars, free forever."}</span>
+            <span style={{ opacity: 0.4 }}>{p.subtitle ?? "calendars, free forever."}</span>
           </h1>
           <p style={{ fontSize: 15, color: "var(--muted)", lineHeight: 1.65, marginBottom: 28 }}>
-            {p.description ??"Monthly calendars for classroom planning with public holidays for USA, Japan, and South Korea. Print one for your desk, one for the board, and one to share with parents. Clean A4 landscape PDF, no login, no subscription."}
+            {p.description ?? "Monthly calendars for classroom planning with public holidays for USA, Japan, and South Korea. Print one for your desk, one for the board, and one to share with parents. Clean A4 landscape PDF, no login, no subscription."}
           </p>
           <Link
             href={`/calendar/us/${year}/${currentMonth}`}
@@ -159,12 +147,12 @@ export default async function TeacherPlannerPage() {
               fontWeight: 500,
             }}
           >
-            {p.viewThisMonth ??"View this month →"}
+            {p.viewThisMonth ?? "View this month →"}
           </Link>
         </div>
 
         <DayCounter
-          targetLabel="End of Term"
+          targetLabel={p.countdownLabel ?? "End of Term"}
           storageKey="term-end"
           milestones={TEACHER_MILESTONES}
         />
@@ -175,7 +163,7 @@ export default async function TeacherPlannerPage() {
           badgeLabel="Last term month"
           pdfHeaderText="Term Countdown"
           pdfTargetLabel="Term End"
-          noDateHint="Set your term end date above to see your planner calendars."
+          noDateHint={p.downloadHint ?? "Set your term end date above to see your planner calendars."}
         />
 
         <AdSlot slot="pre-download" style={{ marginBottom: 48 }} />
@@ -191,7 +179,7 @@ export default async function TeacherPlannerPage() {
               marginBottom: 32,
             }}
           >
-            {p.howTeachersUse ??"How teachers use printed calendars"}
+            {p.howTeachersUse ?? "How teachers use printed calendars"}
           </h2>
           <div
             style={{
@@ -200,7 +188,7 @@ export default async function TeacherPlannerPage() {
               gap: 20,
             }}
           >
-            {CLASSROOM_USES.map(({ title, desc }) => (
+            {CLASSROOM_USES_I18N.map(({ title, desc }) => (
               <div
                 key={title}
                 style={{ borderTop: "1px solid var(--border)", paddingTop: 16 }}
@@ -222,12 +210,7 @@ export default async function TeacherPlannerPage() {
             gap: 28,
           }}
         >
-          {[
-            ["Landscape A4 layout", "Plenty of horizontal space for writing lesson titles and notes beside each date."],
-            ["Official holidays", "All public holidays included —no missed planning around closures."],
-            ["B&W optimised", "Prints cleanly on any school photocopier or inkjet printer."],
-            ["Instant & free", "No account, no forms —just click and download."],
-          ].map(([title, desc]) => (
+          {FEATURES_I18N.map(([title, desc]) => (
             <div key={title}>
               <p style={{ fontWeight: 500, fontSize: 14, marginBottom: 6 }}>{title}</p>
               <p style={{ fontSize: 13, color: "var(--muted)", lineHeight: 1.6 }}>{desc}</p>
@@ -246,7 +229,7 @@ export default async function TeacherPlannerPage() {
               marginBottom: 32,
             }}
           >
-            {p.faqTitle ??"Frequently asked questions"}
+            {p.faqTitle ?? "Frequently asked questions"}
           </h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
             {TEACHER_FAQS.map((faq, i) => (
@@ -264,4 +247,3 @@ export default async function TeacherPlannerPage() {
     </>
   );
 }
-
