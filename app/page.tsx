@@ -84,7 +84,7 @@ export default async function HomePage() {
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "64px 24px" }}>
         {/* Hero */}
         <div style={{ marginBottom: 80, maxWidth: 600 }}>
-          <h1 style={{ fontFamily: "'EB Garamond', Georgia, serif", fontSize: "clamp(36px, 6vw, 64px)", fontWeight: 400, letterSpacing: "-0.03em", lineHeight: 1.1, marginBottom: 20 }}>
+          <h1 style={{ fontFamily: "'EB Garamond', Georgia, serif", fontSize: "clamp(30px, 5vw, 56px)", fontWeight: 400, letterSpacing: "-0.02em", lineHeight: 1.1, marginBottom: 20 }}>
             {i18n.home.headline}
             <br />
             <span style={{ opacity: 0.4 }}>{i18n.home.subheadline}</span>
