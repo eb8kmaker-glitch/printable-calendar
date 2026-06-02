@@ -28,7 +28,7 @@ interface AdFitUnitProps {
 }
 
 function AdFitUnit({ unit, width, height }: AdFitUnitProps) {
-  const ref = useRef<HTMLElement>(null);
+  const ref = useRef<HTMLModElement>(null);
 
   useEffect(() => {
     loadAdFitScript();
