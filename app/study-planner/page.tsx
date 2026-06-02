@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import type { Metadata } from "next";
 import AdSlot from "@/components/AdSlot";
 import DynamicCalendarList from "@/components/DynamicCalendarList";
@@ -72,15 +72,6 @@ const STUDY_FAQS = [
   },
 ];
 
-const STUDY_TIPS = [
-  ["Block exam weeks first", "Add exam dates as soon as they are announced. Everything else schedules around them."],
-  ["Plan in monthly chunks", "A monthly calendar gives you the right resolution —detailed enough to plan, broad enough to see the whole semester."],
-  ["Use the margins", "Our calendars have clean margins. Write deadlines, readings, or study goals directly on the printed sheet."],
-  ["Print black and white", "Our minimal design is optimised for B&W printing —saves ink, stays readable."],
-  ["One calendar per subject", "Some students print a calendar per course and annotate separately, then combine into a master view."],
-  ["Leave buffer weeks", "Block the week before every major exam or deadline as review time —not new-content time."],
-];
-
 export default async function StudyPlannerPage() {
   const locale = await getLocale();
   const i18n = getTranslations(locale);
@@ -88,6 +79,22 @@ export default async function StudyPlannerPage() {
   const now = new Date();
   const year = now.getFullYear();
   const month = now.getMonth() + 1;
+
+  const STUDY_TIPS_I18N = [
+    [p.tip1Title ?? "Block exam weeks first", p.tip1Body ?? "Add exam dates as soon as they are announced. Everything else schedules around them."],
+    [p.tip2Title ?? "Plan in monthly chunks", p.tip2Body ?? "A monthly calendar gives you the right resolution — detailed enough to plan, broad enough to see the whole semester."],
+    [p.tip3Title ?? "Use the margins", p.tip3Body ?? "Our calendars have clean margins. Write deadlines, readings, or study goals directly on the printed sheet."],
+    [p.tip4Title ?? "Print black and white", p.tip4Body ?? "Our minimal design is optimised for B&W printing — saves ink, stays readable."],
+    [p.tip5Title ?? "One calendar per subject", p.tip5Body ?? "Some students print a calendar per course and annotate separately, then combine into a master view."],
+    [p.tip6Title ?? "Leave buffer weeks", p.tip6Body ?? "Block the week before every major exam or deadline as review time — not new-content time."],
+  ];
+
+  const FEATURES_I18N = [
+    [p.feat1Title ?? "A4 landscape PDF", p.feat1Body ?? "Print on any home printer. Fits standard letter and A4 paper."],
+    [p.feat2Title ?? "Public holidays included", p.feat2Body ?? "Never miss a holiday exam date — all official holidays shown."],
+    [p.feat3Title ?? "Minimal design", p.feat3Body ?? "Clean grid leaves space for your notes, annotations, and highlights."],
+    [p.feat4Title ?? "Free, no account", p.feat4Body ?? "No sign-up. No email. Just download and print."],
+  ];
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -149,9 +156,7 @@ export default async function StudyPlannerPage() {
             <span style={{ opacity: 0.4 }}>{p.subtitle ?? "calendars, free forever."}</span>
           </h1>
           <p style={{ fontSize: 15, color: "var(--muted)", lineHeight: 1.65, marginBottom: 28 }}>
-            Monthly calendars designed for students. Map out your semester — exams, deadlines, readings, and study blocks — on a clean A4
-            printout you can write on. Includes public holidays for USA, Japan,
-            and South Korea. No account required.
+            {p.description ?? "Monthly calendars designed for students. Map out your semester — exams, deadlines, readings, and study blocks — on a clean A4 printout you can write on. Includes public holidays for USA, Japan, and South Korea. No account required."}
           </p>
           <Link
             href={`/calendar/us/${year}/${month}`}
@@ -209,7 +214,7 @@ export default async function StudyPlannerPage() {
               gap: 20,
             }}
           >
-            {STUDY_TIPS.map(([title, desc]) => (
+            {STUDY_TIPS_I18N.map(([title, desc]) => (
               <div
                 key={title}
                 style={{
@@ -234,12 +239,7 @@ export default async function StudyPlannerPage() {
             gap: 28,
           }}
         >
-          {[
-            ["A4 landscape PDF", "Print on any home printer. Fits standard letter and A4 paper."],
-            ["Public holidays included", "Never miss a holiday exam date —all official holidays shown."],
-            ["Minimal design", "Clean grid leaves space for your notes, annotations, and highlights."],
-            ["Free, no account", "No sign-up. No email. Just download and print."],
-          ].map(([title, desc]) => (
+          {FEATURES_I18N.map(([title, desc]) => (
             <div key={title}>
               <p style={{ fontWeight: 500, fontSize: 14, marginBottom: 6 }}>{title}</p>
               <p style={{ fontSize: 13, color: "var(--muted)", lineHeight: 1.6 }}>{desc}</p>
@@ -280,4 +280,3 @@ export default async function StudyPlannerPage() {
     </>
   );
 }
-

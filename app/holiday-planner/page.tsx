@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import type { Metadata } from "next";
 import { SUPPORTED_COUNTRIES, MONTH_NAMES } from "@/lib/types";
 import { getHolidays } from "@/lib/holidays";
@@ -72,13 +72,6 @@ const HOLIDAY_PLANNER_FAQS = [
   },
 ];
 
-const PLANNING_TIPS = [
-  ["Bridge days", "When a holiday falls on Tuesday or Thursday, taking the adjacent Monday or Friday creates a 4-day weekend with just one vacation day."],
-  ["Cluster around long weekends", "Plan trips to start the day after a holiday —airlines and hotels are cheaper than on the holiday itself."],
-  ["Book early for peak periods", "Golden Week (JP), Chuseok (KR), Thanksgiving (US), and Christmas block up 3–6 months in advance."],
-  ["Check neighbouring country calendars", "If you work remotely, US holidays can be great times to travel to Japan or Korea —prices drop as local tourism falls."],
-];
-
 export default async function HolidayPlannerPage() {
   const locale = await getLocale();
   const i18n = getTranslations(locale);
@@ -87,6 +80,13 @@ export default async function HolidayPlannerPage() {
   const year = now.getFullYear();
   const currentMonth = now.getMonth() + 1;
   const faqSchema = buildFaqSchema(HOLIDAY_PLANNER_FAQS.map((f) => ({ q: f.q, a: f.a })));
+
+  const PLANNING_TIPS_I18N = [
+    [p.tip1Title ?? "Bridge days", p.tip1Body ?? "A single day off between a public holiday and a weekend can create a 4-day break."],
+    [p.tip2Title ?? "Cluster around long weekends", p.tip2Body ?? "Book 2–3 days adjacent to a long weekend to create a mini holiday without using much leave."],
+    [p.tip3Title ?? "Book early for peak periods", p.tip3Body ?? "School holiday periods and major public holidays fill up fast — plan 3–6 months ahead."],
+    [p.tip4Title ?? "Check neighbouring country calendars", p.tip4Body ?? "If you travel internationally, check the destination's holiday calendar to avoid or coincide with local celebrations."],
+  ];
 
   // Gather upcoming holidays for each country
   const upcomingByCountry = SUPPORTED_COUNTRIES.map((c) => {
@@ -222,7 +222,7 @@ export default async function HolidayPlannerPage() {
                       marginBottom: 12,
                     }}
                   >
-                    {monthHolidayCounts[m]} holidays across countries
+                    {monthHolidayCounts[m]} {p.holidaysAcross ?? "holidays across countries"}
                   </p>
                   <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
                     {SUPPORTED_COUNTRIES.map((c) => (
@@ -350,7 +350,8 @@ export default async function HolidayPlannerPage() {
                     paddingBottom: 1,
                   }}
                 >
-                  {p.viewFull2026 ?? `View full ${year} calendar →`}                </Link>
+                  {p.viewFull2026 ?? `View full ${year} calendar →`}
+                </Link>
               </div>
             ))}
           </div>
@@ -383,7 +384,7 @@ export default async function HolidayPlannerPage() {
               gap: 24,
             }}
           >
-            {PLANNING_TIPS.map(([title, desc]) => (
+            {PLANNING_TIPS_I18N.map(([title, desc]) => (
               <div key={title} style={{ borderTop: "1px solid var(--border)", paddingTop: 16 }}>
                 <p style={{ fontSize: 14, fontWeight: 500, marginBottom: 6 }}>{title}</p>
                 <p style={{ fontSize: 13, color: "var(--muted)", lineHeight: 1.65 }}>{desc}</p>
@@ -421,4 +422,3 @@ export default async function HolidayPlannerPage() {
     </>
   );
 }
-
