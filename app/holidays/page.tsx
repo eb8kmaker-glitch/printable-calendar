@@ -85,7 +85,7 @@ export default async function HolidaysPage() {
           <h1
             style={{
               fontFamily: "'EB Garamond', Georgia, serif",
-              fontSize: "clamp(28px, 5vw, 52px)",
+              fontSize: "clamp(28px, 5vw, 48px)",
               fontWeight: 400,
               letterSpacing: "-0.02em",
               lineHeight: 1.1,
