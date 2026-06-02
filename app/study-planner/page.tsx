@@ -8,7 +8,7 @@ import type { DayMilestone } from "@/components/DayCounter";
 import { getLocale } from "@/i18n/server";
 import { getTranslations } from "@/i18n";
 
-export const dynamic = "force-static";
+export const dynamic = "force-dynamic";
 const BASE_URL = "https://printablecalendars.app";
 
 export const metadata: Metadata = {
