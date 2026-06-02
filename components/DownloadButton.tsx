@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { getTranslations } from "@/i18n";
+import type { Locale } from "@/i18n";
 
 type PaperSize = "A3" | "A4" | "A5" | "A6";
 type Orientation = "landscape" | "portrait";
@@ -10,6 +12,7 @@ interface DownloadButtonProps {
   country: string;
   year: number;
   month?: number; // absent = yearly PDF
+  locale?: Locale;
 }
 
 const selectStyle: React.CSSProperties = {
@@ -23,8 +26,9 @@ const selectStyle: React.CSSProperties = {
   fontSize: 13,
 };
 
-export default function DownloadButton({ country, year, month }: DownloadButtonProps) {
+export default function DownloadButton({ country, year, month, locale = 'en' }: DownloadButtonProps) {
   const isYearly = !month;
+  const i18n = getTranslations(locale);
   const [loading, setLoading] = useState(false);
   const [size, setSize] = useState<PaperSize>("A4");
   const [orientation, setOrientation] = useState<Orientation>("landscape");
@@ -130,7 +134,7 @@ export default function DownloadButton({ country, year, month }: DownloadButtonP
                   textTransform: "capitalize",
                 }}
               >
-                {o === "landscape" ? "⬜ Landscape" : "▭ Portrait"}
+                {o === "landscape" ? i18n.calendar.landscape : i18n.calendar.portrait}
               </button>
             );
           })}
@@ -157,7 +161,7 @@ export default function DownloadButton({ country, year, month }: DownloadButtonP
                   transition: "background 0.15s, color 0.15s",
                 }}
               >
-                {t === "light" ? "☀ Light" : "◑ Dark"}
+                {t === "light" ? i18n.calendar.light : i18n.calendar.dark}
               </button>
             );
           })}
@@ -184,15 +188,13 @@ export default function DownloadButton({ country, year, month }: DownloadButtonP
             transition: "opacity 0.2s",
           }}
         >
-          {loading ? "Generating…" : "↓ Download PDF"}
+          {loading ? i18n.calendar.generating : i18n.calendar.downloadPdf}
         </button>
       </div>
 
       <p style={{ fontSize: 11, color: "var(--muted)", margin: 0 }}>
-        {theme === "light"
-          ? "☀ Light — recommended for printing"
-          : "◑ Dark — best for tablets & digital use"}
-        {isYearly ? " · A6 not available for yearly" : ""}
+        {theme === "light" ? i18n.calendar.lightRecommended : i18n.calendar.darkRecommended}
+        {isYearly ? i18n.calendar.yearlyNote : ""}
       </p>
       {error && (
         <p style={{ fontSize: 12, color: "var(--holiday)", margin: 0 }}>{error}</p>

@@ -4,6 +4,24 @@ import { getHolidays } from "@/lib/holidays";
 import { SUPPORTED_COUNTRIES } from "@/lib/types";
 import Link from "next/link";
 
+export const dynamic = "force-static";
+export const dynamicParams = false;
+
+export async function generateStaticParams() {
+  const years = [2025, 2026, 2027];
+  const params: { slug: string }[] = [];
+  for (const country of SUPPORTED_COUNTRIES) {
+    for (const year of years) {
+      const holidays = getHolidays(country.code, year);
+      for (const h of holidays) {
+        const namePart = h.name.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+        params.push({ slug: `${country.code.toLowerCase()}-${namePart}-${year}` });
+      }
+    }
+  }
+  return params;
+}
+
 interface PageProps {
   params: Promise<{ slug: string }>;
 }

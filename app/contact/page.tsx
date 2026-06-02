@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useForm, ValidationError } from "@formspree/react";
 import Link from "next/link";
-
-const CONTACT_EMAIL = "e.b8k.maker@gmail.com";
+import { useState } from "react";
 
 type Category = "bug" | "feature" | "holiday-error" | "other";
 
@@ -15,22 +14,8 @@ const CATEGORY_LABELS: Record<Category, string> = {
 };
 
 export default function ContactPage() {
-  const [name, setName] = useState("");
-  const [message, setMessage] = useState("");
+  const [state, handleSubmit] = useForm("mgoqdjnr");
   const [category, setCategory] = useState<Category>("other");
-  const [sent, setSent] = useState(false);
-
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!message.trim()) return;
-
-    const subject = `[printcal] ${CATEGORY_LABELS[category]}${name ? ` — from ${name}` : ""}`;
-    const body = `Category: ${CATEGORY_LABELS[category]}\n${name ? `From: ${name}\n` : ""}\n${message}`;
-    const mailto = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
-    window.location.href = mailto;
-    setSent(true);
-  }
 
   return (
     <div style={{ maxWidth: 560, margin: "0 auto", padding: "64px 24px 96px" }}>
@@ -62,14 +47,13 @@ export default function ContactPage() {
         </h1>
         <p style={{ fontSize: 15, color: "var(--muted)", lineHeight: 1.65 }}>
           Wrong holiday, missing feature, broken PDF — anything is useful. We
-          read every message. The form opens your email client with everything
-          pre-filled.
+          read every message.
         </p>
       </div>
 
       <hr style={{ border: "none", borderTop: "1px solid var(--border)", marginBottom: 40 }} />
 
-      {sent ? (
+      {state.succeeded ? (
         <div
           style={{
             border: "1px solid var(--border)",
@@ -86,36 +70,17 @@ export default function ContactPage() {
               marginBottom: 8,
             }}
           >
-            Your email client should have opened.
+            Message sent — thank you.
           </p>
-          <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.65, marginBottom: 24 }}>
-            If it didn&apos;t, email us directly at{" "}
-            <a
-              href={`mailto:${CONTACT_EMAIL}`}
-              style={{ color: "var(--fg)", textDecoration: "underline", textUnderlineOffset: 3 }}
-            >
-              {CONTACT_EMAIL}
-            </a>
-            .
+          <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.65 }}>
+            We read everything and will get back to you if a reply is needed.
           </p>
-          <button
-            onClick={() => setSent(false)}
-            style={{
-              fontSize: 13,
-              color: "var(--muted)",
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              textDecoration: "underline",
-              textUnderlineOffset: 3,
-            }}
-          >
-            Send another message
-          </button>
         </div>
       ) : (
         <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-          {/* Category */}
+          {/* Category (hidden field sent to Formspree) */}
+          <input type="hidden" name="category" value={CATEGORY_LABELS[category]} />
+
           <div>
             <label
               style={{
@@ -172,8 +137,7 @@ export default function ContactPage() {
             <input
               id="name"
               type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              name="name"
               placeholder="Jane Smith"
               autoComplete="name"
               style={{
@@ -189,6 +153,44 @@ export default function ContactPage() {
                 boxSizing: "border-box",
               }}
             />
+          </div>
+
+          {/* Email */}
+          <div>
+            <label
+              htmlFor="email"
+              style={{
+                display: "block",
+                fontFamily: "'DM Mono', monospace",
+                fontSize: 11,
+                color: "var(--muted)",
+                letterSpacing: "0.07em",
+                textTransform: "uppercase",
+                marginBottom: 8,
+              }}
+            >
+              Email <span style={{ opacity: 0.5 }}>(optional, for reply)</span>
+            </label>
+            <input
+              id="email"
+              type="email"
+              name="email"
+              placeholder="you@example.com"
+              autoComplete="email"
+              style={{
+                width: "100%",
+                height: 40,
+                padding: "0 14px",
+                border: "1px solid var(--border)",
+                borderRadius: 8,
+                background: "var(--bg)",
+                color: "var(--fg)",
+                fontSize: 14,
+                outline: "none",
+                boxSizing: "border-box",
+              }}
+            />
+            <ValidationError field="email" prefix="Email" errors={state.errors} style={{ fontSize: 12, color: "var(--holiday)", marginTop: 4, display: "block" }} />
           </div>
 
           {/* Message */}
@@ -209,8 +211,7 @@ export default function ContactPage() {
             </label>
             <textarea
               id="message"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
+              name="message"
               required
               rows={5}
               placeholder={
@@ -235,48 +236,35 @@ export default function ContactPage() {
                 fontFamily: "inherit",
               }}
             />
+            <ValidationError field="message" prefix="Message" errors={state.errors} style={{ fontSize: 12, color: "var(--holiday)", marginTop: 4, display: "block" }} />
           </div>
 
           {/* Submit */}
           <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
             <button
               type="submit"
-              disabled={!message.trim()}
+              disabled={state.submitting}
               style={{
                 padding: "11px 24px",
-                background: message.trim() ? "var(--fg)" : "var(--border)",
-                color: message.trim() ? "var(--bg)" : "var(--muted)",
+                background: "var(--fg)",
+                color: "var(--bg)",
                 border: "none",
                 borderRadius: 8,
                 fontSize: 14,
                 fontWeight: 500,
-                cursor: message.trim() ? "pointer" : "default",
-                transition: "background 0.15s, color 0.15s",
+                cursor: state.submitting ? "default" : "pointer",
+                opacity: state.submitting ? 0.6 : 1,
+                transition: "opacity 0.15s",
               }}
             >
-              Open email client →
+              {state.submitting ? "Sending…" : "Send message →"}
             </button>
-            <p style={{ fontSize: 12, color: "var(--muted)" }}>
-              Sends to{" "}
-              <a
-                href={`mailto:${CONTACT_EMAIL}`}
-                style={{ color: "var(--muted)", textDecoration: "underline", textUnderlineOffset: 3 }}
-              >
-                {CONTACT_EMAIL}
-              </a>
-            </p>
           </div>
         </form>
       )}
 
       {/* Quick links */}
-      <div
-        style={{
-          marginTop: 64,
-          paddingTop: 32,
-          borderTop: "1px solid var(--border)",
-        }}
-      >
+      <div style={{ marginTop: 64, paddingTop: 32, borderTop: "1px solid var(--border)" }}>
         <p
           style={{
             fontFamily: "'DM Mono', monospace",

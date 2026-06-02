@@ -5,6 +5,8 @@ interface CalendarGridProps {
   year: number;
   month: number;
   countryName: string;
+  weekdays?: string[];
+  monthName?: string;
 }
 
 export default function CalendarGrid({
@@ -12,7 +14,11 @@ export default function CalendarGrid({
   year,
   month,
   countryName,
+  weekdays,
+  monthName,
 }: CalendarGridProps) {
+  const displayWeekdays = weekdays ?? DAY_NAMES;
+  const displayMonthName = monthName ?? MONTH_NAMES[month - 1];
   return (
     <div>
       {/* Calendar header — visible in print */}
@@ -34,7 +40,7 @@ export default function CalendarGrid({
             margin: 0,
           }}
         >
-          {MONTH_NAMES[month - 1]}{" "}
+          {displayMonthName}{" "}
           <span style={{ opacity: 0.4 }}>{year}</span>
         </h1>
         <span
@@ -50,7 +56,7 @@ export default function CalendarGrid({
 
       {/* Day headers */}
       <div className="calendar-grid" style={{ marginBottom: 0 }}>
-        {DAY_NAMES.map((name, i) => (
+        {displayWeekdays.map((name, i) => (
           <div
             key={name}
             className="day-header"

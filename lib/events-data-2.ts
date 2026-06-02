@@ -615,7 +615,7 @@ export const EVENTS_PART2: WorldEvent[] = [
     emoji: "brain",
     tagline: "Mental health is a universal human right.",
     about:
-      "World Mental Health Day is observed on October 10 each year, with the overall objective of raising awareness of mental health issues around the world and mobilizing efforts in support of mental health. The World Federation for Mental Health sets a new theme each year to focus attention on a specific area — from suicide prevention to mental health at the workplace.",
+      "World Mental Health Day is observed annually on October 10, with the goal of raising global awareness of mental health issues and mobilising support for those affected. Organised by the World Federation for Mental Health in partnership with the World Health Organization, the day draws attention to the scale of the crisis: an estimated one in eight people worldwide live with a mental health condition, yet over 75% of those in low- and middle-income countries receive no treatment at all. Each year a new theme focuses attention on a specific aspect of mental healthcare — from workplace wellbeing and youth mental health to access to care in humanitarian settings and post-conflict recovery. The COVID-19 pandemic significantly worsened mental health outcomes globally, with rates of anxiety and depression rising sharply across all age groups and persisting well into the mid-2020s. Suicide remains one of the leading causes of death among young people aged 15 to 29. In 2026, the campaign continues to push for mental health to be treated as a fundamental human right, not a privilege. This means adequate public funding for services, reducing stigma in communities and workplaces, training frontline workers to screen for mental health conditions, and ensuring that digital mental health tools are accessible to those without access to in-person care.",
     history:
       "World Mental Health Day was first celebrated on October 10, 1992, as an initiative of the World Federation for Mental Health (WFMH), led by its then-Deputy Secretary General Richard Hunter. For the first three years there was no specific theme; from 1994 onwards each year has had a theme with a focus on a particular aspect of mental health.",
     countries: ["Global — recognized by the WHO and WFMH worldwide"],
@@ -903,7 +903,7 @@ export const EVENTS_PART2: WorldEvent[] = [
     emoji: "heart-hands",
     tagline: "A simple act of kindness can change someone's entire day.",
     about:
-      "World Kindness Day is observed on November 13 each year. It was introduced in 1998 by the World Kindness Movement to highlight good deeds in the community, focusing on the positive power and commonality of kindness. The day encourages individuals to practise random acts of kindness both in person and online.",
+      "World Kindness Day, observed on November 13 each year, was introduced in 1998 by the World Kindness Movement to promote good deeds, compassion, and the positive power of human connection. The premise is straightforward: small, deliberate acts of kindness — holding a door, paying a sincere compliment, buying a stranger a coffee, or checking in on a lonely neighbour — create measurable improvements in wellbeing for both the giver and the receiver. Research in positive psychology consistently shows that acts of kindness trigger the release of serotonin and oxytocin, reduce cortisol stress hormones, and strengthen social bonds over time. At a moment of rising global polarisation, political division, and digital incivility, World Kindness Day offers a counterpoint: an invitation to practise one simple behaviour that is universally welcomed across cultures, generations, and languages. Corporations, schools, and community organisations worldwide now run structured kindness challenges — encouraging teams to log random acts of kindness over several days. These campaigns have been shown to improve workplace morale, reduce school bullying, and build the kind of trust between neighbours that makes communities more resilient to shared challenges. The day originated in Tokyo in 1998 and has since spread to 28 participating nations. On November 13, let kindness be your deliberate default setting.",
     history:
       "World Kindness Day was first observed on November 13, 1998, following the inaugural conference of the World Kindness Movement in Tokyo, Japan. The movement — comprising non-governmental kindness organisations from Canada, Australia, Thailand, Singapore, Japan, and others — declared it a global day and it has grown steadily since.",
     countries: ["Global — promoted by the World Kindness Movement in 28 countries"],
@@ -1271,7 +1271,7 @@ export const EVENTS_PART2: WorldEvent[] = [
     emoji: "telescope",
     tagline: "Look up — the universe is waiting for you to notice it.",
     about:
-      "World Astronomy Day, observed twice yearly (once in spring, usually near the first quarter moon, and once in autumn), bridges the gap between professional astronomers and the general public. Planetariums, observatories, amateur astronomy clubs, and science museums open their doors to invite people to explore the night sky. The day celebrates the extraordinary human achievement of understanding our place in a universe 13.8 billion years old.",
+      "World Astronomy Day, celebrated twice yearly — once in spring around the first quarter moon, and once in autumn — was created to connect the general public with the wonders of the universe. Observatories, planetariums, science museums, and amateur astronomy clubs open their doors and set up telescopes in public spaces, inviting people who might never otherwise look through an eyepiece to see the craters of the Moon, the rings of Saturn, or the Andromeda Galaxy with their own eyes. In 2026, amateur astronomers worldwide have much to look forward to: ongoing discoveries from the James Webb Space Telescope continue to push the observable frontier of the universe back toward the first few hundred million years after the Big Bang, while several planetary conjunctions and meteor shower peaks offer naked-eye spectacle throughout the year. World Astronomy Day is also a moment to reflect on the philosophical significance of the science: no other discipline so forcefully confronts us with our smallness in the cosmos and the fragility of our pale blue dot. Spring Astronomy Day typically falls on the first Saturday close to the first-quarter moon in April or May — check your local astronomy society or science museum for the exact date and public viewing events near you in 2026.",
     history:
       "World Astronomy Day began in 1973 when the Astronomical Association of Northern California organised public astronomy events to promote the science. Doug Berger, the association's president, set up telescopes in busy public places. The concept spread globally through the International Astronomical Union and has been celebrated internationally for decades.",
     countries: ["Global — astronomical societies worldwide"],
@@ -1339,5 +1339,488 @@ export const EVENTS_PART2: WorldEvent[] = [
       "Reduce fertiliser and pesticide use to prevent river runoff pollution",
     ],
     relatedSlugs: ["world-water-day", "world-oceans-day", "earth-day"],
+  },
+  // ─── JANUARY ──────────────────────────────────────────────────────────────
+  {
+    slug: "world-logic-day",
+    name: "World Logic Day",
+    month: 1,
+    day: 14,
+    category: "science",
+    emoji: "calculator",
+    tagline: "Logic — the foundation of mathematics, philosophy, and artificial intelligence.",
+    about:
+      "World Logic Day is celebrated on January 14 to promote logic as a discipline central to knowledge, science, and technology. Logic underpins fields from mathematics and philosophy to artificial intelligence and law. The day encourages educators, researchers, and students worldwide to engage with logical thinking and its applications.",
+    history:
+      "January 14 was chosen to mark the death anniversary of Kurt Gödel (1978) and the birthday of Alfred Tarski (1901) — two giants of 20th-century mathematical logic. UNESCO proclaimed January 14 as World Logic Day in 2019, following a proposal by the International Union of History and Philosophy of Science.",
+    countries: ["Global — UNESCO initiative"],
+    activities: [
+      "Solve a logic puzzle or brain teaser",
+      "Learn about formal logic, syllogisms, or Boolean algebra",
+      "Explore the contributions of Gödel, Tarski, or Aristotle to logic",
+      "Discuss logical fallacies and how to spot them in everyday arguments",
+    ],
+    relatedSlugs: ["pi-day", "world-statistics-day", "world-science-day-for-peace"],
+  },
+  // ─── FEBRUARY ─────────────────────────────────────────────────────────────
+  {
+    slug: "world-interfaith-harmony-week",
+    name: "World Interfaith Harmony Week",
+    month: 2,
+    day: 1,
+    category: "humanitarian",
+    emoji: "dove",
+    tagline: "Promoting peace and understanding among people of all faiths and beliefs.",
+    about:
+      "World Interfaith Harmony Week is observed during the first week of February each year. It encourages dialogue and cooperation among people of different religious and non-religious backgrounds, emphasising shared values of peace, justice, and compassion. Events worldwide include interfaith prayer gatherings, lectures, and community service projects.",
+    history:
+      "World Interfaith Harmony Week was proposed by King Abdullah II of Jordan and adopted by the United Nations General Assembly on October 20, 2010. The initiative builds on the Common Word document — a landmark open letter calling for dialogue grounded in love of God and love of neighbour, signed by Muslim and Christian leaders worldwide.",
+    countries: ["Global — United Nations initiative"],
+    activities: [
+      "Attend or organise an interfaith dialogue event in your community",
+      "Learn about a religion or tradition different from your own",
+      "Share a meal with people of different faiths or beliefs",
+      "Read a sacred text from a tradition outside your own",
+    ],
+    relatedSlugs: ["international-day-of-peace", "world-kindness-day", "human-rights-day"],
+  },
+  {
+    slug: "world-cancer-day",
+    name: "World Cancer Day",
+    month: 2,
+    day: 4,
+    category: "health",
+    emoji: "medical",
+    tagline: "Together we challenge those in power to close the cancer care gap.",
+    about:
+      "World Cancer Day is observed on February 4 each year with the goal of saving millions of preventable deaths by raising awareness, improving education, and pressing governments and individuals to take action against cancer. Cancer is the second leading cause of death globally, responsible for nearly 10 million deaths per year. Early detection and equitable access to treatment remain critical challenges.",
+    history:
+      "World Cancer Day was founded by the Union for International Cancer Control (UICC), with the first observance on February 4, 2000, through the signing of the Charter of Paris Against Cancer. Since 2016, each campaign has run on a three-year cycle — most recently 'Close the Care Gap,' addressing inequalities in cancer treatment worldwide.",
+    countries: ["Global — UICC initiative, recognised in over 100 countries"],
+    activities: [
+      "Schedule a cancer screening if you are overdue",
+      "Learn the warning signs of the most common cancers",
+      "Support a cancer research charity or a local cancer patient",
+      "Share cancer prevention tips — healthy diet, exercise, no smoking",
+    ],
+    relatedSlugs: ["world-health-day", "world-no-tobacco-day", "world-mental-health-day"],
+  },
+  {
+    slug: "international-day-of-women-and-girls-in-science",
+    name: "International Day of Women and Girls in Science",
+    month: 2,
+    day: 11,
+    category: "science",
+    emoji: "sparkles",
+    tagline: "Science needs women. The world needs science.",
+    about:
+      "The International Day of Women and Girls in Science is observed on February 11 to recognise the critical role women and girls play in science and technology. Despite progress, gender gaps persist across STEM fields — women remain underrepresented in research, academic leadership, and high-tech industries. The day highlights inspiring role models and calls for structural change.",
+    history:
+      "The day was established by the United Nations General Assembly in December 2015, with the first celebration held on February 11, 2016. It is implemented by UNESCO and UN-Women in partnership with international institutions, with a new theme each year spotlighting challenges from equal access to education to fighting climate change.",
+    countries: ["Global — UNESCO and UN-Women initiative"],
+    activities: [
+      "Celebrate a woman scientist who has inspired you",
+      "Mentor a girl interested in science, technology, or mathematics",
+      "Share stories of women scientists on social media",
+      "Advocate for gender-equal science education programs",
+    ],
+    relatedSlugs: ["international-womens-day", "pi-day", "world-teachers-day"],
+  },
+  // ─── MARCH ────────────────────────────────────────────────────────────────
+  {
+    slug: "world-sleep-day",
+    name: "World Sleep Day",
+    month: 3,
+    day: 15,
+    category: "health",
+    emoji: "brain",
+    tagline: "Good sleep is a pillar of health as vital as diet and exercise.",
+    about:
+      "World Sleep Day is held annually in mid-March, organised by the World Sleep Society, to celebrate the benefits of healthy sleep and draw attention to sleep disorders. Sleep problems affect up to 45% of the world's population and have serious public health, safety, and economic consequences. The day promotes actionable messages for improving sleep quality.",
+    history:
+      "World Sleep Day has been organised by the World Sleep Society since 2008, falling on the Friday before the spring equinox in the northern hemisphere. Recognition of sleep as a core health behaviour has grown significantly alongside research linking poor sleep to cardiovascular disease, diabetes, and mental illness.",
+    countries: ["Global — World Sleep Society initiative"],
+    activities: [
+      "Commit to a consistent sleep and wake time for one week",
+      "Avoid screens for 30 minutes before bed tonight",
+      "Learn the recommended sleep durations for your age group",
+      "Evaluate your bedroom for light, noise, and temperature improvements",
+    ],
+    relatedSlugs: ["world-mental-health-day", "world-health-day", "international-yoga-day"],
+  },
+  {
+    slug: "world-down-syndrome-day",
+    name: "World Down Syndrome Day",
+    month: 3,
+    day: 21,
+    category: "health",
+    emoji: "heart-hands",
+    tagline: "Inclusion, opportunity, and dignity for every person with Down syndrome.",
+    about:
+      "World Down Syndrome Day is observed on March 21 (21/3) — the date representing the triplication (trisomy) of chromosome 21 that causes Down syndrome. The day promotes public awareness and advocacy for the rights, inclusion, and well-being of people with Down syndrome. A signature activity is Lots of Socks, encouraging people to wear colourful, mismatched socks to celebrate uniqueness.",
+    history:
+      "World Down Syndrome Day was first observed in 2006, initiated by Down Syndrome International. The United Nations General Assembly officially recognised March 21 as World Down Syndrome Day in 2012, calling on member states to affirm the right of people with Down syndrome to participate fully in society.",
+    countries: ["Global — United Nations initiative"],
+    activities: [
+      "Wear colourful, mismatched socks to raise awareness (#LotsOfSocks)",
+      "Share stories of people with Down syndrome living full, independent lives",
+      "Support a Down syndrome advocacy organisation",
+      "Learn about inclusive education policies in your region",
+    ],
+    relatedSlugs: ["world-autism-awareness-day", "human-rights-day", "world-health-day"],
+  },
+  {
+    slug: "world-meteorological-day",
+    name: "World Meteorological Day",
+    month: 3,
+    day: 23,
+    category: "science",
+    emoji: "globe",
+    tagline: "Understanding weather and climate to protect lives and livelihoods.",
+    about:
+      "World Meteorological Day is observed on March 23 each year to mark the entry into force of the World Meteorological Organization (WMO) Convention in 1950. The day celebrates the essential contribution meteorological and hydrological services make to public safety, food security, fresh water supply, transport, energy production, and climate adaptation.",
+    history:
+      "The World Meteorological Organization was established as a UN specialised agency on March 23, 1950. Since 1961, March 23 has been commemorated as World Meteorological Day. Themes have ranged from 'Weather, Climate, and Water in the Digital Age' to 'Early Warning and Early Action,' reflecting the growing importance of climate science in a warming world.",
+    countries: ["Global — World Meteorological Organization initiative"],
+    activities: [
+      "Learn how weather forecasts are created and how accurate they are",
+      "Explore climate data for your region over the past century",
+      "Discuss the difference between weather and climate with a child",
+      "Support early-warning systems for extreme weather events",
+    ],
+    relatedSlugs: ["earth-day", "world-environment-day", "world-water-day"],
+  },
+  // ─── APRIL ────────────────────────────────────────────────────────────────
+  {
+    slug: "yuris-night",
+    name: "Yuri's Night",
+    month: 4,
+    day: 12,
+    category: "science",
+    emoji: "globe",
+    tagline: "April 12, 1961 — the day humanity first reached the stars.",
+    about:
+      "Yuri's Night is an international celebration held on April 12 each year to mark two historic milestones in space exploration: the first human spaceflight by Soviet cosmonaut Yuri Gagarin on April 12, 1961, and the first launch of NASA's Space Shuttle on April 12, 1981. The global event connects space enthusiasts, scientists, educators, and dreamers through hundreds of parties and public events worldwide.",
+    history:
+      "Yuri Gagarin completed a single orbit of Earth aboard Vostok 1 on April 12, 1961, spending 108 minutes in space. The date was declared International Human Space Flight Day by the United Nations in 2011. Yuri's Night as a formal global celebration was founded in 2001, growing into a movement in over 75 countries.",
+    countries: ["Global — Yuri's Night World Space Party"],
+    activities: [
+      "Watch a documentary about Yuri Gagarin or early space exploration",
+      "Stargaze and identify planets visible from your location tonight",
+      "Attend a local planetarium show or space museum event",
+      "Explore NASA or ESA imagery from current space station missions",
+    ],
+    relatedSlugs: ["international-asteroid-day", "pi-day", "world-meteorological-day"],
+  },
+  {
+    slug: "international-jazz-day",
+    name: "International Jazz Day",
+    month: 4,
+    day: 30,
+    category: "music",
+    emoji: "music",
+    tagline: "Jazz — the universal language of freedom, creativity, and dialogue.",
+    about:
+      "International Jazz Day is celebrated on April 30 each year under the auspices of UNESCO and its Goodwill Ambassador, pianist and composer Herbie Hancock. The day highlights jazz as a universal language of freedom, creativity, and cross-cultural dialogue — a music born from the African-American experience in New Orleans in the late 19th century that has since spread to every corner of the globe, absorbing local influences and generating new styles along the way, from bebop and cool jazz to fusion, Latin jazz, and Afrobeat crossovers. Jazz improvisation — the art of spontaneous musical conversation — serves as the day's central metaphor: a model for how different voices can listen to each other, respond in real time, and create something entirely new together. Each year, a different city hosts the All-Star Global Concert, bringing together legendary and emerging jazz artists from multiple continents for a free performance broadcast to audiences worldwide. In 2026, events in over 190 countries will include club performances, school workshops, radio marathons, and free outdoor concerts dedicated to jazz history and innovation. Whether you prefer classic Miles Davis, contemporary jazz fusion, or the jazz-influenced sounds now emerging from Seoul and Tokyo, April 30 is an invitation to let spontaneity and creativity into your day.",
+    history:
+      "International Jazz Day was proclaimed by UNESCO in November 2011 and first celebrated on April 30, 2012. UNESCO Director-General Irina Bokova and jazz pianist Herbie Hancock were instrumental in its establishment. Each year a different city serves as the global host, and the All-Star Global Concert features legendary and emerging artists performing together.",
+    countries: ["Global — UNESCO initiative, with events in over 190 countries"],
+    culturalContext: {
+      US: "Jazz was born in New Orleans and has deep roots in African-American history. The US marks the day with concerts across legendary jazz venues in New York, Chicago, and New Orleans.",
+      JP: "Japan has one of the world's most dedicated jazz fan bases outside the US. Tokyo and Osaka boast hundreds of jazz bars, and the country hosts major jazz festivals year-round.",
+    },
+    activities: [
+      "Attend a live jazz performance or listen to a classic album",
+      "Learn about the origins of jazz in New Orleans",
+      "Explore different jazz sub-genres — bebop, cool jazz, fusion",
+      "Introduce a child to jazz through playful improv activities",
+    ],
+    relatedSlugs: ["world-music-day", "world-theatre-day", "world-book-day"],
+  },
+  // ─── MAY ──────────────────────────────────────────────────────────────────
+  {
+    slug: "world-migratory-bird-day",
+    name: "World Migratory Bird Day",
+    month: 5,
+    day: 10,
+    category: "environment",
+    emoji: "seedling",
+    tagline: "Birds have no borders — protecting them requires global cooperation.",
+    about:
+      "World Migratory Bird Day is observed twice each year — on the second Saturday of May and October — to raise awareness about migratory birds and the need for international cooperation to conserve them. Billions of birds migrate across continents annually, relying on stopover sites threatened by habitat loss, climate change, and light pollution.",
+    history:
+      "World Migratory Bird Day was launched in 2006 by the United Nations Environment Programme's treaties on migratory birds — the Convention on Migratory Species and the African-Eurasian Migratory Waterbird Agreement. It has grown into a major global event engaging birdwatchers, conservationists, and schools across flyway nations.",
+    countries: ["Global — UNEP initiative"],
+    activities: [
+      "Go birdwatching at a local park, wetland, or coastal area",
+      "Set up a bird feeder or nest box in your garden",
+      "Learn to identify five migratory birds that pass through your region",
+      "Turn off unnecessary lights at night during peak migration seasons",
+    ],
+    relatedSlugs: ["world-wildlife-day", "earth-day", "world-environment-day"],
+  },
+  {
+    slug: "international-day-of-light",
+    name: "International Day of Light",
+    month: 5,
+    day: 16,
+    category: "science",
+    emoji: "sparkles",
+    tagline: "Light science and technology illuminating our future.",
+    about:
+      "The International Day of Light is celebrated on May 16 — the anniversary of the first successful operation of the laser in 1960 by physicist Theodore Maiman. The day recognises the role light plays in science, culture, art, education, and sustainable development — from fibre optic communications and solar energy to medical imaging and astronomical observation.",
+    history:
+      "UNESCO proclaimed May 16 as the International Day of Light in 2017, building on the success of the International Year of Light in 2015. The laser anniversary was chosen to reflect both the scientific history of light and its transformative applications. Events worldwide include light art installations, open days at photonics labs, and science outreach in schools.",
+    countries: ["Global — UNESCO initiative"],
+    activities: [
+      "Learn how lasers work and how they are used in everyday life",
+      "Explore how light-based technologies power the internet and medicine",
+      "Experiment with prisms, rainbows, or simple diffraction gratings at home",
+      "Visit a science museum with optics or photonics exhibits",
+    ],
+    relatedSlugs: ["pi-day", "yuris-night", "world-meteorological-day"],
+  },
+  {
+    slug: "international-museum-day",
+    name: "International Museum Day",
+    month: 5,
+    day: 18,
+    category: "culture",
+    emoji: "book",
+    tagline: "Museums are important means of cultural exchange and mutual understanding.",
+    about:
+      "International Museum Day is celebrated on or around May 18 each year to raise awareness of the role museums play as important means of cultural exchange, enrichment, and development of mutual understanding. Hundreds of museums worldwide open their doors for free or host special events on this day.",
+    history:
+      "International Museum Day was established by the International Council of Museums (ICOM) in 1977 and is now observed in over 150 countries. A new theme is chosen each year — from 'Museums for Equality' to 'Museums, Sustainability and Well-being' — reflecting evolving debates about the role of museums in contemporary society.",
+    countries: ["Global — ICOM initiative, over 150 countries"],
+    activities: [
+      "Visit a local museum you have never been to before",
+      "Explore a virtual museum tour online",
+      "Learn about an artefact or collection related to your heritage",
+      "Support your local museum with a membership or donation",
+    ],
+    relatedSlugs: ["world-book-day", "world-theatre-day", "world-art-day"],
+  },
+  // ─── JUNE ─────────────────────────────────────────────────────────────────
+  {
+    slug: "world-bicycle-day",
+    name: "World Bicycle Day",
+    month: 6,
+    day: 3,
+    category: "health",
+    emoji: "seedling",
+    tagline: "The bicycle — simple, affordable, and transformative for health and the planet.",
+    about:
+      "World Bicycle Day is observed on June 3 each year to celebrate the uniqueness, longevity, and versatility of the bicycle as a simple, affordable, reliable, and environmentally friendly means of transport. Cycling promotes physical health, reduces carbon emissions, eases traffic congestion, and expands access to education and employment — particularly in low-income countries.",
+    history:
+      "World Bicycle Day was proclaimed by the United Nations General Assembly on April 12, 2018, following a campaign led by Professor Leszek Sibilski and supported by 56 countries. The resolution recognised the bicycle as a symbol of sustainable development and a tool for education, health, and peace.",
+    countries: ["Global — United Nations initiative"],
+    activities: [
+      "Ride your bicycle instead of driving for at least one trip today",
+      "Plan a cycling route to work, school, or a local destination",
+      "Donate a bicycle to a community or charity programme",
+      "Advocate for better cycling infrastructure in your city",
+    ],
+    relatedSlugs: ["earth-day", "world-health-day", "international-yoga-day"],
+  },
+  {
+    slug: "international-asteroid-day",
+    name: "International Asteroid Day",
+    month: 6,
+    day: 30,
+    category: "science",
+    emoji: "globe",
+    tagline: "Understanding asteroids protects Earth and opens the solar system.",
+    about:
+      "International Asteroid Day is observed on June 30 each year to raise awareness about asteroids — their role in our solar system, the resources they may contain, and the global effort to detect and deflect any that pose a threat to Earth. Planetary defence is a serious, growing scientific field.",
+    history:
+      "June 30 marks the anniversary of the Tunguska event of 1908, when an asteroid exploded over Siberia with the energy of 1,000 Hiroshima bombs. International Asteroid Day was co-founded by physicist Brian May, astronaut Rusty Schweickart, and the B612 Foundation, and was declared by the United Nations in 2016.",
+    countries: ["Global — United Nations initiative"],
+    activities: [
+      "Watch a documentary about the Tunguska event or planetary defence",
+      "Explore NASA's asteroid tracker to see near-Earth objects",
+      "Learn about the DART mission — humanity's first planetary defence test",
+      "Use a telescope app to spot asteroids in the night sky",
+    ],
+    relatedSlugs: ["yuris-night", "pi-day", "world-meteorological-day"],
+  },
+  // ─── AUGUST ───────────────────────────────────────────────────────────────
+  {
+    slug: "international-indigenous-peoples-day",
+    name: "International Day of the World's Indigenous Peoples",
+    month: 8,
+    day: 9,
+    category: "humanitarian",
+    emoji: "globe",
+    tagline: "Honouring the diversity, cultures, and rights of indigenous peoples worldwide.",
+    about:
+      "The International Day of the World's Indigenous Peoples is observed on August 9 each year to recognise and protect the rights of the world's estimated 476 million indigenous people across 90 countries. Indigenous communities are custodians of much of the Earth's remaining biodiversity and are at the forefront of climate impacts, while often facing discrimination, dispossession, and denial of basic rights.",
+    history:
+      "The date marks the day in 1982 when the UN's Working Group on Indigenous Populations held its first meeting. The General Assembly first proclaimed the day in December 1994. The UN Permanent Forum on Indigenous Issues coordinates the day, choosing an annual theme addressing treaty rights, language preservation, land rights, or other pressing issues.",
+    countries: ["Global — United Nations initiative"],
+    activities: [
+      "Learn about the indigenous peoples whose land you live on",
+      "Support indigenous-led organisations and businesses",
+      "Read literature or listen to music by indigenous artists",
+      "Advocate for indigenous language preservation in education",
+    ],
+    relatedSlugs: ["human-rights-day", "international-day-of-peace", "world-wildlife-day"],
+  },
+  {
+    slug: "world-humanitarian-day",
+    name: "World Humanitarian Day",
+    month: 8,
+    day: 19,
+    category: "humanitarian",
+    emoji: "heart-hands",
+    tagline: "For the people who dedicate their lives to helping others in crisis.",
+    about:
+      "World Humanitarian Day is observed on August 19 each year to honour aid workers who risk their lives in humanitarian service and to galvanise support for people affected by crises worldwide. The #WorldHumanitarianDay campaign mobilises millions in solidarity with those who suffer through conflict, disaster, and extreme poverty.",
+    history:
+      "The date commemorates the August 19, 2003 bombing of the United Nations headquarters in Baghdad, which killed 22 people including Sergio Vieira de Mello, the UN High Commissioner for Human Rights. The United Nations General Assembly designated August 19 as World Humanitarian Day in 2008.",
+    countries: ["Global — United Nations initiative"],
+    activities: [
+      "Donate to a humanitarian organisation responding to an active crisis",
+      "Learn about the humanitarian principles: humanity, neutrality, impartiality, and independence",
+      "Amplify the stories of aid workers and affected communities",
+      "Volunteer with a local disaster preparedness or response organisation",
+    ],
+    relatedSlugs: ["world-refugee-day", "human-rights-day", "world-food-day"],
+  },
+  // ─── SEPTEMBER ────────────────────────────────────────────────────────────
+  {
+    slug: "international-charity-day",
+    name: "International Day of Charity",
+    month: 9,
+    day: 5,
+    category: "humanitarian",
+    emoji: "heart-hands",
+    tagline: "Charity connects us — a small act can change a life.",
+    about:
+      "The International Day of Charity is observed on September 5 — the anniversary of the death of Mother Teresa, who received the Nobel Peace Prize in 1979 for her charitable work. The day aims to sensitise and mobilise people, NGOs, and stakeholders worldwide to help others through volunteer and philanthropic activities.",
+    history:
+      "The International Day of Charity was established by the United Nations General Assembly in 2012, at the proposal of Hungary. September 5 was chosen to commemorate Mother Teresa of Calcutta, who dedicated her life to alleviating suffering among the poorest of the poor. The day aligns with the UN's Sustainable Development Goals on poverty and reduced inequalities.",
+    countries: ["Global — United Nations initiative"],
+    activities: [
+      "Make a donation to a cause you care about, however small",
+      "Volunteer time for a local charitable organisation",
+      "Organise a charity drive at your school or workplace",
+      "Learn about effective giving and evidence-based charities",
+    ],
+    relatedSlugs: ["world-kindness-day", "world-food-day", "international-volunteer-day"],
+  },
+  {
+    slug: "world-ozone-day",
+    name: "World Ozone Day",
+    month: 9,
+    day: 16,
+    category: "environment",
+    emoji: "globe",
+    tagline: "The ozone layer is healing — proof that global action works.",
+    about:
+      "World Ozone Day, officially the International Day for the Preservation of the Ozone Layer, is observed on September 16 each year. The ozone layer absorbs most of the Sun's ultraviolet radiation, protecting life on Earth. The recovery of the ozone layer is widely regarded as one of the greatest environmental success stories of the 20th century.",
+    history:
+      "September 16 marks the date in 1987 when the Montreal Protocol on Substances that Deplete the Ozone Layer was signed. The UN General Assembly designated the day in 1994. The Montreal Protocol has been ratified by all 197 UN member states — the only UN treaty to achieve universal ratification — and is credited with preventing millions of skin cancer cases.",
+    countries: ["Global — United Nations Environment Programme initiative"],
+    activities: [
+      "Learn what the ozone layer is and why it matters for life on Earth",
+      "Dispose of old refrigerants and air conditioners through certified recyclers",
+      "Check that aerosol products you use are CFC-free",
+      "Share the Montreal Protocol success story as a model for climate action",
+    ],
+    relatedSlugs: ["earth-day", "world-environment-day", "world-meteorological-day"],
+  },
+  {
+    slug: "world-alzheimers-day",
+    name: "World Alzheimer's Day",
+    month: 9,
+    day: 21,
+    category: "health",
+    emoji: "brain",
+    tagline: "Raising awareness and ending the stigma of dementia worldwide.",
+    about:
+      "World Alzheimer's Day is observed on September 21 each year as part of World Alzheimer's Month. Over 55 million people worldwide live with dementia — a number projected to nearly triple by 2050. The day raises awareness, challenges stigma, and advocates for better diagnosis, support, and research.",
+    history:
+      "World Alzheimer's Day was launched in 1994 by Alzheimer's Disease International (ADI). The entire month of September was designated World Alzheimer's Month in 2012. Alzheimer's disease was first described by German psychiatrist Alois Alzheimer in 1906 and remains without a cure, making advocacy and research funding critically important.",
+    countries: ["Global — Alzheimer's Disease International initiative"],
+    culturalContext: {
+      KR: "South Korea has one of the world's fastest-ageing populations. Dementia is a national healthcare priority, with the government funding a network of dementia care centres (치매안심센터) in every district.",
+      JP: "Japan leads the world in life expectancy and has more than 6 million people living with dementia. The government's 'New Orange Plan' funds community-based support networks and dementia cafés.",
+    },
+    activities: [
+      "Learn the early signs of Alzheimer's disease and dementia",
+      "Check in on a friend or family member living with dementia",
+      "Volunteer with a dementia support organisation or care home",
+      "Donate to Alzheimer's research through a credible charity",
+    ],
+    relatedSlugs: ["world-mental-health-day", "world-health-day", "world-kindness-day"],
+  },
+  // ─── DECEMBER ─────────────────────────────────────────────────────────────
+  {
+    slug: "international-volunteer-day",
+    name: "International Volunteer Day",
+    month: 12,
+    day: 5,
+    category: "humanitarian",
+    emoji: "handshake",
+    tagline: "Volunteers make the world work — celebrate, recognise, and inspire.",
+    about:
+      "International Volunteer Day is observed on December 5 each year to celebrate and recognise volunteers and volunteering around the world. Volunteers are the backbone of civil society — from disaster relief and environmental clean-ups to tutoring, hospital visits, and community building. The day encourages governments to recognise volunteering as a driver of sustainable development.",
+    history:
+      "International Volunteer Day was established by the United Nations General Assembly in 1985. The United Nations Volunteers (UNV) programme coordinates the day and connects skilled volunteers with organisations worldwide. Each year a theme focuses on a dimension of volunteerism — from solidarity and inclusion to volunteering in crises.",
+    countries: ["Global — United Nations initiative"],
+    activities: [
+      "Volunteer a few hours with a local organisation today",
+      "Recognise and thank volunteers in your community",
+      "Sign up for a long-term volunteer role with a cause you care about",
+      "Encourage your employer to offer paid volunteering days",
+    ],
+    relatedSlugs: ["world-kindness-day", "world-humanitarian-day", "international-charity-day"],
+  },
+  {
+    slug: "winter-solstice",
+    name: "Winter Solstice",
+    month: 12,
+    day: 21,
+    category: "culture",
+    emoji: "globe",
+    tagline: "The longest night — and the turning point toward the light.",
+    about:
+      "The Winter Solstice occurs around December 21 in the northern hemisphere — the shortest day and longest night of the year. It marks the astronomical beginning of winter and has been celebrated by cultures worldwide for thousands of years. From Stonehenge to Dongzhi, countless traditions mark the return of the sun and the triumph of light over darkness.",
+    history:
+      "The Winter Solstice has been observed since prehistoric times. At Stonehenge, the monument aligns with the midwinter sunset. In ancient Rome, Saturnalia was celebrated around the solstice. In Scandinavia, Yule was a festival of fire, feasting, and evergreen plants. Many modern pagan and cultural traditions continue to celebrate the solstice as a moment of renewal.",
+    countries: ["Global — observed across many cultural and spiritual traditions"],
+    culturalContext: {
+      KR: "In Korea, Dongji (동지) falls on or near the winter solstice and is marked by eating red bean porridge (팥죽) to ward off evil spirits and bring good fortune for the year ahead.",
+      JP: "Japan observes Tōji (冬至) with the tradition of bathing in yuzu-citrus water (yuzu-yu) to stay healthy through winter, and eating kabocha squash to ensure good fortune.",
+    },
+    activities: [
+      "Light candles or a fire to symbolise the return of light",
+      "Spend time with loved ones around a warm meal",
+      "Learn about winter solstice traditions from different cultures",
+      "Go stargazing on the longest night of the year",
+    ],
+    relatedSlugs: ["new-years-day", "christmas-day", "world-kindness-day"],
+  },
+  {
+    slug: "international-day-of-epidemic-preparedness",
+    name: "International Day of Epidemic Preparedness",
+    month: 12,
+    day: 27,
+    category: "health",
+    emoji: "medical",
+    tagline: "The next pandemic can be prevented — if we are prepared.",
+    about:
+      "The International Day of Epidemic Preparedness is observed on December 27 each year to raise awareness about the importance of prevention, preparedness, and response capabilities needed to reduce the impact of epidemics and pandemics. Following the devastating experience of COVID-19, the day carries renewed urgency — highlighting the need for robust surveillance, equitable vaccine access, and international health cooperation.",
+    history:
+      "The International Day of Epidemic Preparedness was established by the United Nations General Assembly on December 7, 2020. December 27 was chosen to mark the day in 2019 when Chinese health authorities first reported a cluster of pneumonia cases in Wuhan — the beginning of what became the COVID-19 pandemic. The day reinforces the WHO's International Health Regulations.",
+    countries: ["Global — United Nations initiative"],
+    activities: [
+      "Learn how your country's public health surveillance system works",
+      "Stay up to date on recommended vaccinations",
+      "Support global health equity — equal access to vaccines and medical supplies",
+      "Read about COVID-19 lessons and how they shape future pandemic preparedness",
+    ],
+    relatedSlugs: ["world-health-day", "world-aids-day", "international-nurses-day"],
   },
 ];

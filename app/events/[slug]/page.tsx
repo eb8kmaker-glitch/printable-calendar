@@ -10,8 +10,12 @@ import {
 } from "@/lib/events";
 import { SUPPORTED_COUNTRIES } from "@/lib/types";
 import { buildFaqSchema } from "@/lib/seo-helpers";
+import { getLocale } from "@/i18n/server";
+import { getTranslations, t } from "@/i18n";
+import { getEventName } from "@/lib/events-translations";
+import { getLocalizedEvent } from "@/lib/events-i18n";
 
-const BASE_URL = "https://printablecalendars.io";
+const BASE_URL = "https://printablecalendars.app";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -62,8 +66,14 @@ const COUNTRY_LABEL: Record<string, string> = {
 
 export default async function EventDetailPage({ params }: PageProps) {
   const { slug } = await params;
-  const event = getEventBySlug(slug);
-  if (!event) notFound();
+  const baseEvent = getEventBySlug(slug);
+  if (!baseEvent) notFound();
+
+  const locale = await getLocale();
+  const event = await getLocalizedEvent(baseEvent, locale);
+  const i18n = getTranslations(locale);
+  const ed = i18n.eventDetail as Record<string, string>;
+  const displayName = getEventName(slug, locale, event.name);
 
   const related = getRelatedEvents(event);
   const currentYear = new Date().getFullYear();
@@ -214,7 +224,7 @@ export default async function EventDetailPage({ params }: PageProps) {
               marginBottom: 20,
             }}
           >
-            {event.name}
+            {displayName}
           </h1>
           <p
             style={{
@@ -239,7 +249,7 @@ export default async function EventDetailPage({ params }: PageProps) {
 
         {/* About */}
         <section style={{ marginBottom: 48 }}>
-          <SectionLabel>About</SectionLabel>
+          <SectionLabel>{ed.about}</SectionLabel>
           <p style={{ fontSize: 15, lineHeight: 1.85, color: "var(--fg)" }}>
             {event.about}
           </p>
@@ -247,7 +257,7 @@ export default async function EventDetailPage({ params }: PageProps) {
 
         {/* History */}
         <section style={{ marginBottom: 48 }}>
-          <SectionLabel>History</SectionLabel>
+          <SectionLabel>{ed.history}</SectionLabel>
           <p style={{ fontSize: 15, lineHeight: 1.85, color: "var(--fg)" }}>
             {event.history}
           </p>
@@ -255,7 +265,7 @@ export default async function EventDetailPage({ params }: PageProps) {
 
         {/* Where observed */}
         <section style={{ marginBottom: 48 }}>
-          <SectionLabel>Where It&apos;s Observed</SectionLabel>
+          <SectionLabel>{ed.whereObserved}</SectionLabel>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
             {event.countries.map((c) => (
               <span
@@ -278,7 +288,7 @@ export default async function EventDetailPage({ params }: PageProps) {
         {/* Cultural context — US / KR / JP */}
         {hasCultural && (
           <section style={{ marginBottom: 48 }}>
-            <SectionLabel>Cultural Context</SectionLabel>
+            <SectionLabel>{ed.culturalContext ?? "CULTURAL CONTEXT"}</SectionLabel>
             <div
               style={{
                 display: "grid",
@@ -324,7 +334,7 @@ export default async function EventDetailPage({ params }: PageProps) {
 
         {/* How to participate */}
         <section style={{ marginBottom: 56 }}>
-          <SectionLabel>How to Participate</SectionLabel>
+          <SectionLabel>{ed.howToParticipate}</SectionLabel>
           <ul
             style={{
               listStyle: "none",
@@ -360,7 +370,7 @@ export default async function EventDetailPage({ params }: PageProps) {
 
         {/* FAQ */}
         <section style={{ marginBottom: 56 }}>
-          <SectionLabel>Frequently asked questions</SectionLabel>
+          <SectionLabel>{ed.faq}</SectionLabel>
           <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
             {faqs.map((faq, i) => (
               <details
@@ -411,7 +421,7 @@ export default async function EventDetailPage({ params }: PageProps) {
             marginBottom: 56,
           }}
         >
-          <SectionLabel>Mark the date</SectionLabel>
+          <SectionLabel>{ed.markTheDate}</SectionLabel>
           <p
             style={{
               fontFamily: "'EB Garamond', Georgia, serif",
@@ -421,8 +431,7 @@ export default async function EventDetailPage({ params }: PageProps) {
               marginBottom: 20,
             }}
           >
-            Download a free printable calendar for {eventYear} and never miss{" "}
-            {event.name}.
+            {t(ed.downloadCta, { year: eventYear, event: displayName })}
           </p>
 
           {/* Per-country calendar + PDF links */}
@@ -474,7 +483,7 @@ export default async function EventDetailPage({ params }: PageProps) {
                         whiteSpace: "nowrap",
                       }}
                     >
-                      View Calendar
+                      {ed.viewCalendar}
                     </Link>
                     <a
                       href={pdfUrl}
@@ -501,7 +510,7 @@ export default async function EventDetailPage({ params }: PageProps) {
         {/* Related Events */}
         {related.length > 0 && (
           <section>
-            <SectionLabel>Related Events</SectionLabel>
+            <SectionLabel>{ed.relatedEvents}</SectionLabel>
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {related.map((r) => (
                 <Link

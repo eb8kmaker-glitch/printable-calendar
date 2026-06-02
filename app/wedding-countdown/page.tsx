@@ -1,12 +1,18 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { SUPPORTED_COUNTRIES, MONTH_NAMES } from "@/lib/types";
 import AdSlot from "@/components/AdSlot";
+import DynamicCalendarList from "@/components/DynamicCalendarList";
+import { buildFaqSchema } from "@/lib/seo-helpers";
+import DayCounter from "@/components/DayCounter";
+import type { DayMilestone } from "@/components/DayCounter";
+import { getLocale } from "@/i18n/server";
+import { getTranslations } from "@/i18n";
 
-const BASE_URL = "https://printablecalendars.io";
+export const dynamic = "force-dynamic";
+const BASE_URL = "https://printablecalendars.app";
 
 export const metadata: Metadata = {
-  title: "Wedding Countdown Printable Calendar — Plan Month by Month",
+  title: "Wedding Countdown Printable Calendar —Plan Month by Month",
   description:
     "Download free printable monthly calendars to count down to your wedding day. Plan vendor meetings, dress fittings, and deadlines month by month. A4 PDF, instant download.",
   keywords: [
@@ -34,70 +40,66 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-// Month-by-month wedding planning milestones
-const PLANNING_MILESTONES: { monthsBefore: number; tasks: string[] }[] = [
+const WEDDING_FAQS = [
   {
-    monthsBefore: 12,
-    tasks: [
-      "Set your date and book your venue",
-      "Agree on a rough guest list and budget",
-      "Research and book key vendors (photographer, caterer)",
-      "Start dress/suit shopping",
-    ],
+    q: "How do I use a wedding countdown calendar printable?",
+    a: "Download one calendar PDF for each month between now and your wedding date. Print them all and store them in a binder, or put the current month on the fridge. Write in vendor calls, fittings, payment deadlines, and family commitments as they come up. A physical calendar is harder to ignore than a phone reminder.",
   },
   {
-    monthsBefore: 9,
-    tasks: [
-      "Send save-the-dates",
-      "Book officiant, florist, and band/DJ",
-      "Begin honeymoon research",
-      "Arrange accommodation for out-of-town guests",
-    ],
+    q: "What should I track on a wedding planning calendar PDF?",
+    a: "Key milestones include: venue and vendor deposit deadlines, dress and suit fitting appointments, RSVP cutoff dates, rehearsal dinner and ceremony rehearsal, final headcount to the caterer, and honeymoon booking deadlines. The planning checklist above shows the typical month-by-month breakdown.",
   },
   {
-    monthsBefore: 6,
-    tasks: [
-      "Send formal invitations",
-      "Finalise catering menu and cake",
-      "Book hair and makeup artists",
-      "Register for gifts",
-    ],
+    q: "How far in advance should I start my wedding countdown calendar?",
+    a: "Most couples start planning 12 to 18 months in advance for weekend weddings at popular venues. If your wedding is in peak season (June, September, October), start even earlier. The download section above shows the next 12 months so you can begin immediately.",
   },
   {
-    monthsBefore: 3,
-    tasks: [
-      "Final dress/suit fittings",
-      "Confirm all vendors and share final timeline",
-      "Write personal vows",
-      "Apply for marriage license",
-    ],
-  },
-  {
-    monthsBefore: 1,
-    tasks: [
-      "Final walkthrough with venue coordinator",
-      "Deliver payments to vendors",
-      "Pack for honeymoon",
-      "Delegate day-of responsibilities to a coordinator or trusted friend",
-    ],
+    q: "Do the wedding countdown calendars include public holidays?",
+    a: "Yes. Every calendar includes the official public holidays for your chosen country (USA, UK, Australia, Canada, Japan, or South Korea). This helps you avoid scheduling meetings or deliveries on bank holidays when vendors may be unavailable.",
   },
 ];
 
-export default function WeddingCountdownPage() {
+const WEDDING_MILESTONES: DayMilestone[] = [
+  { min: 0, max: 0, message: "Today is your wedding day." },
+  { min: 1, max: 6, message: "This is it. You're ready.", tip: "Sleep. Everything is handled." },
+  { min: 7, max: 29, message: "Almost there —delegate, pack, breathe.", tip: "Hand off day-of coordination to someone you trust." },
+  { min: 30, max: 89, message: "Final fittings, payments, and last confirmations.", tip: "Write your vows this week." },
+  { min: 90, max: 179, message: "Send formal invitations and finalise your vendors.", tip: "Confirm headcount with caterer 6 weeks out." },
+  { min: 180, max: 364, message: "Big decisions time —photographer, caterer, dress.", tip: "Send save-the-dates now." },
+  { min: 365, max: 99999, message: "Start early —book your venue and set a date.", tip: "Popular venues book up 18 months out." },
+];
+
+export default async function WeddingCountdownPage() {
+  const locale = await getLocale();
+  const i18n = getTranslations(locale);
+  const p = (i18n as unknown as Record<string, Record<string, string>>).weddingCountdown ?? {};
   const now = new Date();
   const year = now.getFullYear();
   const currentMonth = now.getMonth() + 1;
+  const faqSchema = buildFaqSchema(WEDDING_FAQS.map((f) => ({ q: f.q, a: f.a })));
 
-  // Show the next 12 months for planning
-  const countdownMonths = Array.from({ length: 12 }, (_, i) => {
-    const totalMonth = currentMonth + i;
-    const m = ((totalMonth - 1) % 12) + 1;
-    const y = year + Math.floor((totalMonth - 1) / 12);
-    return { month: m, year: y, name: MONTH_NAMES[m - 1] };
-  });
+  const HOW_TO_USE_I18N = [
+    [p.step1Title ?? "Print one month at a time", p.step1Body ?? "Start with the current month. Fill in venue visits, tastings, and fittings as you go."],
+    [p.step2Title ?? "Write deadlines in red", p.step2Body ?? "Payments, RSVPs, and booking cut-offs are easy to miss — highlight them on the printed sheet."],
+    [p.step3Title ?? "Post it somewhere visible", p.step3Body ?? "Stick the current month to your fridge or office wall. Out of sight is out of mind."],
+    [p.step4Title ?? "Share with your partner", p.step4Body ?? "Print two copies — one for each partner — so both are tracking the same milestones."],
+  ];
+
+  // Month-by-month wedding planning milestones (with i18n)
+  const PLANNING_MILESTONES_I18N = [
+    { label: p.mile1Label ?? "12 months before", body: p.mile1Body ?? "Set the date, choose a venue, and book your photographer." },
+    { label: p.mile2Label ?? "6 months before", body: p.mile2Body ?? "Send save-the-dates, book caterer and officiant, start dress/suit shopping." },
+    { label: p.mile3Label ?? "4 months before", body: p.mile3Body ?? "Send formal invitations, book honeymoon, arrange accommodation for guests." },
+    { label: p.mile4Label ?? "3 months before", body: p.mile4Body ?? "Finalise menu, confirm vendors, schedule hair and makeup trials." },
+    { label: p.mile5Label ?? "1 month before", body: p.mile5Body ?? "Confirm all vendors, do final dress fitting, prepare seating plan." },
+  ];
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "64px 24px" }}>
         <AdSlot slot="top-banner" style={{ marginBottom: 32 }} />
 
@@ -113,7 +115,7 @@ export default function WeddingCountdownPage() {
               marginBottom: 12,
             }}
           >
-            Wedding Planning
+            {p.eyebrow ?? "Wedding Planning"}
           </p>
           <h1
             style={{
@@ -125,16 +127,12 @@ export default function WeddingCountdownPage() {
               marginBottom: 20,
             }}
           >
-            Wedding countdown
+            {p.title ?? "Wedding countdown"}
             <br />
-            <span style={{ opacity: 0.4 }}>month by month.</span>
+            <span style={{ opacity: 0.4 }}>{p.subtitle ?? "month by month."}</span>
           </h1>
           <p style={{ fontSize: 15, color: "var(--muted)", lineHeight: 1.65, marginBottom: 28 }}>
-            Download a free printable monthly calendar for each month leading
-            up to your wedding day. Write in vendor meetings, dress fittings,
-            deadline reminders, and family events. Includes public holidays so
-            you never accidentally schedule a meeting on a day everything
-            is closed.
+            {p.description ?? "Count down to your wedding day month by month — with free printable calendars to track every milestone, deadline, and detail."}
           </p>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
             <Link
@@ -152,8 +150,7 @@ export default function WeddingCountdownPage() {
                 fontWeight: 500,
               }}
             >
-              Start this month →
-            </Link>
+              {p.viewThisMonth ?? "Start this month →"}</Link>
             <a
               href={`/api/pdf?country=us&year=${year}&month=${currentMonth}&size=A4&orientation=landscape&theme=light`}
               download={`wedding-countdown-us-${year}-${String(currentMonth).padStart(2, "0")}.pdf`}
@@ -169,10 +166,16 @@ export default function WeddingCountdownPage() {
                 fontSize: 14,
               }}
             >
-              Download PDF
+              {p.downloadPdf ?? "Download PDF"}
             </a>
           </div>
         </div>
+
+        <DayCounter
+          targetLabel={p.countdownLabel ?? "Wedding Day"}
+          storageKey="wedding-date"
+          milestones={WEDDING_MILESTONES}
+        />
 
         {/* How to use */}
         <section
@@ -193,7 +196,7 @@ export default function WeddingCountdownPage() {
               marginBottom: 16,
             }}
           >
-            How to use a printed countdown calendar
+            {p.howToUseSection ?? p.howToUse ?? "How to use a printed countdown calendar"}
           </h2>
           <div
             style={{
@@ -202,12 +205,7 @@ export default function WeddingCountdownPage() {
               gap: 20,
             }}
           >
-            {[
-              ["Print one month at a time", "Download the calendar for each upcoming month. Write in vendor calls, tastings, and fittings as they are booked."],
-              ["Write deadlines in red", "Mark payment deadlines, RSVP cutoffs, and contract signing dates in a contrasting colour so they are impossible to miss."],
-              ["Post it somewhere visible", "Pin the current month on the fridge or bathroom mirror — not buried in a planner. Daily visibility is the point."],
-              ["Share with your partner", "Print two copies — one for each of you. Independently reviewing the same month catches missed items before they become problems."],
-            ].map(([title, desc]) => (
+            {HOW_TO_USE_I18N.map(([title, desc]) => (
               <div key={title}>
                 <p style={{ fontSize: 14, fontWeight: 500, marginBottom: 6 }}>{title}</p>
                 <p style={{ fontSize: 13, color: "var(--muted)", lineHeight: 1.65 }}>{desc}</p>
@@ -227,10 +225,10 @@ export default function WeddingCountdownPage() {
               marginBottom: 28,
             }}
           >
-            What to plan each month
+            {p.planningTitle ?? "What to plan each month"}
           </h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-            {PLANNING_MILESTONES.map((milestone, i) => (
+            {PLANNING_MILESTONES_I18N.map((milestone, i) => (
               <div
                 key={i}
                 style={{
@@ -239,7 +237,7 @@ export default function WeddingCountdownPage() {
                   gap: 24,
                   paddingBottom: 28,
                   marginBottom: 28,
-                  borderBottom: i < PLANNING_MILESTONES.length - 1 ? "1px solid var(--border)" : "none",
+                  borderBottom: i < PLANNING_MILESTONES_I18N.length - 1 ? "1px solid var(--border)" : "none",
                 }}
               >
                 <div>
@@ -251,134 +249,51 @@ export default function WeddingCountdownPage() {
                       letterSpacing: "0.04em",
                     }}
                   >
-                    {milestone.monthsBefore === 1
-                      ? "1 month before"
-                      : `${milestone.monthsBefore} months before`}
+                    {milestone.label}
                   </p>
                 </div>
-                <ul
-                  style={{
-                    listStyle: "none",
-                    padding: 0,
-                    margin: 0,
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 8,
-                  }}
-                >
-                  {milestone.tasks.map((task, j) => (
-                    <li
-                      key={j}
-                      style={{
-                        display: "flex",
-                        gap: 10,
-                        alignItems: "flex-start",
-                        fontSize: 14,
-                        lineHeight: 1.55,
-                      }}
-                    >
-                      <span
-                        style={{
-                          fontFamily: "'DM Mono', monospace",
-                          fontSize: 10,
-                          color: "var(--muted)",
-                          paddingTop: 3,
-                          flexShrink: 0,
-                        }}
-                      >
-                        ○
-                      </span>
-                      {task}
-                    </li>
-                  ))}
-                </ul>
+                <p style={{ fontSize: 14, lineHeight: 1.55 }}>{milestone.body}</p>
               </div>
             ))}
           </div>
         </section>
 
-        {/* Calendar downloads */}
-        <section style={{ marginBottom: 56 }}>
-          <h2
-            style={{
-              fontFamily: "'DM Mono', monospace",
-              fontSize: 11,
-              color: "var(--muted)",
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              marginBottom: 24,
-            }}
-          >
-            Download your countdown months
-          </h2>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
-              gap: 12,
-            }}
-          >
-            {countdownMonths.map(({ month: m, year: y, name }, i) => (
-              <div
-                key={`${y}-${m}`}
-                style={{
-                  border: "1px solid var(--border)",
-                  borderRadius: 8,
-                  padding: "14px 16px",
-                }}
-              >
-                <div style={{ marginBottom: 10 }}>
-                  <p style={{ fontSize: 14, fontWeight: 500 }}>{name} {y}</p>
-                  <p
-                    style={{
-                      fontFamily: "'DM Mono', monospace",
-                      fontSize: 10,
-                      color: "var(--muted)",
-                      marginTop: 2,
-                    }}
-                  >
-                    {i === 0 ? "This month" : `${i + 1} months from now`}
-                  </p>
-                </div>
-                <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-                  {SUPPORTED_COUNTRIES.map((c) => (
-                    <div key={c.code} style={{ display: "flex", gap: 4 }}>
-                      <Link
-                        href={`/calendar/${c.code.toLowerCase()}/${y}/${m}`}
-                        style={{
-                          fontSize: 11,
-                          padding: "4px 10px",
-                          border: "1px solid var(--border)",
-                          borderRadius: 5,
-                          textDecoration: "none",
-                          color: "var(--fg)",
-                        }}
-                      >
-                        {c.code}
-                      </Link>
-                      <a
-                        href={`/api/pdf?country=${c.code.toLowerCase()}&year=${y}&month=${m}&size=A4&orientation=landscape&theme=light`}
-                        download={`wedding-countdown-${c.code.toLowerCase()}-${y}-${String(m).padStart(2, "0")}.pdf`}
-                        style={{
-                          fontSize: 11,
-                          padding: "4px 10px",
-                          border: "1px solid var(--border)",
-                          borderRadius: 5,
-                          textDecoration: "none",
-                          color: "var(--muted)",
-                        }}
-                      >
-                        PDF
-                      </a>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
+        <DynamicCalendarList
+          storageKey="wedding-date"
+          maxMonths={24}
+          badgeLabel="Wedding month"
+          pdfHeaderText="Wedding Countdown"
+          pdfTargetLabel="Wedding Day"
+          noDateHint={p.downloadHint ?? "Enter your wedding date above to customize this list."}
+        />
 
         <AdSlot slot="pre-download" style={{ marginBottom: 32 }} />
+
+        {/* FAQ */}
+        <section style={{ marginTop: 32, paddingTop: 40, borderTop: "1px solid var(--border)" }}>
+          <h2
+            style={{
+              fontFamily: "'EB Garamond', Georgia, serif",
+              fontSize: 28,
+              fontWeight: 400,
+              letterSpacing: "-0.01em",
+              marginBottom: 32,
+            }}
+          >
+            {p.faqTitle ?? "Frequently asked questions"}
+          </h2>
+          <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+            {WEDDING_FAQS.map((faq, i) => (
+              <div
+                key={i}
+                style={{ borderTop: "1px solid var(--border)", paddingTop: 20, paddingBottom: 20 }}
+              >
+                <p style={{ fontSize: 15, fontWeight: 500, marginBottom: 8 }}>{faq.q}</p>
+                <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.7 }}>{faq.a}</p>
+              </div>
+            ))}
+          </div>
+        </section>
       </div>
     </>
   );

@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import type { Metadata } from "next";
 import {
   WORLD_EVENTS,
@@ -6,13 +6,16 @@ import {
   formatEventDate,
   type EventCategory,
 } from "@/lib/events";
-
-const BASE_URL = "https://printablecalendars.io";
+import { getLocale } from "@/i18n/server";
+import { getTranslations } from "@/i18n";
+import { getLocalizedEvent } from "@/lib/events-i18n";
+import { getEventName } from "@/lib/events-translations";
+const BASE_URL = "https://printablecalendars.app";
 
 export const metadata: Metadata = {
   title: "World Events & International Days",
   description:
-    "Browse international observances and world events — from Earth Day to World Mental Health Day. Explore history, cultural context, activities, and free printable calendars.",
+    "Browse international observances and world events —from Earth Day to World Mental Health Day. Explore history, cultural context, activities, and free printable calendars.",
   alternates: {
     canonical: `${BASE_URL}/events`,
     languages: {
@@ -45,6 +48,9 @@ interface PageProps {
 
 export default async function EventsPage({ searchParams }: PageProps) {
   const { category, q } = await searchParams;
+  const locale = await getLocale();
+  const i18n = getTranslations(locale);
+  const eventsI18n = (i18n as unknown as Record<string, Record<string, string>>).events ?? {};
 
   const activeCategory = CATEGORIES.includes(category as EventCategory)
     ? (category as EventCategory)
@@ -55,7 +61,7 @@ export default async function EventsPage({ searchParams }: PageProps) {
     (a, b) => a.month * 100 + a.day - (b.month * 100 + b.day),
   );
 
-  const events = sorted.filter((e) => {
+  const filtered = sorted.filter((e) => {
     const matchesCategory = !activeCategory || e.category === activeCategory;
     const matchesQuery =
       !query ||
@@ -64,6 +70,7 @@ export default async function EventsPage({ searchParams }: PageProps) {
       CATEGORY_LABELS[e.category].toLowerCase().includes(query);
     return matchesCategory && matchesQuery;
   });
+  const events = await Promise.all(filtered.map((e) => getLocalizedEvent(e, locale)));
 
   const itemListJsonLd = {
     "@context": "https://schema.org",
@@ -101,7 +108,7 @@ export default async function EventsPage({ searchParams }: PageProps) {
               marginBottom: 12,
             }}
           >
-            World Events
+            {eventsI18n.title}
           </p>
           <h1
             style={{
@@ -113,7 +120,7 @@ export default async function EventsPage({ searchParams }: PageProps) {
               marginBottom: 16,
             }}
           >
-            International Days &amp; Observances
+            {eventsI18n.title}
           </h1>
           <p
             style={{
@@ -123,9 +130,7 @@ export default async function EventsPage({ searchParams }: PageProps) {
               maxWidth: 560,
             }}
           >
-            Discover the stories behind the world&apos;s most celebrated
-            international days — their history, global reach, cultural context,
-            and how you can participate.
+            {eventsI18n.description}
           </p>
         </div>
 
@@ -139,7 +144,7 @@ export default async function EventsPage({ searchParams }: PageProps) {
             marginBottom: 32,
           }}
         >
-          {/* Search form — GET, works without JS */}
+          {/* Search form ??GET, works without JS */}
           <form
             method="GET"
             action="/events"
@@ -151,7 +156,7 @@ export default async function EventsPage({ searchParams }: PageProps) {
             <input
               name="q"
               defaultValue={q ?? ""}
-              placeholder="Search events…"
+              placeholder={eventsI18n.searchPlaceholder}
               autoComplete="off"
               style={{
                 height: 36,
@@ -180,7 +185,7 @@ export default async function EventsPage({ searchParams }: PageProps) {
                 fontSize: 13,
               }}
             >
-              Search
+              {eventsI18n.searchPlaceholder?.split("…")[0] ?? "Search"}
             </button>
           </form>
 
@@ -190,7 +195,7 @@ export default async function EventsPage({ searchParams }: PageProps) {
               href={query ? `/events?q=${encodeURIComponent(query)}` : "/events"}
               style={pillStyle(!activeCategory)}
             >
-              All
+              {eventsI18n.filterAll}
             </Link>
             {CATEGORIES.map((cat) => {
               const href = query
@@ -223,7 +228,7 @@ export default async function EventsPage({ searchParams }: PageProps) {
             {events.length} result{events.length !== 1 ? "s" : ""}
             {query ? ` for "${q}"` : ""}
             {activeCategory ? ` in ${CATEGORY_LABELS[activeCategory]}` : ""}
-            {" — "}
+            {" ??"}
             <Link
               href="/events"
               style={{ color: "var(--muted)", textDecoration: "underline" }}
@@ -236,11 +241,7 @@ export default async function EventsPage({ searchParams }: PageProps) {
         {/* Event grid */}
         {events.length === 0 ? (
           <p style={{ fontSize: 14, color: "var(--muted)", paddingTop: 24 }}>
-            No events found. Try a different search or{" "}
-            <Link href="/events" style={{ color: "var(--fg)" }}>
-              browse all
-            </Link>
-            .
+            {eventsI18n.noResults}
           </p>
         ) : (
           <div
@@ -308,7 +309,7 @@ export default async function EventsPage({ searchParams }: PageProps) {
                       lineHeight: 1.2,
                     }}
                   >
-                    {event.name}
+                    {getEventName(event.slug, locale, event.name)}
                   </h2>
 
                   {/* Tagline */}
@@ -327,19 +328,6 @@ export default async function EventsPage({ searchParams }: PageProps) {
                     {event.tagline}
                   </p>
 
-                  {/* Cultural context indicator */}
-                  {event.culturalContext && Object.keys(event.culturalContext).length > 0 && (
-                    <p
-                      style={{
-                        fontSize: 10,
-                        color: "var(--muted)",
-                        fontFamily: "'DM Mono', monospace",
-                        letterSpacing: "0.04em",
-                      }}
-                    >
-                      {Object.keys(event.culturalContext).join(" · ")} context
-                    </p>
-                  )}
                 </div>
               </Link>
             ))}
@@ -363,3 +351,4 @@ function pillStyle(active: boolean): React.CSSProperties {
     whiteSpace: "nowrap",
   };
 }
+
