@@ -2,6 +2,7 @@ import Link from "next/link";
 import { SUPPORTED_COUNTRIES, MONTH_NAMES } from "@/lib/types";
 import { t } from "@/i18n";
 import type { Locale } from "@/i18n";
+import AdFit from "@/components/AdFit";
 
 interface FooterTranslations {
   tagline: string;
@@ -111,6 +112,8 @@ export default function Footer({ locale = 'en', footerI18n, countryNames, monthN
             </div>
           </div>
         </div>
+
+        <AdFit />
 
         <div style={{ borderTop: "1px solid var(--border)", paddingTop: 24, display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 12, color: "var(--muted)", flexWrap: "wrap", gap: 12 }}>
           <span>{t(footer.copyright, { year })}</span>
