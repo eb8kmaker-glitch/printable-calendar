@@ -38,7 +38,7 @@ function AdFitUnit({ unit, width, height }: AdFitUnitProps) {
     <ins
       ref={ref}
       className="kakao_ad_area"
-      style={{ display: "none" }}
+      style={{ display: "block" }}
       data-ad-unit={unit}
       data-ad-width={String(width)}
       data-ad-height={String(height)}
