@@ -124,6 +124,11 @@ export default async function RootLayout({
           crossOrigin="anonymous"
           strategy="afterInteractive"
         />
+        <Script
+          async
+          src="//t1.kakaocdn.net/kas/static/ba.min.js"
+          strategy="afterInteractive"
+        />
         <Analytics />
       </body>
     </html>
