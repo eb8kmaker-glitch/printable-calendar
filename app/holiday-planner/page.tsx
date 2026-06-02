@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import type { Metadata } from "next";
 import { SUPPORTED_COUNTRIES, MONTH_NAMES } from "@/lib/types";
 import { getHolidays } from "@/lib/holidays";
@@ -7,12 +7,14 @@ import DynamicCalendarList from "@/components/DynamicCalendarList";
 import { buildFaqSchema } from "@/lib/seo-helpers";
 import DayCounter from "@/components/DayCounter";
 import type { DayMilestone } from "@/components/DayCounter";
+import { getLocale } from "@/i18n/server";
+import { getTranslations } from "@/i18n";
 
-export const dynamic = "force-static";
+export const dynamic = "force-dynamic";
 const BASE_URL = "https://printablecalendars.app";
 
 export const metadata: Metadata = {
-  title: "Holiday Planner ??Map Your Time Off with Printable Calendars",
+  title: "Holiday Planner —Map Your Time Off with Printable Calendars",
   description:
     "Plan your vacation and time off around public holidays in the USA, Japan, and South Korea. See upcoming holidays month by month and download free printable PDF calendars.",
   keywords: [
@@ -27,7 +29,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Holiday Planner | PrintableCalendars",
     description:
-      "See all public holidays in the USA, Japan, and South Korea ??and download printable monthly calendars to plan your time off.",
+      "See all public holidays in the USA, Japan, and South Korea —and download printable monthly calendars to plan your time off.",
     url: `${BASE_URL}/holiday-planner`,
     type: "website",
     siteName: "PrintableCalendars",
@@ -35,20 +37,20 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Holiday Planner | PrintableCalendars",
-    description: "Plan time off around public holidays ??free printable calendar PDFs for USA, Japan, and South Korea.",
+    description: "Plan time off around public holidays —free printable calendar PDFs for USA, Japan, and South Korea.",
   },
   robots: { index: true, follow: true },
 };
 
-const COUNTRY_FLAG: Record<string, string> = { US: "?눣?눡", GB: "?눐?눉", AU: "?눇?눣", CA: "?눊?눇", KR: "?눖?눟", JP: "?눓?눝" };
+const COUNTRY_FLAG: Record<string, string> = { US: "", GB: "", AU: "", CA: "", KR: "", JP: "" };
 
 const HOLIDAY_MILESTONES: DayMilestone[] = [
   { min: 0, max: 0, message: "Today you leave. Safe travels." },
-  { min: 1, max: 6, message: "Last check ??confirm all bookings.", tip: "Charge all devices tonight." },
+  { min: 1, max: 6, message: "Last check —confirm all bookings.", tip: "Charge all devices tonight." },
   { min: 7, max: 13, message: "Pack light, prepare documents.", tip: "Digital copies of passport and bookings in email." },
-  { min: 14, max: 29, message: "Finalise ??travel insurance, itinerary, currency.", tip: "Notify your bank before you travel." },
-  { min: 30, max: 89, message: "Mid-planning ??check visa requirements now.", tip: "Some visas take 4?? weeks to process." },
-  { min: 90, max: 99999, message: "Early planning ??flights and accommodation first.", tip: "Booking 3+ months out saves 20??0%." },
+  { min: 14, max: 29, message: "Finalise —travel insurance, itinerary, currency.", tip: "Notify your bank before you travel." },
+  { min: 30, max: 89, message: "Mid-planning —check visa requirements now.", tip: "Some visas take 4–8 weeks to process." },
+  { min: 90, max: 99999, message: "Early planning —flights and accommodation first.", tip: "Booking 3+ months out saves 20–40%." },
 ];
 
 const HOLIDAY_PLANNER_FAQS = [
@@ -70,18 +72,21 @@ const HOLIDAY_PLANNER_FAQS = [
   },
 ];
 
-const PLANNING_TIPS = [
-  ["Bridge days", "When a holiday falls on Tuesday or Thursday, taking the adjacent Monday or Friday creates a 4-day weekend with just one vacation day."],
-  ["Cluster around long weekends", "Plan trips to start the day after a holiday ??airlines and hotels are cheaper than on the holiday itself."],
-  ["Book early for peak periods", "Golden Week (JP), Chuseok (KR), Thanksgiving (US), and Christmas block up 3?? months in advance."],
-  ["Check neighbouring country calendars", "If you work remotely, US holidays can be great times to travel to Japan or Korea ??prices drop as local tourism falls."],
-];
-
-export default function HolidayPlannerPage() {
+export default async function HolidayPlannerPage() {
+  const locale = await getLocale();
+  const i18n = getTranslations(locale);
+  const p = (i18n as unknown as Record<string, Record<string, string>>).holidayPlanner ?? {};
   const now = new Date();
   const year = now.getFullYear();
   const currentMonth = now.getMonth() + 1;
   const faqSchema = buildFaqSchema(HOLIDAY_PLANNER_FAQS.map((f) => ({ q: f.q, a: f.a })));
+
+  const PLANNING_TIPS_I18N = [
+    [p.tip1Title ?? "Bridge days", p.tip1Body ?? "A single day off between a public holiday and a weekend can create a 4-day break."],
+    [p.tip2Title ?? "Cluster around long weekends", p.tip2Body ?? "Book 2–3 days adjacent to a long weekend to create a mini holiday without using much leave."],
+    [p.tip3Title ?? "Book early for peak periods", p.tip3Body ?? "School holiday periods and major public holidays fill up fast — plan 3–6 months ahead."],
+    [p.tip4Title ?? "Check neighbouring country calendars", p.tip4Body ?? "If you travel internationally, check the destination's holiday calendar to avoid or coincide with local celebrations."],
+  ];
 
   // Gather upcoming holidays for each country
   const upcomingByCountry = SUPPORTED_COUNTRIES.map((c) => {
@@ -130,7 +135,7 @@ export default function HolidayPlannerPage() {
               marginBottom: 12,
             }}
           >
-            Time Off Planning
+            {p.eyebrow ?? "Time Off Planning"}
           </p>
           <h1
             style={{
@@ -142,17 +147,18 @@ export default function HolidayPlannerPage() {
               marginBottom: 20,
             }}
           >
-            Holiday planner ??            <br />
-            <span style={{ opacity: 0.4 }}>make every day count.</span>
+            {p.title ?? "Holiday planner"}
+            <br />
+            <span style={{ opacity: 0.4 }}>{p.subtitle ?? "make every day count."}</span>
           </h1>
           <p style={{ fontSize: 15, color: "var(--muted)", lineHeight: 1.65 }}>
             See all upcoming public holidays for the USA, Japan, and South
-            Korea. Identify bridge days, long weekends, and holiday clusters ??            then download free printable calendars to plan your time off.
+            Korea. Identify bridge days, long weekends, and holiday clusters — then download free printable calendars to plan your time off.
           </p>
         </div>
 
         <DayCounter
-          targetLabel="Departure Date"
+          targetLabel={p.countdownLabel ?? "Departure Date"}
           storageKey="trip-date"
           milestones={HOLIDAY_MILESTONES}
         />
@@ -163,7 +169,7 @@ export default function HolidayPlannerPage() {
           badgeLabel="Trip month"
           pdfHeaderText="Trip Countdown"
           pdfTargetLabel="Departure"
-          noDateHint="Set your departure date above to see your trip calendars."
+          noDateHint={p.downloadHint ?? "Set your departure date above to see your trip calendars."}
         />
 
         {/* Holiday-dense months */}
@@ -179,7 +185,7 @@ export default function HolidayPlannerPage() {
                 marginBottom: 20,
               }}
             >
-              Holiday-rich months in {year}
+              {p.holidayRichMonths ?? `Holiday-rich months in ${year}`}
             </h2>
             <div
               style={{
@@ -216,7 +222,7 @@ export default function HolidayPlannerPage() {
                       marginBottom: 12,
                     }}
                   >
-                    {monthHolidayCounts[m]} holidays across countries
+                    {monthHolidayCounts[m]} {p.holidaysAcross ?? "holidays across countries"}
                   </p>
                   <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
                     {SUPPORTED_COUNTRIES.map((c) => (
@@ -254,7 +260,7 @@ export default function HolidayPlannerPage() {
               marginBottom: 24,
             }}
           >
-            Upcoming public holidays
+            {p.upcomingHolidays ?? "Upcoming public holidays"}
           </h2>
           <div
             style={{
@@ -344,7 +350,8 @@ export default function HolidayPlannerPage() {
                     paddingBottom: 1,
                   }}
                 >
-                  View full {year} calendar ??                </Link>
+                  {p.viewFull2026 ?? `View full ${year} calendar →`}
+                </Link>
               </div>
             ))}
           </div>
@@ -368,7 +375,7 @@ export default function HolidayPlannerPage() {
               marginBottom: 28,
             }}
           >
-            How to maximise your time off
+            {p.howToMaximise ?? "How to maximise your time off"}
           </h2>
           <div
             style={{
@@ -377,7 +384,7 @@ export default function HolidayPlannerPage() {
               gap: 24,
             }}
           >
-            {PLANNING_TIPS.map(([title, desc]) => (
+            {PLANNING_TIPS_I18N.map(([title, desc]) => (
               <div key={title} style={{ borderTop: "1px solid var(--border)", paddingTop: 16 }}>
                 <p style={{ fontSize: 14, fontWeight: 500, marginBottom: 6 }}>{title}</p>
                 <p style={{ fontSize: 13, color: "var(--muted)", lineHeight: 1.65 }}>{desc}</p>
@@ -397,7 +404,7 @@ export default function HolidayPlannerPage() {
               marginBottom: 32,
             }}
           >
-            Frequently asked questions
+            {p.faqTitle ?? "Frequently asked questions"}
           </h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
             {HOLIDAY_PLANNER_FAQS.map((faq, i) => (
@@ -415,4 +422,3 @@ export default function HolidayPlannerPage() {
     </>
   );
 }
-

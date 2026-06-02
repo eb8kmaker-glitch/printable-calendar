@@ -5,14 +5,15 @@ import {
   COUNTRY_ORDER,
   COUNTRY_FULL_NAMES,
 } from "@/lib/holidays-content";
-
-export const dynamic = "force-static";
+import { getLocale } from "@/i18n/server";
+import { getTranslations, t } from "@/i18n";
+import { getLocalizedHolidayContent } from "@/lib/holidays-i18n";
 const BASE_URL = "https://printablecalendars.app";
 
 export const metadata: Metadata = {
-  title: "Cultural Holidays ??History, Traditions & Printable Calendars",
+  title: "Cultural Holidays —History, Traditions & Printable Calendars",
   description:
-    "Explore the history, food, and traditions of major cultural holidays in Japan, South Korea, and the United States ??from Chuseok to Thanksgiving. Download free printable calendars.",
+    "Explore the history, food, and traditions of major cultural holidays in Japan, South Korea, and the United States —from Chuseok to Thanksgiving. Download free printable calendars.",
   alternates: {
     canonical: `${BASE_URL}/holidays`,
     languages: { en: `${BASE_URL}/holidays`, "x-default": `${BASE_URL}/holidays` },
@@ -29,17 +30,17 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Cultural Holidays | PrintableCalendars",
     description:
-      "History and traditions of major holidays in Japan, South Korea, and the USA ??with free printable calendars.",
+      "History and traditions of major holidays in Japan, South Korea, and the USA —with free printable calendars.",
   },
   robots: { index: true, follow: true },
 };
 
-const FLAG: Record<string, string> = { US: "?눣?눡", KR: "?눖?눟", JP: "?눓?눝" };
+const FLAG: Record<string, string> = { US: "🇺🇸", KR: "🇰🇷", JP: "🇯🇵" };
 
 const itemListJsonLd = {
   "@context": "https://schema.org",
   "@type": "ItemList",
-  name: "Cultural Holidays ??History & Traditions",
+  name: "Cultural Holidays —History & Traditions",
   url: `${BASE_URL}/holidays`,
   numberOfItems: CULTURAL_HOLIDAYS.length,
   itemListElement: CULTURAL_HOLIDAYS.map((h, i) => ({
@@ -50,7 +51,15 @@ const itemListJsonLd = {
   })),
 };
 
-export default function HolidaysPage() {
+export default async function HolidaysPage() {
+  const locale = await getLocale();
+  const i18n = getTranslations(locale);
+  const holidaysI18n = ((i18n as unknown as Record<string, Record<string, string>>).holidays ?? {});
+  const localizedHolidays = await Promise.all(
+    CULTURAL_HOLIDAYS.map((h) => getLocalizedHolidayContent(h, locale))
+  );
+  const englishNames = Object.fromEntries(CULTURAL_HOLIDAYS.map((h) => [h.slug, h.name]));
+
   return (
     <>
       <script
@@ -71,7 +80,7 @@ export default function HolidaysPage() {
               marginBottom: 12,
             }}
           >
-            Cultural Holidays
+            {holidaysI18n.title}
           </p>
           <h1
             style={{
@@ -84,7 +93,7 @@ export default function HolidaysPage() {
               maxWidth: 600,
             }}
           >
-            Holidays, traditions &amp; the stories behind them
+            {holidaysI18n.headline}
           </h1>
           <p
             style={{
@@ -94,16 +103,13 @@ export default function HolidaysPage() {
               maxWidth: 560,
             }}
           >
-            From Chuseok to Golden Week to Thanksgiving ??explore the origin,
-            history, food, and culture of the world&apos;s most celebrated
-            holidays. Each entry links to a free printable calendar for the
-            relevant month.
+            {holidaysI18n.description}
           </p>
         </div>
 
         {/* Country sections */}
         {COUNTRY_ORDER.map((countryCode) => {
-          const holidays = CULTURAL_HOLIDAYS.filter((h) => h.country === countryCode);
+          const holidays = localizedHolidays.filter((h) => h.country === countryCode);
           if (holidays.length === 0) return null;
           return (
             <section key={countryCode} style={{ marginBottom: 64 }}>
@@ -166,19 +172,27 @@ export default function HolidaysPage() {
                         }}
                       >
                         <div>
-                          {holiday.localName && (
-                            <p
-                              style={{
-                                fontFamily: "'DM Mono', monospace",
-                                fontSize: 11,
-                                color: "var(--muted)",
-                                letterSpacing: "0.04em",
-                                marginBottom: 4,
-                              }}
-                            >
-                              {holiday.localName}
-                            </p>
-                          )}
+                          {(() => {
+                            const subTitle =
+                              holiday.localName && holiday.localName !== holiday.name
+                                ? holiday.localName
+                                : !holiday.localName && locale !== "en"
+                                  ? englishNames[holiday.slug]
+                                  : null;
+                            return subTitle ? (
+                              <p
+                                style={{
+                                  fontFamily: "'EB Garamond', Georgia, serif",
+                                  fontSize: 13,
+                                  color: "var(--muted)",
+                                  letterSpacing: "0.02em",
+                                  marginBottom: 4,
+                                }}
+                              >
+                                {subTitle}
+                              </p>
+                            ) : null;
+                          })()}
                           <h3
                             style={{
                               fontFamily: "'EB Garamond', Georgia, serif",
@@ -203,7 +217,7 @@ export default function HolidaysPage() {
                               marginTop: 2,
                             }}
                           >
-                            Lunar
+                            {holidaysI18n.lunarLabel}
                           </span>
                         )}
                       </div>
@@ -243,8 +257,8 @@ export default function HolidaysPage() {
                           marginTop: 4,
                         }}
                       >
-                        {holiday.food.length} traditional dishes 쨌{" "}
-                        {holiday.activities.length} activities
+                        {t(holidaysI18n.traditionalDishes, { n: holiday.food.length })} ·{" "}
+                        {t(holidaysI18n.activities, { n: holiday.activities.length })}
                       </p>
                     </div>
                   </Link>
