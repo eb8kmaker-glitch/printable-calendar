@@ -7,6 +7,7 @@ import DownloadButton from "@/components/DownloadButton";
 import AdSlot from "@/components/AdSlot";
 import { getLocale } from "@/i18n/server";
 import { getTranslations } from "@/i18n";
+import { generateBreadcrumbSchema, COUNTRY_NAMES } from "@/lib/seo-helpers";
 
 interface PageProps {
   params: Promise<{ country: string; year: string }>;
@@ -56,8 +57,14 @@ export default async function YearlyCalendarPage({ params }: PageProps) {
 
   const holidays = getHolidays(config.code, year);
 
+  const breadcrumb = generateBreadcrumbSchema([
+    { name: "Home", url: "https://printablecalendars.app" },
+    { name: COUNTRY_NAMES[country] ?? countryName, url: `https://printablecalendars.app/calendar/${country}/${year}` },
+  ]);
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "32px 24px" }}>
         <AdSlot slot="top-banner" style={{ marginBottom: 24 }} />
 

@@ -6,7 +6,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import LangSwitcher from "@/components/LangSwitcher";
 import CalendarNavLink from "@/components/CalendarNavLink";
-import { organizationSchema } from "@/lib/seo-helpers";
+import { organizationSchema, generateWebSiteSchema } from "@/lib/seo-helpers";
 import { Analytics } from "@vercel/analytics/next";
 import { getLocale } from "@/i18n/server";
 import { getTranslations } from "@/i18n";
@@ -82,6 +82,10 @@ export default async function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(generateWebSiteSchema()) }}
         />
         <ThemeProvider>
           <Header
