@@ -8,6 +8,7 @@ import MonthNav from "@/components/MonthNav";
 import DownloadButton from "@/components/DownloadButton";
 import LangSwitcher from "@/components/LangSwitcher";
 import AdSlot from "@/components/AdSlot";
+import MonthSummary from "@/components/MonthSummary";
 import Link from "next/link";
 import { buildHowToSchema } from "@/lib/seo-helpers";
 import { getLocale } from "@/i18n/server";
@@ -248,6 +249,20 @@ export default async function CalendarPage({ params }: PageProps) {
           <p style={{ fontSize: 13, color: "var(--muted)", marginBottom: 16 }}>{i18n.calendar.landscapePdf}</p>
           <DownloadButton country={country} year={year} month={month} locale={locale} />
         </div>
+
+        <MonthSummary
+          country={country}
+          year={year}
+          month={month}
+          holidays={monthHolidays.map((d) => ({ date: d.date.toISOString().split("T")[0], name: d.holiday!.name }))}
+          locale={locale}
+          i18n={{
+            monthSummary: (i18n.calendar as unknown as Record<string, Record<string, string>>).monthSummary as { intro_one: string; intro_other: string; noHolidays: string; downloadNote: string },
+            holidayDescriptions: (i18n.calendar as unknown as Record<string, Record<string, string>>).holidayDescriptions ?? {},
+          }}
+          monthName={monthName}
+          countryName={countryName}
+        />
 
         {/* SEO text */}
         <section className="no-print" style={{ marginTop: 48, paddingTop: 32, borderTop: "1px solid var(--border)" }}>
