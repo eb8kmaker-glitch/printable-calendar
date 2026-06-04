@@ -21,14 +21,16 @@ interface PageProps {
 
 export async function generateStaticParams() {
   const params = [];
-  const year = new Date().getFullYear();
+  const currentYear = new Date().getFullYear();
   for (const country of SUPPORTED_COUNTRIES) {
-    for (let month = 1; month <= 12; month++) {
-      params.push({
-        country: country.code.toLowerCase(),
-        year: String(year),
-        month: String(month),
-      });
+    for (const year of [currentYear, currentYear + 1]) {
+      for (let month = 1; month <= 12; month++) {
+        params.push({
+          country: country.code.toLowerCase(),
+          year: String(year),
+          month: String(month),
+        });
+      }
     }
   }
   return params;
