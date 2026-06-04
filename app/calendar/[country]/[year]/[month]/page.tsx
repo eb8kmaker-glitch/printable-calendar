@@ -8,8 +8,9 @@ import MonthNav from "@/components/MonthNav";
 import DownloadButton from "@/components/DownloadButton";
 import LangSwitcher from "@/components/LangSwitcher";
 import AdSlot from "@/components/AdSlot";
+import MonthSummary from "@/components/MonthSummary";
 import Link from "next/link";
-import { buildHowToSchema } from "@/lib/seo-helpers";
+import { buildHowToSchema, generateCalendarPageSchema, COUNTRY_NAMES } from "@/lib/seo-helpers";
 import { getLocale } from "@/i18n/server";
 import { getTranslations, t } from "@/i18n";
 import type { Locale } from "@/i18n";
@@ -21,14 +22,16 @@ interface PageProps {
 
 export async function generateStaticParams() {
   const params = [];
-  const year = new Date().getFullYear();
+  const currentYear = new Date().getFullYear();
   for (const country of SUPPORTED_COUNTRIES) {
-    for (let month = 1; month <= 12; month++) {
-      params.push({
-        country: country.code.toLowerCase(),
-        year: String(year),
-        month: String(month),
-      });
+    for (const year of [currentYear, currentYear + 1]) {
+      for (let month = 1; month <= 12; month++) {
+        params.push({
+          country: country.code.toLowerCase(),
+          year: String(year),
+          month: String(month),
+        });
+      }
     }
   }
   return params;
@@ -45,9 +48,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const countryName = (i18n.countries as Record<string, string>)[country] ?? config.name;
 
   const titles: Record<Locale, string> = {
-    en: `${monthName} ${year} Printable Calendar — ${countryName} Public Holidays | PrintableCalendars`,
-    ko: `${year}년 ${monthName} 달력 — ${countryName} 공휴일 | PrintableCalendars`,
-    ja: `${year}年${monthName}カレンダー — ${countryName}の祝日 | PrintableCalendars`,
+    en: `${monthName} ${year} Printable Calendar — ${countryName} Public Holidays`,
+    ko: `${year}년 ${monthName} 달력 — ${countryName} 공휴일`,
+    ja: `${year}年${monthName}カレンダー — ${countryName}の祝日`,
   };
   const descriptions: Record<Locale, string> = {
     en: `Free printable ${monthName} ${year} calendar for ${countryName} with official public holidays. Download as A4 PDF instantly, no login required.`,
@@ -131,10 +134,19 @@ export default async function CalendarPage({ params }: PageProps) {
 
   const weekdayAbbrs = (i18n.weekdays as string[]).map((d) => d.slice(0, 2));
 
+  const breadcrumb = generateCalendarPageSchema({
+    country,
+    countryName: COUNTRY_NAMES[country] ?? countryName,
+    year,
+    month,
+    monthName: MONTH_NAMES[month - 1],
+  });
+
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />
 
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "32px 24px" }}>
         <AdSlot slot="top-banner" style={{ marginBottom: 24 }} />
@@ -246,6 +258,20 @@ export default async function CalendarPage({ params }: PageProps) {
           <p style={{ fontSize: 13, color: "var(--muted)", marginBottom: 16 }}>{i18n.calendar.landscapePdf}</p>
           <DownloadButton country={country} year={year} month={month} locale={locale} />
         </div>
+
+        <MonthSummary
+          country={country}
+          year={year}
+          month={month}
+          holidays={monthHolidays.map((d) => ({ date: d.date.toISOString().split("T")[0], name: d.holiday!.name }))}
+          locale={locale}
+          i18n={{
+            monthSummary: (i18n.calendar as unknown as Record<string, Record<string, string>>).monthSummary as { intro_one: string; intro_other: string; noHolidays: string; downloadNote: string },
+            holidayDescriptions: (i18n.calendar as unknown as Record<string, Record<string, string>>).holidayDescriptions ?? {},
+          }}
+          monthName={monthName}
+          countryName={countryName}
+        />
 
         {/* SEO text */}
         <section className="no-print" style={{ marginTop: 48, paddingTop: 32, borderTop: "1px solid var(--border)" }}>

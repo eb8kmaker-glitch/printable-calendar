@@ -7,31 +7,26 @@ import DownloadButton from "@/components/DownloadButton";
 import AdSlot from "@/components/AdSlot";
 import { getLocale } from "@/i18n/server";
 import { getTranslations } from "@/i18n";
-import { generateBreadcrumbSchema, COUNTRY_NAMES } from "@/lib/seo-helpers";
+
+const BASE_URL = "https://printablecalendars.app";
 
 interface PageProps {
-  params: Promise<{ country: string; year: string }>;
+  params: Promise<{ country: string }>;
 }
 
 export async function generateStaticParams() {
-  const params = [];
-  const currentYear = new Date().getFullYear();
-  for (const country of SUPPORTED_COUNTRIES) {
-    for (const year of [currentYear, currentYear + 1]) {
-      params.push({ country: country.code.toLowerCase(), year: String(year) });
-    }
-  }
-  return params;
+  return SUPPORTED_COUNTRIES.map((c) => ({ country: c.code.toLowerCase() }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { country, year } = await params;
+  const { country } = await params;
   const config = getCountryConfig(country);
   if (!config) return {};
 
   const locale = await getLocale();
   const i18n = getTranslations(locale);
   const countryName = (i18n.countries as Record<string, string>)[country] ?? config.name;
+  const year = new Date().getFullYear();
 
   const title = `${year} Printable Calendar — ${countryName}`;
   const description = `Free printable ${year} annual calendar for ${countryName} with all public holidays. Download PDF instantly.`;
@@ -40,16 +35,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description,
     keywords: [`printable calendar ${year}`, `${countryName} calendar ${year}`, `annual calendar ${year}`, `yearly calendar PDF ${year}`],
     openGraph: { title, description, type: "website" },
-    alternates: { canonical: `/calendar/${country}/${year}` },
+    alternates: { canonical: `${BASE_URL}/calendar/${country}/${year}` },
   };
 }
 
-export default async function YearlyCalendarPage({ params }: PageProps) {
-  const { country, year: yearStr } = await params;
-  const year = Number(yearStr);
+export default async function CountryCalendarPage({ params }: PageProps) {
+  const { country } = await params;
   const config = getCountryConfig(country);
-  if (!config || isNaN(year)) notFound();
+  if (!config) notFound();
 
+  const year = new Date().getFullYear();
   const locale = await getLocale();
   const i18n = getTranslations(locale);
   const countryName = (i18n.countries as Record<string, string>)[country] ?? config.name;
@@ -57,14 +52,8 @@ export default async function YearlyCalendarPage({ params }: PageProps) {
 
   const holidays = getHolidays(config.code, year);
 
-  const breadcrumb = generateBreadcrumbSchema([
-    { name: "Home", url: "https://printablecalendars.app" },
-    { name: COUNTRY_NAMES[country] ?? countryName, url: `https://printablecalendars.app/calendar/${country}/${year}` },
-  ]);
-
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "32px 24px" }}>
         <AdSlot slot="top-banner" style={{ marginBottom: 24 }} />
 
@@ -76,7 +65,7 @@ export default async function YearlyCalendarPage({ params }: PageProps) {
               return (
                 <Link
                   key={c.code}
-                  href={`/calendar/${c.code.toLowerCase()}/${year}`}
+                  href={`/calendar/${c.code.toLowerCase()}`}
                   style={{
                     fontSize: 12, padding: "5px 12px", border: "1px solid var(--border)",
                     borderRadius: 20, textDecoration: "none",
