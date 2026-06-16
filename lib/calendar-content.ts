@@ -121,6 +121,36 @@ export const CALENDAR_CONTENT_EN: CountryMonthContentMap = {
         "With no public holidays, March is well suited to focused work and quarter-end planning.",
       ],
     },
+    4: {
+      introParagraph:
+        "April has no federal public holidays in the United States, making it a full working month as spring takes hold. This printable April calendar gives you an open grid for second-quarter planning and spring events.",
+      seasonalNote:
+        "April is mid-spring across most of the United States, with warming weather, blooming trees, and longer days. Federal income tax filing season also concludes around the middle of the month.",
+      planningTips: [
+        "The federal income tax filing deadline usually falls in mid-April — a key date for many households.",
+        "With no public holidays, April is well suited to focused work and second-quarter planning.",
+      ],
+    },
+    5: {
+      introParagraph:
+        "May closes with Memorial Day, the federal holiday observed on the last Monday of the month, honoring those who died in military service. This printable May calendar marks the long weekend that unofficially opens summer.",
+      seasonalNote:
+        "May is late spring in the United States, with warm, pleasant weather across most regions. Memorial Day weekend is widely seen as the unofficial start of summer.",
+      planningTips: [
+        "Memorial Day falls on the last Monday of May, creating a three-day weekend and a major travel period.",
+        "Many schools approach their end-of-year break in late May, though exact dates vary by district.",
+      ],
+    },
+    6: {
+      introParagraph:
+        "June brings Juneteenth National Independence Day on the 19th, a federal holiday commemorating the end of slavery in the United States. This printable June calendar marks the holiday at the start of summer.",
+      seasonalNote:
+        "June is early summer in the United States, with long, warm days and the summer solstice around the 20th. Most schools break for the summer at some point during the month.",
+      planningTips: [
+        "Juneteenth (June 19) is a federal holiday; when it falls on a weekend, it is typically observed on the nearest weekday.",
+        "School summer-break start dates vary widely by state and district — confirm your local calendar.",
+      ],
+    },
   },
 
   // ─── United Kingdom ────────────────────────────────────────────────────────
