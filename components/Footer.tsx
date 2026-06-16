@@ -20,6 +20,7 @@ interface FooterTranslations {
   holidayPlanner: string;
   ramadan: string;
   weddingCountdown: string;
+  resignationPlanner: string;
 }
 
 interface FooterProps {
@@ -40,7 +41,7 @@ export default function Footer({ locale = 'en', footerI18n, countryNames, monthN
     sitemap: "Sitemap", planners: "Planners", studyPlanner: "Study Planner",
     teacherPlanner: "Teacher Planner", schoolCalendar: "School Calendar {year}",
     holidayPlanner: "Holiday Planner", ramadan: "Ramadan {year}",
-    weddingCountdown: "Wedding Countdown",
+    weddingCountdown: "Wedding Countdown", resignationPlanner: "Resignation Planner",
   };
 
   return (
@@ -104,6 +105,7 @@ export default function Footer({ locale = 'en', footerI18n, countryNames, monthN
                 ["/holiday-planner", footer.holidayPlanner],
                 ["/ramadan-2026", t(footer.ramadan, { year: 2026 })],
                 ["/wedding-countdown", footer.weddingCountdown],
+                ["/resignation-planner", footer.resignationPlanner],
               ] as [string, string][]).map(([href, label]) => (
                 <Link key={href} href={href} style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
                   {label}

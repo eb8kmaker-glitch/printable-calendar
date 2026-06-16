@@ -111,6 +111,7 @@ export default async function RootLayout({
               { href: "/holiday-planner", label: (i18n.footer as Record<string, string>).holidayPlanner ?? "Holiday Planner" },
               { href: "/school-calendar-2026", label: ((i18n.footer as Record<string, string>).schoolCalendar ?? "School Calendar {year}").replace("{year}", "2026") },
               { href: "/wedding-countdown", label: (i18n.footer as Record<string, string>).weddingCountdown ?? "Wedding Countdown" },
+              { href: "/resignation-planner", label: (i18n.footer as Record<string, string>).resignationPlanner ?? "Resignation Planner" },
               { href: "/ramadan-2026", label: (i18n.footer as Record<string, string>).ramadan ?? "Ramadan 2026" },
             ]}
           />

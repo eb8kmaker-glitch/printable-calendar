@@ -110,6 +110,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "holiday-planner",
     "teacher-planner",
     "wedding-countdown",
+    "resignation-planner",
   ]) {
     entries.push({
       url: `${baseUrl}/${slug}`,
