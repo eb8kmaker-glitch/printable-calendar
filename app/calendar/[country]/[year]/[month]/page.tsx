@@ -318,7 +318,9 @@ export default async function CalendarPage({ params }: PageProps) {
         {/* Seasonal context + planning tips (graceful fallback when absent) */}
         {content && (content.seasonalNote || content.planningTips.length > 0) && (
           <section className="no-print" style={{ marginTop: 32, paddingTop: 24, borderTop: "1px solid var(--border)" }}>
-            <h2 className="sr-only">{pageHeading}</h2>
+            <h2 style={{ fontFamily: "'EB Garamond', Georgia, serif", fontSize: 20, fontWeight: 400, marginBottom: 12, color: "var(--fg)" }}>
+              {t(i18n.calendar.seasonalTitle, { month: monthName, year })}
+            </h2>
             {content.seasonalNote && (
               <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.7, maxWidth: 720 }}>
                 {content.seasonalNote}

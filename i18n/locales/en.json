@@ -52,6 +52,7 @@
     "darkRecommended": "◑ Dark — best for tablets & digital use",
     "yearlyNote": " · A6 not available for yearly",
     "aboutTitle": "About this printable calendar",
+    "seasonalTitle": "Planning around {month} {year}",
     "aboutText": "This free printable {month} {year} calendar for {country} includes all official public holidays. Download as a PDF (A3–A6) in landscape format. The clean, minimal design is optimized for both black-and-white and color printing.",
     "landscapePdf": "Landscape PDF · includes public holidays · print-ready",
     "landscapePdfYearly": "Landscape PDF · all 12 months on one page · includes public holidays",
