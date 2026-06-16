@@ -61,7 +61,7 @@ export const organizationSchema = {
   url: BASE_URL,
   logo: `${BASE_URL}/og-image.png`,
   description:
-    "Free printable monthly and annual calendars with official public holidays for USA, Japan, and South Korea. A4 PDF, no login required.",
+    "Free printable monthly and annual calendars with official public holidays for the USA, UK, Australia, Canada, Japan, and South Korea. A4 PDF, no login required.",
   sameAs: [],
 };
 

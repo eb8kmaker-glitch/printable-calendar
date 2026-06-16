@@ -16,7 +16,7 @@ const BASE_URL = "https://printablecalendars.app";
 export const metadata: Metadata = {
   title: "Holiday Planner —Map Your Time Off with Printable Calendars",
   description:
-    "Plan your vacation and time off around public holidays in the USA, Japan, and South Korea. See upcoming holidays month by month and download free printable PDF calendars.",
+    "Plan your vacation and time off around public holidays in the USA, UK, Australia, Canada, Japan, and South Korea. See upcoming holidays month by month and download free printable PDF calendars.",
   keywords: [
     "holiday planner printable",
     "time off planner calendar",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Holiday Planner | PrintableCalendars",
     description:
-      "See all public holidays in the USA, Japan, and South Korea —and download printable monthly calendars to plan your time off.",
+      "See all public holidays in the USA, UK, Australia, Canada, Japan, and South Korea —and download printable monthly calendars to plan your time off.",
     url: `${BASE_URL}/holiday-planner`,
     type: "website",
     siteName: "PrintableCalendars",
@@ -37,21 +37,12 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Holiday Planner | PrintableCalendars",
-    description: "Plan time off around public holidays —free printable calendar PDFs for USA, Japan, and South Korea.",
+    description: "Plan time off around public holidays —free printable calendar PDFs for the USA, UK, Australia, Canada, Japan, and South Korea.",
   },
   robots: { index: true, follow: true },
 };
 
 const COUNTRY_FLAG: Record<string, string> = { US: "", GB: "", AU: "", CA: "", KR: "", JP: "" };
-
-const HOLIDAY_MILESTONES: DayMilestone[] = [
-  { min: 0, max: 0, message: "Today you leave. Safe travels." },
-  { min: 1, max: 6, message: "Last check —confirm all bookings.", tip: "Charge all devices tonight." },
-  { min: 7, max: 13, message: "Pack light, prepare documents.", tip: "Digital copies of passport and bookings in email." },
-  { min: 14, max: 29, message: "Finalise —travel insurance, itinerary, currency.", tip: "Notify your bank before you travel." },
-  { min: 30, max: 89, message: "Mid-planning —check visa requirements now.", tip: "Some visas take 4–8 weeks to process." },
-  { min: 90, max: 99999, message: "Early planning —flights and accommodation first.", tip: "Booking 3+ months out saves 20–40%." },
-];
 
 const HOLIDAY_PLANNER_FAQS = [
   {
@@ -80,6 +71,15 @@ export default async function HolidayPlannerPage() {
   const year = now.getFullYear();
   const currentMonth = now.getMonth() + 1;
   const faqSchema = buildFaqSchema(HOLIDAY_PLANNER_FAQS.map((f) => ({ q: f.q, a: f.a })));
+
+  const HOLIDAY_MILESTONES: DayMilestone[] = [
+    { min: 0, max: 0, message: p.ms0msg ?? "Today you leave. Safe travels." },
+    { min: 1, max: 6, message: p.ms1msg ?? "Last check — confirm all bookings.", tip: p.ms1tip ?? "Charge all devices tonight." },
+    { min: 7, max: 13, message: p.ms2msg ?? "Pack light, prepare documents.", tip: p.ms2tip ?? "Keep digital copies of your passport and bookings in your email." },
+    { min: 14, max: 29, message: p.ms3msg ?? "Finalise — travel insurance, itinerary, currency.", tip: p.ms3tip ?? "Notify your bank before you travel." },
+    { min: 30, max: 89, message: p.ms4msg ?? "Mid-planning — check visa requirements now.", tip: p.ms4tip ?? "Some visas take 4–8 weeks to process." },
+    { min: 90, max: 99999, message: p.ms5msg ?? "Early planning — flights and accommodation first.", tip: p.ms5tip ?? "Booking 3+ months out saves 20–40%." },
+  ];
 
   const PLANNING_TIPS_I18N = [
     [p.tip1Title ?? "Bridge days", p.tip1Body ?? "A single day off between a public holiday and a weekend can create a 4-day break."],
@@ -152,8 +152,7 @@ export default async function HolidayPlannerPage() {
             <span style={{ opacity: 0.4 }}>{p.subtitle ?? "make every day count."}</span>
           </h1>
           <p style={{ fontSize: 15, color: "var(--muted)", lineHeight: 1.65 }}>
-            See all upcoming public holidays for the USA, Japan, and South
-            Korea. Identify bridge days, long weekends, and holiday clusters — then download free printable calendars to plan your time off.
+            {p.description ?? "See all upcoming public holidays for the USA, UK, Australia, Canada, Japan, and South Korea. Identify bridge days, long weekends, and holiday clusters — then download free printable calendars to plan your time off."}
           </p>
         </div>
 
@@ -300,7 +299,7 @@ export default async function HolidayPlannerPage() {
                 <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                   {holidays.length === 0 ? (
                     <p style={{ fontSize: 13, color: "var(--muted)" }}>
-                      No remaining holidays this year.
+                      {p.noRemainingHolidays ?? "No remaining holidays this year."}
                     </p>
                   ) : (
                     holidays.map((h, i) => {
