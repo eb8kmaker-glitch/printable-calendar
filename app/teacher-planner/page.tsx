@@ -40,14 +40,6 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const TEACHER_MILESTONES: DayMilestone[] = [
-  { min: 0, max: 0, message: "Term complete. Well done." },
-  { min: 1, max: 13, message: "End of term —grades, reports, parent comms.", tip: "Batch similar tasks to save time." },
-  { min: 14, max: 29, message: "Final push —start wrapping up units.", tip: "Leave buffer time for unexpected delays." },
-  { min: 30, max: 59, message: "Mid-term —check in with struggling students now.", tip: "Small interventions now prevent big problems later." },
-  { min: 60, max: 99999, message: "Strong start —establish routines early.", tip: "First 2 weeks set the tone for the whole term." },
-];
-
 const TEACHER_FAQS = [
   {
     q: "What makes a printable teacher planner 2026 useful in the classroom?",
@@ -76,6 +68,14 @@ export default async function TeacherPlannerPage() {
   const currentMonth = now.getMonth() + 1;
   const faqSchema = buildFaqSchema(TEACHER_FAQS.map((f) => ({ q: f.q, a: f.a })));
 
+  const TEACHER_MILESTONES: DayMilestone[] = [
+    { min: 0, max: 0, message: p.ms0msg ?? "Term complete. Well done." },
+    { min: 1, max: 13, message: p.ms1msg ?? "End of term — grades, reports, parent comms.", tip: p.ms1tip ?? "Batch similar tasks to save time." },
+    { min: 14, max: 29, message: p.ms2msg ?? "Final push — start wrapping up units.", tip: p.ms2tip ?? "Leave buffer time for unexpected delays." },
+    { min: 30, max: 59, message: p.ms3msg ?? "Mid-term — check in with struggling students now.", tip: p.ms3tip ?? "Small interventions now prevent big problems later." },
+    { min: 60, max: 99999, message: p.ms4msg ?? "Strong start — establish routines early.", tip: p.ms4tip ?? "First 2 weeks set the tone for the whole term." },
+  ];
+
   const CLASSROOM_USES_I18N = [
     { title: p.use1Title ?? "Lesson planning overview", desc: p.use1Body ?? "Map all school days, public holidays, and exam periods at the start of each term." },
     { title: p.use2Title ?? "Parent–teacher communication", desc: p.use2Body ?? "Share a printed calendar with parents to keep everyone informed of key dates." },
@@ -87,7 +87,7 @@ export default async function TeacherPlannerPage() {
 
   const FEATURES_I18N = [
     [p.feat1Title ?? "Landscape A4 layout", p.feat1Body ?? "Designed to be pinned to the wall or laid flat on a desk."],
-    [p.feat2Title ?? "Official holidays", p.feat2Body ?? "USA, Japan, and South Korea public holidays marked on every month."],
+    [p.feat2Title ?? "Official holidays", p.feat2Body ?? "USA, UK, Australia, Canada, Japan, and South Korea public holidays marked on every month."],
     [p.feat3Title ?? "B&W optimised", p.feat3Body ?? "Prints cleanly in greyscale — no expensive colour ink required."],
     [p.feat4Title ?? "Instant & free", p.feat4Body ?? "No account, no subscription. Download as many months as you need."],
   ];
@@ -130,7 +130,7 @@ export default async function TeacherPlannerPage() {
             <span style={{ opacity: 0.4 }}>{p.subtitle ?? "calendars, free forever."}</span>
           </h1>
           <p style={{ fontSize: 15, color: "var(--muted)", lineHeight: 1.65, marginBottom: 28 }}>
-            {p.description ?? "Monthly calendars for classroom planning with public holidays for USA, Japan, and South Korea. Print one for your desk, one for the board, and one to share with parents. Clean A4 landscape PDF, no login, no subscription."}
+            {p.description ?? "Monthly calendars for classroom planning with public holidays for the USA, UK, Australia, Canada, Japan, and South Korea. Print one for your desk, one for the board, and one to share with parents. Clean A4 landscape PDF, no login, no subscription."}
           </p>
           <Link
             href={`/calendar/us/${year}/${currentMonth}`}
