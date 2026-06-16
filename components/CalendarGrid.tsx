@@ -30,7 +30,7 @@ export default function CalendarGrid({
           marginBottom: 20,
         }}
       >
-        <h1
+        <h2
           style={{
             fontFamily: "'EB Garamond', Georgia, serif",
             fontSize: "clamp(28px, 5vw, 48px)",
@@ -42,7 +42,7 @@ export default function CalendarGrid({
         >
           {displayMonthName}{" "}
           <span style={{ opacity: 0.4 }}>{year}</span>
-        </h1>
+        </h2>
         <span
           style={{
             fontSize: 13,

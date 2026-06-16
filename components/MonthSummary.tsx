@@ -60,10 +60,6 @@ export default function MonthSummary({
         borderTop: "1px solid var(--border)",
       }}
     >
-      <h2 className="sr-only">
-        About {monthName} {year} calendar for {countryName}
-      </h2>
-
       <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.7, marginBottom: 8 }}>
         {introText}{" "}
         <span style={{ color: "var(--muted)" }}>{i18n.monthSummary.downloadNote}</span>
@@ -75,14 +71,17 @@ export default function MonthSummary({
         const key = normalizeKey(h.name);
         const desc = i18n.holidayDescriptions[key] ?? i18n.holidayDescriptions[h.name] ?? "";
 
+        // Only render a holiday block when it has a description — holidays without
+        // one (e.g. substitute days) stay in the dated holiday list above rather
+        // than producing an empty heading.
+        if (!desc) return null;
+
         return (
           <div key={h.date}>
             <h3 style={{ fontSize: 14, fontWeight: 500, color: "var(--fg)", marginTop: 16, marginBottom: 4 }}>
               {displayName}
             </h3>
-            {desc && (
-              <p style={{ fontSize: 13, color: "var(--muted)", lineHeight: 1.65 }}>{desc}</p>
-            )}
+            <p style={{ fontSize: 13, color: "var(--muted)", lineHeight: 1.65 }}>{desc}</p>
           </div>
         );
       })}

@@ -52,6 +52,7 @@
     "darkRecommended": "◑ 어둡게 — 태블릿·디지털 최적",
     "yearlyNote": " · A6는 연간 달력에 사용 불가",
     "aboutTitle": "이 달력에 대하여",
+    "seasonalTitle": "{year}년 {month} 계획 노트",
     "aboutText": "이 무료 {year}년 {month} {country} 달력에는 모든 공식 공휴일이 포함되어 있습니다. A3–A6 크기의 PDF로 다운로드하세요. 흑백 및 컬러 인쇄 모두에 최적화된 깔끔한 디자인입니다.",
     "landscapePdf": "가로 PDF · 공휴일 포함 · 인쇄용",
     "landscapePdfYearly": "가로 PDF · 12개월 한 페이지 · 공휴일 포함",
