@@ -357,15 +357,19 @@ export default async function CalendarPage({ params }: PageProps) {
           </Link>
         </nav>
 
-        {/* SEO text */}
-        <section className="no-print" style={{ marginTop: 48, paddingTop: 32, borderTop: "1px solid var(--border)" }}>
-          <h2 style={{ fontFamily: "'EB Garamond', Georgia, serif", fontSize: 22, fontWeight: 400, marginBottom: 12 }}>
-            {i18n.calendar.aboutTitle}
-          </h2>
-          <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.7, maxWidth: 700 }}>
-            {t(i18n.calendar.aboutText, { month: monthName, year, country: countryName })}
-          </p>
-        </section>
+        {/* SEO text — fallback only. When unique per-month content exists
+            (intro / seasonal note / planning tips above), this generic templated
+            block is omitted to avoid a duplicate-content signal across pages. */}
+        {!content && (
+          <section className="no-print" style={{ marginTop: 48, paddingTop: 32, borderTop: "1px solid var(--border)" }}>
+            <h2 style={{ fontFamily: "'EB Garamond', Georgia, serif", fontSize: 22, fontWeight: 400, marginBottom: 12 }}>
+              {i18n.calendar.aboutTitle}
+            </h2>
+            <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.7, maxWidth: 700 }}>
+              {t(i18n.calendar.aboutText, { month: monthName, year, country: countryName })}
+            </p>
+          </section>
+        )}
       </div>
     </>
   );
