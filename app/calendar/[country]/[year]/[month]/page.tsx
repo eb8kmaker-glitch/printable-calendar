@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getHolidays, buildCalendarDays, getCountryConfig } from "@/lib/holidays";
+import { getCalendarContent } from "@/lib/calendar-content";
 import { MONTH_NAMES, SUPPORTED_COUNTRIES } from "@/lib/types";
 import { getEventsByMonth, formatEventDate, CATEGORY_LABELS } from "@/lib/events";
 import CalendarGrid from "@/components/CalendarGrid";
@@ -105,6 +106,26 @@ export default async function CalendarPage({ params }: PageProps) {
   const monthHolidays = days.filter((d) => d.holiday && d.isCurrentMonth);
   const monthEvents = getEventsByMonth(month).slice(0, 8);
 
+  // Unique per-country, per-month content (null => render heading only).
+  const content = await getCalendarContent(country, month, locale);
+
+  // Locale-aware page heading, following the generateMetadata title pattern.
+  const headings: Record<Locale, string> = {
+    en: `${countryName} Calendar — ${monthName} ${year}`,
+    ko: `${countryName} ${year}년 ${monthName} 달력`,
+    ja: `${countryName} ${year}年${monthName}カレンダー`,
+  };
+  const pageHeading = headings[locale];
+
+  // Crawlable previous / next month targets (with year rollover).
+  const prevMonth = month === 1 ? 12 : month - 1;
+  const prevYear = month === 1 ? year - 1 : year;
+  const nextMonth = month === 12 ? 1 : month + 1;
+  const nextYear = month === 12 ? year + 1 : year;
+  const months = i18n.months as Record<string, string>;
+  const prevMonthName = months[String(prevMonth)] ?? MONTH_NAMES[prevMonth - 1];
+  const nextMonthName = months[String(nextMonth)] ?? MONTH_NAMES[nextMonth - 1];
+
   const enMonthName = MONTH_NAMES[month - 1];
   const webPageSchema = {
     "@context": "https://schema.org",
@@ -188,6 +209,27 @@ export default async function CalendarPage({ params }: PageProps) {
             <MonthNav country={country} year={year} month={month} />
           </div>
         </div>
+
+        {/* Page heading + unique intro (above the grid) */}
+        <header style={{ marginBottom: 24 }}>
+          <h1
+            style={{
+              fontFamily: "'EB Garamond', Georgia, serif",
+              fontSize: 30,
+              fontWeight: 400,
+              lineHeight: 1.2,
+              color: "var(--fg)",
+              margin: 0,
+            }}
+          >
+            {pageHeading}
+          </h1>
+          {content && (
+            <p style={{ fontSize: 15, color: "var(--muted)", lineHeight: 1.7, maxWidth: 720, marginTop: 12 }}>
+              {content.introParagraph}
+            </p>
+          )}
+        </header>
 
         {/* Calendar */}
         <div className="fade-up">
@@ -273,15 +315,61 @@ export default async function CalendarPage({ params }: PageProps) {
           countryName={countryName}
         />
 
-        {/* SEO text */}
-        <section className="no-print" style={{ marginTop: 48, paddingTop: 32, borderTop: "1px solid var(--border)" }}>
-          <h2 style={{ fontFamily: "'EB Garamond', Georgia, serif", fontSize: 22, fontWeight: 400, marginBottom: 12 }}>
-            {i18n.calendar.aboutTitle}
-          </h2>
-          <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.7, maxWidth: 700 }}>
-            {t(i18n.calendar.aboutText, { month: monthName, year, country: countryName })}
-          </p>
-        </section>
+        {/* Seasonal context + planning tips (graceful fallback when absent) */}
+        {content && (content.seasonalNote || content.planningTips.length > 0) && (
+          <section className="no-print" style={{ marginTop: 32, paddingTop: 24, borderTop: "1px solid var(--border)" }}>
+            <h2 className="sr-only">{pageHeading}</h2>
+            {content.seasonalNote && (
+              <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.7, maxWidth: 720 }}>
+                {content.seasonalNote}
+              </p>
+            )}
+            {content.planningTips.length > 0 && (
+              <ul style={{ marginTop: 16, paddingLeft: 20, display: "flex", flexDirection: "column", gap: 8 }}>
+                {content.planningTips.map((tip, i) => (
+                  <li key={i} style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.65 }}>
+                    {tip}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        )}
+
+        {/* Crawlable month / hub navigation */}
+        <nav
+          aria-label="Calendar navigation"
+          style={{ marginTop: 40, paddingTop: 24, borderTop: "1px solid var(--border)", display: "flex", flexWrap: "wrap", gap: 16, alignItems: "center", justifyContent: "space-between" }}
+        >
+          <Link href={`/calendar/${country}/${prevYear}/${prevMonth}`} style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
+            ← {prevMonthName} {prevYear}
+          </Link>
+          <div style={{ display: "flex", gap: 16, flexWrap: "wrap", justifyContent: "center" }}>
+            <Link href={`/calendar/${country}/${year}`} style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
+              {year} {countryName}
+            </Link>
+            <Link href={`/calendar/${country}`} style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
+              {countryName}
+            </Link>
+          </div>
+          <Link href={`/calendar/${country}/${nextYear}/${nextMonth}`} style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
+            {nextMonthName} {nextYear} →
+          </Link>
+        </nav>
+
+        {/* SEO text — fallback only. When unique per-month content exists
+            (intro / seasonal note / planning tips above), this generic templated
+            block is omitted to avoid a duplicate-content signal across pages. */}
+        {!content && (
+          <section className="no-print" style={{ marginTop: 48, paddingTop: 32, borderTop: "1px solid var(--border)" }}>
+            <h2 style={{ fontFamily: "'EB Garamond', Georgia, serif", fontSize: 22, fontWeight: 400, marginBottom: 12 }}>
+              {i18n.calendar.aboutTitle}
+            </h2>
+            <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.7, maxWidth: 700 }}>
+              {t(i18n.calendar.aboutText, { month: monthName, year, country: countryName })}
+            </p>
+          </section>
+        )}
       </div>
     </>
   );
