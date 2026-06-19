@@ -15,17 +15,22 @@ import { buildHowToSchema, generateCalendarPageSchema, COUNTRY_NAMES } from "@/l
 import { getLocale } from "@/i18n/server";
 import { getTranslations, t } from "@/i18n";
 import type { Locale } from "@/i18n";
-import { headers } from "next/headers";
 
 interface PageProps {
   params: Promise<{ country: string; year: string; month: string }>;
 }
 
+// Years we statically generate. With dynamicParams = false, any year outside
+// this list returns 404 instead of being rendered and written to the ISR cache.
+const CURRENT_YEAR = new Date().getFullYear();
+const CALENDAR_YEARS = [CURRENT_YEAR, CURRENT_YEAR + 1];
+
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   const params = [];
-  const currentYear = new Date().getFullYear();
   for (const country of SUPPORTED_COUNTRIES) {
-    for (const year of [currentYear, currentYear + 1]) {
+    for (const year of CALENDAR_YEARS) {
       for (let month = 1; month <= 12; month++) {
         params.push({
           country: country.code.toLowerCase(),
@@ -98,9 +103,6 @@ export default async function CalendarPage({ params }: PageProps) {
   const monthName = (i18n.months as Record<string, string>)[String(month)] ?? MONTH_NAMES[month - 1];
   const countryName = (i18n.countries as Record<string, string>)[country] ?? config.name;
 
-  const headersList = await headers();
-  const currentPath = headersList.get("x-invoke-path") || `/calendar/${country}/${year}/${month}`;
-
   const holidays = getHolidays(config.code, year);
   const days = buildCalendarDays(year, month, holidays);
   const monthHolidays = days.filter((d) => d.holiday && d.isCurrentMonth);
@@ -122,6 +124,10 @@ export default async function CalendarPage({ params }: PageProps) {
   const prevYear = month === 1 ? year - 1 : year;
   const nextMonth = month === 12 ? 1 : month + 1;
   const nextYear = month === 12 ? year + 1 : year;
+  // Only link to adjacent months whose year we actually generate (see
+  // CALENDAR_YEARS) so crawlers can't walk an unbounded prev/next chain.
+  const showPrevMonthLink = CALENDAR_YEARS.includes(prevYear);
+  const showNextMonthLink = CALENDAR_YEARS.includes(nextYear);
   const months = i18n.months as Record<string, string>;
   const prevMonthName = months[String(prevMonth)] ?? MONTH_NAMES[prevMonth - 1];
   const nextMonthName = months[String(nextMonth)] ?? MONTH_NAMES[nextMonth - 1];
@@ -343,9 +349,13 @@ export default async function CalendarPage({ params }: PageProps) {
           aria-label="Calendar navigation"
           style={{ marginTop: 40, paddingTop: 24, borderTop: "1px solid var(--border)", display: "flex", flexWrap: "wrap", gap: 16, alignItems: "center", justifyContent: "space-between" }}
         >
-          <Link href={`/calendar/${country}/${prevYear}/${prevMonth}`} style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
-            ← {prevMonthName} {prevYear}
-          </Link>
+          {showPrevMonthLink ? (
+            <Link href={`/calendar/${country}/${prevYear}/${prevMonth}`} style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
+              ← {prevMonthName} {prevYear}
+            </Link>
+          ) : (
+            <span />
+          )}
           <div style={{ display: "flex", gap: 16, flexWrap: "wrap", justifyContent: "center" }}>
             <Link href={`/calendar/${country}/${year}`} style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
               {year} {countryName}
@@ -354,9 +364,13 @@ export default async function CalendarPage({ params }: PageProps) {
               {countryName}
             </Link>
           </div>
-          <Link href={`/calendar/${country}/${nextYear}/${nextMonth}`} style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
-            {nextMonthName} {nextYear} →
-          </Link>
+          {showNextMonthLink ? (
+            <Link href={`/calendar/${country}/${nextYear}/${nextMonth}`} style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
+              {nextMonthName} {nextYear} →
+            </Link>
+          ) : (
+            <span />
+          )}
         </nav>
 
         {/* SEO text — fallback only. When unique per-month content exists
