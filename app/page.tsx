@@ -13,16 +13,23 @@ import { getTranslations } from "@/i18n";
 
 const BASE_URL = "https://printablecalendars.app";
 
+const HOME_TITLE =
+  "Free Printable Calendars with Public Holidays — USA, UK, Australia, Canada, Japan & Korea | PrintableCalendars";
+const HOME_DESCRIPTION =
+  "Download free printable monthly calendars with official public holidays for the USA, UK, Australia, Canada, Japan, and South Korea. Clean A4 PDF, instant download, no sign-up required.";
+
 export const metadata: Metadata = {
-  title: "Free Printable Calendars with Public Holidays — Japan, Korea & USA | PrintableCalendars",
-  description:
-    "Download free printable monthly calendars with official public holidays for USA, Japan, and South Korea. Clean A4 PDF, instant download, no sign-up required.",
+  title: HOME_TITLE,
+  description: HOME_DESCRIPTION,
   keywords: [
     "free printable calendar 2026",
     "printable calendar with public holidays",
+    "USA calendar 2026",
+    "UK calendar 2026",
+    "Australia calendar 2026",
+    "Canada calendar 2026",
     "Japan calendar 2026",
     "South Korea calendar 2026",
-    "USA calendar 2026",
     "printable calendar PDF",
     "printable monthly calendar",
     "A4 calendar download",
@@ -30,16 +37,16 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: BASE_URL },
   openGraph: {
-    title: "Free Printable Calendars with Public Holidays — Japan, Korea & USA | PrintableCalendars",
-    description: "Download free printable monthly calendars with official public holidays for USA, Japan, and South Korea. Clean A4 PDF, instant download, no sign-up required.",
+    title: HOME_TITLE,
+    description: HOME_DESCRIPTION,
     url: BASE_URL,
     type: "website",
     siteName: "PrintableCalendars",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Free Printable Calendars with Public Holidays — Japan, Korea & USA | PrintableCalendars",
-    description: "Download free printable monthly calendars with official public holidays for USA, Japan, and South Korea. Clean A4 PDF, instant download, no sign-up required.",
+    title: HOME_TITLE,
+    description: HOME_DESCRIPTION,
     images: ["/og-image.png"],
   },
 };
@@ -78,7 +85,6 @@ export default async function HomePage() {
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
 
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "64px 24px" }}>

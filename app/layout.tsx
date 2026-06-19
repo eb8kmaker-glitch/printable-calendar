@@ -6,7 +6,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import LangSwitcher from "@/components/LangSwitcher";
 import CalendarNavLink from "@/components/CalendarNavLink";
-import { organizationSchema } from "@/lib/seo-helpers";
+import { organizationSchema, generateWebSiteSchema } from "@/lib/seo-helpers";
 import { Analytics } from "@vercel/analytics/next";
 import { getLocale } from "@/i18n/server";
 import { getTranslations } from "@/i18n";
@@ -83,6 +83,10 @@ export default async function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(generateWebSiteSchema()) }}
+        />
         <ThemeProvider>
           <Header
             navLabels={{
@@ -107,6 +111,7 @@ export default async function RootLayout({
               { href: "/holiday-planner", label: (i18n.footer as Record<string, string>).holidayPlanner ?? "Holiday Planner" },
               { href: "/school-calendar-2026", label: ((i18n.footer as Record<string, string>).schoolCalendar ?? "School Calendar {year}").replace("{year}", "2026") },
               { href: "/wedding-countdown", label: (i18n.footer as Record<string, string>).weddingCountdown ?? "Wedding Countdown" },
+              { href: "/resignation-planner", label: (i18n.footer as Record<string, string>).resignationPlanner ?? "Resignation Planner" },
               { href: "/ramadan-2026", label: (i18n.footer as Record<string, string>).ramadan ?? "Ramadan 2026" },
             ]}
           />
@@ -122,6 +127,11 @@ export default async function RootLayout({
           async
           src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_ID}`}
           crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
+        <Script
+          async
+          src="//t1.kakaocdn.net/kas/static/ba.min.js"
           strategy="afterInteractive"
         />
         <Analytics />

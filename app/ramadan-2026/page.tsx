@@ -62,12 +62,21 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const RAMADAN_MILESTONES: DayMilestone[] = [
-  { min: 0, max: 0, message: "Eid Mubarak!" },
-  { min: 1, max: 9, message: "The final days —Laylat al-Qadr is near.", tip: "Increase worship in the last odd nights." },
-  { min: 10, max: 19, message: "The middle third —stay consistent.", tip: "Increase Quran recitation in the last 10 days." },
-  { min: 20, max: 99999, message: "The month of reflection has begun.", tip: "Set your intention (niyyah) each night." },
-];
+// Render an i18n template with {placeholders} replaced by bold values, keeping
+// natural per-locale word order while preserving the highlighted dates.
+function renderWithBold(template: string, vars: Record<string, string>) {
+  return template.split(/(\{\w+\})/g).map((part, i) => {
+    const m = part.match(/^\{(\w+)\}$/);
+    if (m) {
+      return (
+        <strong key={i} style={{ color: "var(--fg)" }}>
+          {vars[m[1]] ?? part}
+        </strong>
+      );
+    }
+    return part;
+  });
+}
 
 // Ramadan day labels
 const FEB_DAY_LABELS: Record<string, string> = {
@@ -138,6 +147,13 @@ export default async function Ramadan2026Page() {
   const i18n = getTranslations(locale);
   const p = (i18n as unknown as Record<string, Record<string, string>>).ramadanPlanner ?? {};
   const faqSchema = buildFaqSchema(RAMADAN_FAQS.map((f) => ({ q: f.q, a: f.a })));
+
+  const RAMADAN_MILESTONES: DayMilestone[] = [
+    { min: 0, max: 0, message: p.ms0msg ?? "Eid Mubarak!" },
+    { min: 1, max: 9, message: p.ms1msg ?? "The final days — Laylat al-Qadr is near.", tip: p.ms1tip ?? "Increase worship in the last odd nights." },
+    { min: 10, max: 19, message: p.ms2msg ?? "The middle third — stay consistent.", tip: p.ms2tip ?? "Increase Quran recitation in the last 10 days." },
+    { min: 20, max: 99999, message: p.ms3msg ?? "The month of reflection has begun.", tip: p.ms3tip ?? "Set your intention (niyyah) each night." },
+  ];
   return (
     <>
       <script
@@ -179,18 +195,11 @@ export default async function Ramadan2026Page() {
             {p.title ?? "Ramadan Calendar 2026"}
           </h1>
           <p style={{ fontSize: 15, color: "var(--muted)", lineHeight: 1.65, maxWidth: 560 }}>
-            Ramadan 2026 runs from approximately{" "}
-            <strong style={{ color: "var(--fg)" }}>
-              {RAMADAN_2026.start}
-            </strong>{" "}
-            to{" "}
-            <strong style={{ color: "var(--fg)" }}>
-              {RAMADAN_2026.end}
-            </strong>
-            , with Eid al-Fitr celebrated around{" "}
-            <strong style={{ color: "var(--fg)" }}>{RAMADAN_2026.eidAlFitr}</strong>. Download
-            free printable calendars for February and March 2026 to plan your
-            fasting schedule.
+            {renderWithBold(
+              p.heroIntro ??
+                "Ramadan 2026 runs from approximately {start} to {end}, with Eid al-Fitr celebrated around {eid}. Download free printable calendars for February and March 2026 to plan your fasting schedule.",
+              { start: RAMADAN_2026.start, end: RAMADAN_2026.end, eid: RAMADAN_2026.eidAlFitr },
+            )}
           </p>
           <p
             style={{
@@ -339,20 +348,12 @@ export default async function Ramadan2026Page() {
           </h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 16, maxWidth: 700 }}>
             <p style={{ fontSize: 15, lineHeight: 1.85, color: "var(--fg)" }}>
-              Ramadan is the ninth month of the Islamic lunar calendar and the
-              holiest period in Islam. During Ramadan, Muslims around the world
-              observe a fast from before sunrise (Fajr) to sunset (Maghrib),
-              abstaining from food, drink, and other physical needs. The month
-              is also marked by increased prayer, Quran recitation, charitable
-              giving (Zakat), and community gatherings for the pre-dawn meal
-              (Suhoor) and the breaking of the fast (Iftar).
+              {p.aboutBody1 ??
+                "Ramadan is the ninth month of the Islamic lunar calendar and the holiest period in Islam. During Ramadan, Muslims around the world observe a fast from before sunrise (Fajr) to sunset (Maghrib), abstaining from food, drink, and other physical needs. The month is also marked by increased prayer, Quran recitation, charitable giving (Zakat), and community gatherings for the pre-dawn meal (Suhoor) and the breaking of the fast (Iftar)."}
             </p>
             <p style={{ fontSize: 15, lineHeight: 1.85, color: "var(--fg)" }}>
-              Ramadan ends with Eid al-Fitr —the &quot;Festival of Breaking the
-              Fast&quot; —a joyful celebration marked by communal prayers, feasting,
-              gift-giving, and charity. Because the Islamic calendar is lunar,
-              Ramadan shifts approximately 10–11 days earlier each year on the
-              Gregorian calendar.
+              {p.aboutBody2 ??
+                "Ramadan ends with Eid al-Fitr — the “Festival of Breaking the Fast” — a joyful celebration marked by communal prayers, feasting, gift-giving, and charity. Because the Islamic calendar is lunar, Ramadan shifts approximately 10–11 days earlier each year on the Gregorian calendar."}
             </p>
           </div>
         </section>
@@ -377,10 +378,11 @@ export default async function Ramadan2026Page() {
             {p.planningAhead ?? "Planning ahead — Ramadan 2027"}
           </h2>
           <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.65, marginBottom: 20 }}>
-            Ramadan 2027 is expected to begin around{" "}
-            <strong style={{ color: "var(--fg)" }}>{RAMADAN_2027.start}</strong> and end around{" "}
-            <strong style={{ color: "var(--fg)" }}>{RAMADAN_2027.end}</strong>, with Eid al-Fitr
-            around <strong style={{ color: "var(--fg)" }}>{RAMADAN_2027.eidAlFitr}</strong>.
+            {renderWithBold(
+              p.preview2027 ??
+                "Ramadan 2027 is expected to begin around {start} and end around {end}, with Eid al-Fitr around {eid}.",
+              { start: RAMADAN_2027.start, end: RAMADAN_2027.end, eid: RAMADAN_2027.eidAlFitr },
+            )}
           </p>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             {[RAMADAN_2027.startMonth, RAMADAN_2027.endMonth].map((m) => (

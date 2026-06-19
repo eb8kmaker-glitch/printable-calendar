@@ -15,7 +15,7 @@ const BASE_URL = "https://printablecalendars.app";
 export const metadata: Metadata = {
   title: "Printable School Calendar 2026 —Academic Year PDF Download",
   description:
-    "Download a free printable school calendar for the 2026–2027 academic year. Monthly PDFs with public holidays for USA, Japan, and South Korea. Perfect for students, parents, and teachers.",
+    "Download a free printable school calendar for the 2026–2027 academic year. Monthly PDFs with public holidays for the USA, UK, Australia, Canada, Japan, and South Korea. Perfect for students, parents, and teachers.",
   keywords: [
     "printable school calendar 2026",
     "academic calendar 2026 2027",
@@ -142,14 +142,6 @@ const ACADEMIC_YEARS: Record<string, { label: string; months: { year: number; mo
 
 const COUNTRY_FLAG: Record<string, string> = { US: "", GB: "", AU: "", CA: "", KR: "", JP: "" };
 
-const SCHOOL_MILESTONES: DayMilestone[] = [
-  { min: 0, max: 0, message: "School's out!" },
-  { min: 1, max: 13, message: "Final days —finish strong.", tip: "One week of effort pays off all year." },
-  { min: 14, max: 29, message: "Almost done —finals prep time.", tip: "Start studying earlier than you think you need to." },
-  { min: 30, max: 59, message: "Second half begins —push through.", tip: "This is when consistency matters most." },
-  { min: 60, max: 99999, message: "Plenty of semester left —stay on track.", tip: "Review your syllabus and set weekly goals." },
-];
-
 const SCHOOL_FAQS = [
   {
     q: "What is a printable school calendar 2026?",
@@ -174,6 +166,14 @@ export default async function SchoolCalendar2026Page() {
   const i18n = getTranslations(locale);
   const p = (i18n as unknown as Record<string, Record<string, string>>).schoolCalendar ?? {};
   const faqSchema = buildFaqSchema(SCHOOL_FAQS.map((f) => ({ q: f.q, a: f.a })));
+
+  const SCHOOL_MILESTONES: DayMilestone[] = [
+    { min: 0, max: 0, message: p.ms0msg ?? "School's out!" },
+    { min: 1, max: 13, message: p.ms1msg ?? "Final days — finish strong.", tip: p.ms1tip ?? "One week of effort pays off all year." },
+    { min: 14, max: 29, message: p.ms2msg ?? "Almost done — finals prep time.", tip: p.ms2tip ?? "Start studying earlier than you think you need to." },
+    { min: 30, max: 59, message: p.ms3msg ?? "Second half begins — push through.", tip: p.ms3tip ?? "This is when consistency matters most." },
+    { min: 60, max: 99999, message: p.ms4msg ?? "Plenty of semester left — stay on track.", tip: p.ms4tip ?? "Review your syllabus and set weekly goals." },
+  ];
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebPage",
@@ -184,7 +184,7 @@ export default async function SchoolCalendar2026Page() {
 
   const FEATURES_I18N = [
     [p.feat1Title ?? "School year differences", p.feat1Body ?? "US school years run August–May; Japanese and Korean school years run April–March."],
-    [p.feat2Title ?? "Holiday coverage", p.feat2Body ?? "All public holidays for USA, Japan, and South Korea are marked."],
+    [p.feat2Title ?? "Holiday coverage", p.feat2Body ?? "All public holidays for the USA, UK, Australia, Canada, Japan, and South Korea are marked."],
     [p.feat3Title ?? "Print-ready PDF", p.feat3Body ?? "A4 landscape format, optimised for home and office printers."],
     [p.feat4Title ?? "No login required", p.feat4Body ?? "Download instantly without creating an account."],
   ];
@@ -232,10 +232,7 @@ export default async function SchoolCalendar2026Page() {
             <span style={{ opacity: 0.4 }}>{p.subtitle ?? "2026–2027"}</span>
           </h1>
           <p style={{ fontSize: 15, color: "var(--muted)", lineHeight: 1.65 }}>
-            Free monthly calendars covering the full academic year —from back-to-school
-            through graduation. Each PDF includes official public holidays for
-            your country, a clean grid layout, and print-optimised margins for
-            writing in class schedules and exam dates.
+            {p.description ?? "Free monthly calendars covering the full academic year — from back-to-school through graduation. Each PDF includes official public holidays for your country, a clean grid layout, and print-optimised margins for writing in class schedules and exam dates."}
           </p>
         </div>
 
@@ -290,7 +287,7 @@ export default async function SchoolCalendar2026Page() {
                       marginTop: 2,
                     }}
                   >
-                    Academic year: {academic.label}
+                    {p.academicYearLabel ?? "Academic year:"} {academic.label}
                   </p>
                 </div>
               </div>

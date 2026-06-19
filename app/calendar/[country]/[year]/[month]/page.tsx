@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getHolidays, buildCalendarDays, getCountryConfig } from "@/lib/holidays";
+import { getCalendarContent } from "@/lib/calendar-content";
 import { MONTH_NAMES, SUPPORTED_COUNTRIES } from "@/lib/types";
 import { getEventsByMonth, formatEventDate, CATEGORY_LABELS } from "@/lib/events";
 import CalendarGrid from "@/components/CalendarGrid";
@@ -8,27 +9,35 @@ import MonthNav from "@/components/MonthNav";
 import DownloadButton from "@/components/DownloadButton";
 import LangSwitcher from "@/components/LangSwitcher";
 import AdSlot from "@/components/AdSlot";
+import MonthSummary from "@/components/MonthSummary";
 import Link from "next/link";
-import { buildHowToSchema } from "@/lib/seo-helpers";
+import { buildHowToSchema, generateCalendarPageSchema, COUNTRY_NAMES } from "@/lib/seo-helpers";
 import { getLocale } from "@/i18n/server";
 import { getTranslations, t } from "@/i18n";
 import type { Locale } from "@/i18n";
-import { headers } from "next/headers";
 
 interface PageProps {
   params: Promise<{ country: string; year: string; month: string }>;
 }
 
+// Years we statically generate. With dynamicParams = false, any year outside
+// this list returns 404 instead of being rendered and written to the ISR cache.
+const CURRENT_YEAR = new Date().getFullYear();
+const CALENDAR_YEARS = [CURRENT_YEAR, CURRENT_YEAR + 1];
+
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   const params = [];
-  const year = new Date().getFullYear();
   for (const country of SUPPORTED_COUNTRIES) {
-    for (let month = 1; month <= 12; month++) {
-      params.push({
-        country: country.code.toLowerCase(),
-        year: String(year),
-        month: String(month),
-      });
+    for (const year of CALENDAR_YEARS) {
+      for (let month = 1; month <= 12; month++) {
+        params.push({
+          country: country.code.toLowerCase(),
+          year: String(year),
+          month: String(month),
+        });
+      }
     }
   }
   return params;
@@ -45,9 +54,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const countryName = (i18n.countries as Record<string, string>)[country] ?? config.name;
 
   const titles: Record<Locale, string> = {
-    en: `${monthName} ${year} Printable Calendar — ${countryName} Public Holidays | PrintableCalendars`,
-    ko: `${year}년 ${monthName} 달력 — ${countryName} 공휴일 | PrintableCalendars`,
-    ja: `${year}年${monthName}カレンダー — ${countryName}の祝日 | PrintableCalendars`,
+    en: `${monthName} ${year} Printable Calendar — ${countryName} Public Holidays`,
+    ko: `${year}년 ${monthName} 달력 — ${countryName} 공휴일`,
+    ja: `${year}年${monthName}カレンダー — ${countryName}の祝日`,
   };
   const descriptions: Record<Locale, string> = {
     en: `Free printable ${monthName} ${year} calendar for ${countryName} with official public holidays. Download as A4 PDF instantly, no login required.`,
@@ -94,13 +103,34 @@ export default async function CalendarPage({ params }: PageProps) {
   const monthName = (i18n.months as Record<string, string>)[String(month)] ?? MONTH_NAMES[month - 1];
   const countryName = (i18n.countries as Record<string, string>)[country] ?? config.name;
 
-  const headersList = await headers();
-  const currentPath = headersList.get("x-invoke-path") || `/calendar/${country}/${year}/${month}`;
-
   const holidays = getHolidays(config.code, year);
   const days = buildCalendarDays(year, month, holidays);
   const monthHolidays = days.filter((d) => d.holiday && d.isCurrentMonth);
   const monthEvents = getEventsByMonth(month).slice(0, 8);
+
+  // Unique per-country, per-month content (null => render heading only).
+  const content = await getCalendarContent(country, month, locale);
+
+  // Locale-aware page heading, following the generateMetadata title pattern.
+  const headings: Record<Locale, string> = {
+    en: `${countryName} Calendar — ${monthName} ${year}`,
+    ko: `${countryName} ${year}년 ${monthName} 달력`,
+    ja: `${countryName} ${year}年${monthName}カレンダー`,
+  };
+  const pageHeading = headings[locale];
+
+  // Crawlable previous / next month targets (with year rollover).
+  const prevMonth = month === 1 ? 12 : month - 1;
+  const prevYear = month === 1 ? year - 1 : year;
+  const nextMonth = month === 12 ? 1 : month + 1;
+  const nextYear = month === 12 ? year + 1 : year;
+  // Only link to adjacent months whose year we actually generate (see
+  // CALENDAR_YEARS) so crawlers can't walk an unbounded prev/next chain.
+  const showPrevMonthLink = CALENDAR_YEARS.includes(prevYear);
+  const showNextMonthLink = CALENDAR_YEARS.includes(nextYear);
+  const months = i18n.months as Record<string, string>;
+  const prevMonthName = months[String(prevMonth)] ?? MONTH_NAMES[prevMonth - 1];
+  const nextMonthName = months[String(nextMonth)] ?? MONTH_NAMES[nextMonth - 1];
 
   const enMonthName = MONTH_NAMES[month - 1];
   const webPageSchema = {
@@ -131,10 +161,19 @@ export default async function CalendarPage({ params }: PageProps) {
 
   const weekdayAbbrs = (i18n.weekdays as string[]).map((d) => d.slice(0, 2));
 
+  const breadcrumb = generateCalendarPageSchema({
+    country,
+    countryName: COUNTRY_NAMES[country] ?? countryName,
+    year,
+    month,
+    monthName: MONTH_NAMES[month - 1],
+  });
+
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />
 
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "32px 24px" }}>
         <AdSlot slot="top-banner" style={{ marginBottom: 24 }} />
@@ -176,6 +215,27 @@ export default async function CalendarPage({ params }: PageProps) {
             <MonthNav country={country} year={year} month={month} />
           </div>
         </div>
+
+        {/* Page heading + unique intro (above the grid) */}
+        <header style={{ marginBottom: 24 }}>
+          <h1
+            style={{
+              fontFamily: "'EB Garamond', Georgia, serif",
+              fontSize: 30,
+              fontWeight: 400,
+              lineHeight: 1.2,
+              color: "var(--fg)",
+              margin: 0,
+            }}
+          >
+            {pageHeading}
+          </h1>
+          {content && (
+            <p style={{ fontSize: 15, color: "var(--muted)", lineHeight: 1.7, maxWidth: 720, marginTop: 12 }}>
+              {content.introParagraph}
+            </p>
+          )}
+        </header>
 
         {/* Calendar */}
         <div className="fade-up">
@@ -247,15 +307,85 @@ export default async function CalendarPage({ params }: PageProps) {
           <DownloadButton country={country} year={year} month={month} locale={locale} />
         </div>
 
-        {/* SEO text */}
-        <section className="no-print" style={{ marginTop: 48, paddingTop: 32, borderTop: "1px solid var(--border)" }}>
-          <h2 style={{ fontFamily: "'EB Garamond', Georgia, serif", fontSize: 22, fontWeight: 400, marginBottom: 12 }}>
-            {i18n.calendar.aboutTitle}
-          </h2>
-          <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.7, maxWidth: 700 }}>
-            {t(i18n.calendar.aboutText, { month: monthName, year, country: countryName })}
-          </p>
-        </section>
+        <MonthSummary
+          country={country}
+          year={year}
+          month={month}
+          holidays={monthHolidays.map((d) => ({ date: d.date.toISOString().split("T")[0], name: d.holiday!.name }))}
+          locale={locale}
+          i18n={{
+            monthSummary: (i18n.calendar as unknown as Record<string, Record<string, string>>).monthSummary as { intro_one: string; intro_other: string; noHolidays: string; downloadNote: string },
+            holidayDescriptions: (i18n.calendar as unknown as Record<string, Record<string, string>>).holidayDescriptions ?? {},
+          }}
+          monthName={monthName}
+          countryName={countryName}
+        />
+
+        {/* Seasonal context + planning tips (graceful fallback when absent) */}
+        {content && (content.seasonalNote || content.planningTips.length > 0) && (
+          <section className="no-print" style={{ marginTop: 32, paddingTop: 24, borderTop: "1px solid var(--border)" }}>
+            <h2 style={{ fontFamily: "'EB Garamond', Georgia, serif", fontSize: 20, fontWeight: 400, marginBottom: 12, color: "var(--fg)" }}>
+              {t(i18n.calendar.seasonalTitle, { month: monthName, year })}
+            </h2>
+            {content.seasonalNote && (
+              <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.7, maxWidth: 720 }}>
+                {content.seasonalNote}
+              </p>
+            )}
+            {content.planningTips.length > 0 && (
+              <ul style={{ marginTop: 16, paddingLeft: 20, display: "flex", flexDirection: "column", gap: 8 }}>
+                {content.planningTips.map((tip, i) => (
+                  <li key={i} style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.65 }}>
+                    {tip}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        )}
+
+        {/* Crawlable month / hub navigation */}
+        <nav
+          aria-label="Calendar navigation"
+          style={{ marginTop: 40, paddingTop: 24, borderTop: "1px solid var(--border)", display: "flex", flexWrap: "wrap", gap: 16, alignItems: "center", justifyContent: "space-between" }}
+        >
+          {showPrevMonthLink ? (
+            <Link href={`/calendar/${country}/${prevYear}/${prevMonth}`} style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
+              ← {prevMonthName} {prevYear}
+            </Link>
+          ) : (
+            <span />
+          )}
+          <div style={{ display: "flex", gap: 16, flexWrap: "wrap", justifyContent: "center" }}>
+            <Link href={`/calendar/${country}/${year}`} style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
+              {year} {countryName}
+            </Link>
+            <Link href={`/calendar/${country}`} style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
+              {countryName}
+            </Link>
+          </div>
+          {showNextMonthLink ? (
+            <Link href={`/calendar/${country}/${nextYear}/${nextMonth}`} style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
+              {nextMonthName} {nextYear} →
+            </Link>
+          ) : (
+            <span />
+          )}
+        </nav>
+
+        {/* SEO text — fallback only. When unique per-month content exists
+            (intro / seasonal note / planning tips above), this generic templated
+            block is omitted to avoid a duplicate-content signal across pages. */}
+        {!content && (
+          <section className="no-print" style={{ marginTop: 48, paddingTop: 32, borderTop: "1px solid var(--border)" }}>
+            <h2 style={{ fontFamily: "'EB Garamond', Georgia, serif", fontSize: 22, fontWeight: 400, marginBottom: 12 }}>
+              {i18n.calendar.aboutTitle}
+            </h2>
+            <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.7, maxWidth: 700 }}>
+              {t(i18n.calendar.aboutText, { month: monthName, year, country: countryName })}
+            </p>
+          </section>
+        )}
       </div>
     </>
   );

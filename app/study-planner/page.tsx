@@ -146,7 +146,7 @@ export default async function StudyPlannerPage() {
             <span style={{ opacity: 0.4 }}>{p.subtitle ?? "calendars, free forever."}</span>
           </h1>
           <p style={{ fontSize: 15, color: "var(--muted)", lineHeight: 1.65, marginBottom: 28 }}>
-            {p.description ?? "Monthly calendars designed for students. Map out your semester — exams, deadlines, readings, and study blocks — on a clean A4 printout you can write on. Includes public holidays for USA, Japan, and South Korea. No account required."}
+            {p.description ?? "Monthly calendars designed for students. Map out your semester — exams, deadlines, readings, and study blocks — on a clean A4 printout you can write on. Includes public holidays for the USA, UK, Australia, Canada, Japan, and South Korea. No account required."}
           </p>
           <Link
             href={`/calendar/us/${year}/${month}`}

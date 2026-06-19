@@ -59,16 +59,6 @@ const WEDDING_FAQS = [
   },
 ];
 
-const WEDDING_MILESTONES: DayMilestone[] = [
-  { min: 0, max: 0, message: "Today is your wedding day." },
-  { min: 1, max: 6, message: "This is it. You're ready.", tip: "Sleep. Everything is handled." },
-  { min: 7, max: 29, message: "Almost there —delegate, pack, breathe.", tip: "Hand off day-of coordination to someone you trust." },
-  { min: 30, max: 89, message: "Final fittings, payments, and last confirmations.", tip: "Write your vows this week." },
-  { min: 90, max: 179, message: "Send formal invitations and finalise your vendors.", tip: "Confirm headcount with caterer 6 weeks out." },
-  { min: 180, max: 364, message: "Big decisions time —photographer, caterer, dress.", tip: "Send save-the-dates now." },
-  { min: 365, max: 99999, message: "Start early —book your venue and set a date.", tip: "Popular venues book up 18 months out." },
-];
-
 export default async function WeddingCountdownPage() {
   const locale = await getLocale();
   const i18n = getTranslations(locale);
@@ -77,6 +67,16 @@ export default async function WeddingCountdownPage() {
   const year = now.getFullYear();
   const currentMonth = now.getMonth() + 1;
   const faqSchema = buildFaqSchema(WEDDING_FAQS.map((f) => ({ q: f.q, a: f.a })));
+
+  const WEDDING_MILESTONES: DayMilestone[] = [
+    { min: 0, max: 0, message: p.ms0msg ?? "Today is your wedding day." },
+    { min: 1, max: 6, message: p.ms1msg ?? "This is it. You're ready.", tip: p.ms1tip ?? "Sleep. Everything is handled." },
+    { min: 7, max: 29, message: p.ms2msg ?? "Almost there — delegate, pack, breathe.", tip: p.ms2tip ?? "Hand off day-of coordination to someone you trust." },
+    { min: 30, max: 89, message: p.ms3msg ?? "Final fittings, payments, and last confirmations.", tip: p.ms3tip ?? "Write your vows this week." },
+    { min: 90, max: 179, message: p.ms4msg ?? "Send formal invitations and finalise your vendors.", tip: p.ms4tip ?? "Confirm headcount with caterer 6 weeks out." },
+    { min: 180, max: 364, message: p.ms5msg ?? "Big decisions time — photographer, caterer, dress.", tip: p.ms5tip ?? "Send save-the-dates now." },
+    { min: 365, max: 99999, message: p.ms6msg ?? "Start early — book your venue and set a date.", tip: p.ms6tip ?? "Popular venues book up 18 months out." },
+  ];
 
   const HOW_TO_USE_I18N = [
     [p.step1Title ?? "Print one month at a time", p.step1Body ?? "Start with the current month. Fill in venue visits, tastings, and fittings as you go."],

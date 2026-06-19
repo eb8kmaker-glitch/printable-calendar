@@ -11,6 +11,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: baseUrl, lastModified: new Date(), changeFrequency: "monthly", priority: 1 },
   ];
 
+  // Country landing pages — /calendar/:country (current year, no redirect)
+  for (const country of SUPPORTED_COUNTRIES) {
+    entries.push({
+      url: `${baseUrl}/calendar/${country.code.toLowerCase()}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.9,
+    });
+  }
+
   // Calendar pages — current year + next year
   for (const country of SUPPORTED_COUNTRIES) {
     for (const y of [year, year + 1]) {
@@ -100,6 +110,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "holiday-planner",
     "teacher-planner",
     "wedding-countdown",
+    "resignation-planner",
   ]) {
     entries.push({
       url: `${baseUrl}/${slug}`,

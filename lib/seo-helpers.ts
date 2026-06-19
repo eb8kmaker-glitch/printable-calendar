@@ -1,5 +1,58 @@
 const BASE_URL = "https://printablecalendars.app";
 
+export const COUNTRY_NAMES: Record<string, string> = {
+  us: "United States",
+  gb: "United Kingdom",
+  au: "Australia",
+  ca: "Canada",
+  kr: "South Korea",
+  jp: "Japan",
+};
+
+export function generateWebSiteSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "PrintableCalendars",
+    url: BASE_URL,
+    potentialAction: {
+      "@type": "SearchAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: `${BASE_URL}/calendar/{country}/2026/{month}`,
+      },
+      "query-input": "required name=country",
+    },
+  };
+}
+
+export function generateBreadcrumbSchema(items: { name: string; url: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      item: item.url,
+    })),
+  };
+}
+
+export function generateCalendarPageSchema(params: {
+  country: string;
+  countryName: string;
+  year: number;
+  month: number;
+  monthName: string;
+}) {
+  return generateBreadcrumbSchema([
+    { name: "Home", url: BASE_URL },
+    { name: params.countryName, url: `${BASE_URL}/calendar/${params.country}/${params.year}` },
+    { name: `${params.monthName} ${params.year}`, url: `${BASE_URL}/calendar/${params.country}/${params.year}/${params.month}` },
+  ]);
+}
+
 /** Singleton Organization schema — embed in layout for Knowledge Graph. */
 export const organizationSchema = {
   "@context": "https://schema.org",
@@ -8,7 +61,7 @@ export const organizationSchema = {
   url: BASE_URL,
   logo: `${BASE_URL}/og-image.png`,
   description:
-    "Free printable monthly and annual calendars with official public holidays for USA, Japan, and South Korea. A4 PDF, no login required.",
+    "Free printable monthly and annual calendars with official public holidays for the USA, UK, Australia, Canada, Japan, and South Korea. A4 PDF, no login required.",
   sameAs: [],
 };
 

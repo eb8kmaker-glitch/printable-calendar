@@ -1,25 +1,11 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 
 // Desktop: 728×90 (printablecalendars_footer)
 const DESKTOP_UNIT = "DAN-CoVdtClU3lNByMCT";
 // Mobile: 320×50 (printablecalendars_footer_m)
 const MOBILE_UNIT  = "DAN-3RN3Rk3bpFXPgnnP";
-
-declare global {
-  interface Window {
-    kakaoAdfit?: { push: (opts: object) => void };
-  }
-}
-
-function loadAdFitScript() {
-  if (document.querySelector('script[src*="kas/static/ba.min.js"]')) return;
-  const s = document.createElement("script");
-  s.src = "//t1.kakaocdn.net/kas/static/ba.min.js";
-  s.async = true;
-  document.head.appendChild(s);
-}
 
 interface AdFitUnitProps {
   unit: string;
@@ -30,15 +16,11 @@ interface AdFitUnitProps {
 function AdFitUnit({ unit, width, height }: AdFitUnitProps) {
   const ref = useRef<HTMLModElement>(null);
 
-  useEffect(() => {
-    loadAdFitScript();
-  }, []);
-
   return (
     <ins
       ref={ref}
       className="kakao_ad_area"
-      style={{ display: "none" }}
+      style={{ display: "block" }}
       data-ad-unit={unit}
       data-ad-width={String(width)}
       data-ad-height={String(height)}
