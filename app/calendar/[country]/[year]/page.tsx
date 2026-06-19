@@ -13,11 +13,17 @@ interface PageProps {
   params: Promise<{ country: string; year: string }>;
 }
 
+// Years we statically generate. With dynamicParams = false, any year outside
+// this list returns 404 instead of being rendered and written to the ISR cache.
+const CURRENT_YEAR = new Date().getFullYear();
+const CALENDAR_YEARS = [CURRENT_YEAR, CURRENT_YEAR + 1];
+
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   const params = [];
-  const currentYear = new Date().getFullYear();
   for (const country of SUPPORTED_COUNTRIES) {
-    for (const year of [currentYear, currentYear + 1]) {
+    for (const year of CALENDAR_YEARS) {
       params.push({ country: country.code.toLowerCase(), year: String(year) });
     }
   }
@@ -57,6 +63,12 @@ export default async function YearlyCalendarPage({ params }: PageProps) {
 
   const holidays = getHolidays(config.code, year);
 
+  // Only link to adjacent years we actually generate (see CALENDAR_YEARS).
+  // Prevents crawlers from following an unbounded prev/next year chain, which
+  // previously caused an on-demand ISR write for every year requested.
+  const showPrevYear = CALENDAR_YEARS.includes(year - 1);
+  const showNextYear = CALENDAR_YEARS.includes(year + 1);
+
   const breadcrumb = generateBreadcrumbSchema([
     { name: "Home", url: "https://printablecalendars.app" },
     { name: COUNTRY_NAMES[country] ?? countryName, url: `https://printablecalendars.app/calendar/${country}/${year}` },
@@ -92,9 +104,17 @@ export default async function YearlyCalendarPage({ params }: PageProps) {
           </div>
 
           <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-            <Link href={`/calendar/${country}/${year - 1}`} style={{ width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid var(--border)", borderRadius: 8, textDecoration: "none", color: "var(--fg)", fontSize: 16 }}>←</Link>
+            {showPrevYear ? (
+              <Link href={`/calendar/${country}/${year - 1}`} style={{ width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid var(--border)", borderRadius: 8, textDecoration: "none", color: "var(--fg)", fontSize: 16 }}>←</Link>
+            ) : (
+              <span style={{ width: 36, height: 36 }} />
+            )}
             <span style={{ fontSize: 14, fontWeight: 500, minWidth: 48, textAlign: "center" }}>{year}</span>
-            <Link href={`/calendar/${country}/${year + 1}`} style={{ width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid var(--border)", borderRadius: 8, textDecoration: "none", color: "var(--fg)", fontSize: 16 }}>→</Link>
+            {showNextYear ? (
+              <Link href={`/calendar/${country}/${year + 1}`} style={{ width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid var(--border)", borderRadius: 8, textDecoration: "none", color: "var(--fg)", fontSize: 16 }}>→</Link>
+            ) : (
+              <span style={{ width: 36, height: 36 }} />
+            )}
             <Link href={`/calendar/${country}/${year}/${new Date().getMonth() + 1}`} style={{ fontSize: 12, padding: "5px 12px", border: "1px solid var(--border)", borderRadius: 8, textDecoration: "none", color: "var(--muted)" }}>
               {i18n.calendar.monthlyView}
             </Link>
