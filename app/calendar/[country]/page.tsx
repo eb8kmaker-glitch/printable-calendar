@@ -14,6 +14,12 @@ interface PageProps {
   params: Promise<{ country: string }>;
 }
 
+// With dynamicParams = false, any country outside SUPPORTED_COUNTRIES returns
+// 404 at the routing layer instead of invoking the function and writing to the
+// ISR cache — preventing crawlers from generating pages for unknown country
+// values. Mirrors the [year]/[month] child routes.
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   return SUPPORTED_COUNTRIES.map((c) => ({ country: c.code.toLowerCase() }));
 }
