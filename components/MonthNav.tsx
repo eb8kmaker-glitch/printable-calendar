@@ -1,24 +1,32 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { MONTH_NAMES, CALENDAR_YEARS } from "@/lib/types";
+import { MONTH_NAMES } from "@/lib/types";
 
 interface MonthNavProps {
   country: string;
   year: number;
   month: number;
+  /**
+   * CALENDAR_YEARS, passed down from the server rather than imported here.
+   * Importing it would pull `new Date().getFullYear()` into the client bundle,
+   * where it is re-evaluated against the visitor's clock — a year apart from
+   * the server's value, that mismatches the server HTML during hydration and
+   * leaves the browser's (wrong) years on screen.
+   */
+  years: number[];
 }
 
-export default function MonthNav({ country, year, month }: MonthNavProps) {
+export default function MonthNav({ country, year, month, years }: MonthNavProps) {
   const router = useRouter();
 
-  // Only step into a year we actually generate (see CALENDAR_YEARS). Same guard
-  // the server-rendered prev/next links in [year] and [year]/[month] use — the
-  // arrows would otherwise roll over into a year that 404s.
+  // Only step into a year we actually generate. Same guard the server-rendered
+  // prev/next links in [year] and [year]/[month] use — the arrows would
+  // otherwise roll over into a year that 404s.
   const prevYear = month === 1 ? year - 1 : year;
   const nextYear = month === 12 ? year + 1 : year;
-  const canGoPrev = CALENDAR_YEARS.includes(prevYear);
-  const canGoNext = CALENDAR_YEARS.includes(nextYear);
+  const canGoPrev = years.includes(prevYear);
+  const canGoNext = years.includes(nextYear);
 
   const prev = () => {
     if (!canGoPrev) return;
@@ -105,7 +113,7 @@ export default function MonthNav({ country, year, month }: MonthNavProps) {
           cursor: "pointer",
         }}
       >
-        {CALENDAR_YEARS.map((y) => (
+        {years.map((y) => (
           <option key={y} value={y}>
             {y}
           </option>

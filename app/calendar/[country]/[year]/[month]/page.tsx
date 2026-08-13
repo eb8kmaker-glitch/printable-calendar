@@ -44,7 +44,9 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { country, year, month } = await params;
   const config = getCountryConfig(country);
-  if (!config) return {};
+  // Out-of-range years 404 in the page below; don't emit canonical/hreflang
+  // URLs for one of them.
+  if (!config || !CALENDAR_YEARS.includes(Number(year))) return {};
 
   const locale = await getLocale();
   const i18n = getTranslations(locale);
@@ -92,7 +94,11 @@ export default async function CalendarPage({ params }: PageProps) {
   const month = Number(monthStr);
 
   const config = getCountryConfig(country);
-  if (!config || isNaN(year) || isNaN(month) || month < 1 || month > 12) {
+  // The CALENDAR_YEARS check subsumes isNaN(year): a non-numeric segment parses
+  // to NaN, which is never in the list. It also does the work dynamicParams =
+  // false is meant to do — that only gates prerendered routes, and this one
+  // renders dynamically, so an out-of-range year would otherwise render fine.
+  if (!config || !CALENDAR_YEARS.includes(year) || isNaN(month) || month < 1 || month > 12) {
     notFound();
   }
 
@@ -210,7 +216,7 @@ export default async function CalendarPage({ params }: PageProps) {
             >
               {i18n.calendar.yearView}
             </Link>
-            <MonthNav country={country} year={year} month={month} />
+            <MonthNav country={country} year={year} month={month} years={CALENDAR_YEARS} />
           </div>
         </div>
 
