@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { SUPPORTED_COUNTRIES } from "@/lib/types";
+import { SUPPORTED_COUNTRIES, CALENDAR_YEARS } from "@/lib/types";
 import AdSlot from "@/components/AdSlot";
 import { buildFaqSchema } from "@/lib/seo-helpers";
 import DayCounter from "@/components/DayCounter";
@@ -147,6 +147,13 @@ export default async function Ramadan2026Page() {
   const i18n = getTranslations(locale);
   const p = (i18n as unknown as Record<string, Record<string, string>>).ramadanPlanner ?? {};
   const faqSchema = buildFaqSchema(RAMADAN_FAQS.map((f) => ({ q: f.q, a: f.a })));
+
+  // These Ramadan years are fixed page content, but the calendar routes only
+  // exist for CALENDAR_YEARS — once a Ramadan year drops out of that window its
+  // /calendar links 404 (dynamicParams = false), so hide them. The PDF links
+  // stay: /api/pdf is a route handler and renders any year.
+  const showRamadan2026Links = CALENDAR_YEARS.includes(RAMADAN_2026.year);
+  const showRamadan2027Links = CALENDAR_YEARS.includes(RAMADAN_2027.year);
 
   const RAMADAN_MILESTONES: DayMilestone[] = [
     { min: 0, max: 0, message: p.ms0msg ?? "Eid Mubarak!" },
@@ -295,20 +302,35 @@ export default async function Ramadan2026Page() {
                 <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
                   {SUPPORTED_COUNTRIES.map((c) => (
                     <div key={c.code} style={{ display: "flex", gap: 6 }}>
-                      <Link
-                        href={`/calendar/${c.code.toLowerCase()}/${RAMADAN_2026.year}/${month}`}
-                        style={{
-                          padding: "7px 14px",
-                          background: "var(--fg)",
-                          color: "var(--bg)",
-                          borderRadius: 6,
-                          textDecoration: "none",
-                          fontSize: 12,
-                          fontWeight: 500,
-                        }}
-                      >
-                        {c.name}
-                      </Link>
+                      {showRamadan2026Links ? (
+                        <Link
+                          href={`/calendar/${c.code.toLowerCase()}/${RAMADAN_2026.year}/${month}`}
+                          style={{
+                            padding: "7px 14px",
+                            background: "var(--fg)",
+                            color: "var(--bg)",
+                            borderRadius: 6,
+                            textDecoration: "none",
+                            fontSize: 12,
+                            fontWeight: 500,
+                          }}
+                        >
+                          {c.name}
+                        </Link>
+                      ) : (
+                        <span
+                          style={{
+                            padding: "7px 14px",
+                            border: "1px solid var(--border)",
+                            color: "var(--muted)",
+                            borderRadius: 6,
+                            fontSize: 12,
+                            fontWeight: 500,
+                          }}
+                        >
+                          {c.name}
+                        </span>
+                      )}
                       <a
                         href={buildRamadanPdfUrl(c.code.toLowerCase(), month as 2 | 3)}
                         download={`ramadan-calendar-${c.code.toLowerCase()}-2026-${String(month).padStart(2, "0")}.pdf`}
@@ -384,26 +406,28 @@ export default async function Ramadan2026Page() {
               { start: RAMADAN_2027.start, end: RAMADAN_2027.end, eid: RAMADAN_2027.eidAlFitr },
             )}
           </p>
-          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-            {[RAMADAN_2027.startMonth, RAMADAN_2027.endMonth].map((m) => (
-              SUPPORTED_COUNTRIES.map((c) => (
-                <Link
-                  key={`${c.code}-${m}`}
-                  href={`/calendar/${c.code.toLowerCase()}/${RAMADAN_2027.year}/${m}`}
-                  style={{
-                    fontSize: 12,
-                    padding: "6px 14px",
-                    border: "1px solid var(--border)",
-                    borderRadius: 6,
-                    textDecoration: "none",
-                    color: "var(--muted)",
-                  }}
-                >
-                  {new Date(2000, m - 1).toLocaleString("en-US", { month: "long" })} {RAMADAN_2027.year} · {c.code}
-                </Link>
-              ))
-            ))}
-          </div>
+          {showRamadan2027Links && (
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              {[RAMADAN_2027.startMonth, RAMADAN_2027.endMonth].map((m) => (
+                SUPPORTED_COUNTRIES.map((c) => (
+                  <Link
+                    key={`${c.code}-${m}`}
+                    href={`/calendar/${c.code.toLowerCase()}/${RAMADAN_2027.year}/${m}`}
+                    style={{
+                      fontSize: 12,
+                      padding: "6px 14px",
+                      border: "1px solid var(--border)",
+                      borderRadius: 6,
+                      textDecoration: "none",
+                      color: "var(--muted)",
+                    }}
+                  >
+                    {new Date(2000, m - 1).toLocaleString("en-US", { month: "long" })} {RAMADAN_2027.year} · {c.code}
+                  </Link>
+                ))
+              ))}
+            </div>
+          )}
         </section>
 
         {/* FAQ */}

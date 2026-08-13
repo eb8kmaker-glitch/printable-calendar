@@ -1,3 +1,5 @@
+import { CURRENT_YEAR } from "@/lib/types";
+
 const BASE_URL = "https://printablecalendars.app";
 
 export const COUNTRY_NAMES: Record<string, string> = {
@@ -19,7 +21,7 @@ export function generateWebSiteSchema() {
       "@type": "SearchAction",
       target: {
         "@type": "EntryPoint",
-        urlTemplate: `${BASE_URL}/calendar/{country}/2026/{month}`,
+        urlTemplate: `${BASE_URL}/calendar/{country}/${CURRENT_YEAR}/{month}`,
       },
       "query-input": "required name=country",
     },

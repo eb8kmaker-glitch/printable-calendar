@@ -73,6 +73,14 @@ export const COUNTRY_NAMES: Record<string, string> = {
   JP: "Japan",
 };
 
+// Years we statically generate. With dynamicParams = false on the calendar
+// routes, any year outside this list returns 404 instead of being rendered and
+// written to the ISR cache. Every link that points at /calendar/[country]/[year]
+// (and its [month] child) must be guarded with CALENDAR_YEARS.includes(...) so
+// the UI can never navigate to a year we don't generate.
+export const CURRENT_YEAR = new Date().getFullYear();
+export const CALENDAR_YEARS = [CURRENT_YEAR, CURRENT_YEAR + 1];
+
 export const MONTH_NAMES = [
   "January", "February", "March", "April",
   "May", "June", "July", "August",

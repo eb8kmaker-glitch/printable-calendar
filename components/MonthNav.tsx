@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { MONTH_NAMES } from "@/lib/types";
+import { MONTH_NAMES, CALENDAR_YEARS } from "@/lib/types";
 
 interface MonthNavProps {
   country: string;
@@ -12,13 +12,23 @@ interface MonthNavProps {
 export default function MonthNav({ country, year, month }: MonthNavProps) {
   const router = useRouter();
 
+  // Only step into a year we actually generate (see CALENDAR_YEARS). Same guard
+  // the server-rendered prev/next links in [year] and [year]/[month] use — the
+  // arrows would otherwise roll over into a year that 404s.
+  const prevYear = month === 1 ? year - 1 : year;
+  const nextYear = month === 12 ? year + 1 : year;
+  const canGoPrev = CALENDAR_YEARS.includes(prevYear);
+  const canGoNext = CALENDAR_YEARS.includes(nextYear);
+
   const prev = () => {
-    if (month === 1) router.push(`/calendar/${country}/${year - 1}/12`);
+    if (!canGoPrev) return;
+    if (month === 1) router.push(`/calendar/${country}/${prevYear}/12`);
     else router.push(`/calendar/${country}/${year}/${month - 1}`);
   };
 
   const next = () => {
-    if (month === 12) router.push(`/calendar/${country}/${year + 1}/1`);
+    if (!canGoNext) return;
+    if (month === 12) router.push(`/calendar/${country}/${nextYear}/1`);
     else router.push(`/calendar/${country}/${year}/${month + 1}`);
   };
 
@@ -37,12 +47,23 @@ export default function MonthNav({ country, year, month }: MonthNavProps) {
     transition: "background 0.15s",
   };
 
+  const disabledBtnStyle: React.CSSProperties = {
+    ...btnStyle,
+    cursor: "default",
+    opacity: 0.3,
+  };
+
   return (
     <div
       className="no-print"
       style={{ display: "flex", alignItems: "center", gap: 8 }}
     >
-      <button onClick={prev} style={btnStyle} aria-label="Previous month">
+      <button
+        onClick={prev}
+        disabled={!canGoPrev}
+        style={canGoPrev ? btnStyle : disabledBtnStyle}
+        aria-label="Previous month"
+      >
         ←
       </button>
 
@@ -84,14 +105,19 @@ export default function MonthNav({ country, year, month }: MonthNavProps) {
           cursor: "pointer",
         }}
       >
-        {[2024, 2025, 2026, 2027].map((y) => (
+        {CALENDAR_YEARS.map((y) => (
           <option key={y} value={y}>
             {y}
           </option>
         ))}
       </select>
 
-      <button onClick={next} style={btnStyle} aria-label="Next month">
+      <button
+        onClick={next}
+        disabled={!canGoNext}
+        style={canGoNext ? btnStyle : disabledBtnStyle}
+        aria-label="Next month"
+      >
         →
       </button>
     </div>

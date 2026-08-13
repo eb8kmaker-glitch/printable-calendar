@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getHolidays, buildCalendarDays, getCountryConfig } from "@/lib/holidays";
 import { getCalendarContent } from "@/lib/calendar-content";
-import { MONTH_NAMES, SUPPORTED_COUNTRIES } from "@/lib/types";
+import { MONTH_NAMES, SUPPORTED_COUNTRIES, CALENDAR_YEARS } from "@/lib/types";
 import { getEventsByMonth, formatEventDate, CATEGORY_LABELS } from "@/lib/events";
 import CalendarGrid from "@/components/CalendarGrid";
 import MonthNav from "@/components/MonthNav";
@@ -20,11 +20,9 @@ interface PageProps {
   params: Promise<{ country: string; year: string; month: string }>;
 }
 
-// Years we statically generate. With dynamicParams = false, any year outside
-// this list returns 404 instead of being rendered and written to the ISR cache.
-const CURRENT_YEAR = new Date().getFullYear();
-const CALENDAR_YEARS = [CURRENT_YEAR, CURRENT_YEAR + 1];
-
+// Years we statically generate: see CALENDAR_YEARS in lib/types. With
+// dynamicParams = false, any year outside that list returns 404 instead of
+// being rendered and written to the ISR cache.
 export const dynamicParams = false;
 
 export async function generateStaticParams() {

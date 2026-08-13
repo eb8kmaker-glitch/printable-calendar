@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getHolidays, buildCalendarDays, getCountryConfig } from "@/lib/holidays";
-import { MONTH_NAMES, DAY_NAMES, SUPPORTED_COUNTRIES } from "@/lib/types";
+import { MONTH_NAMES, DAY_NAMES, SUPPORTED_COUNTRIES, CURRENT_YEAR, CALENDAR_YEARS } from "@/lib/types";
 import DownloadButton from "@/components/DownloadButton";
 import AdSlot from "@/components/AdSlot";
 import { getLocale } from "@/i18n/server";
@@ -50,13 +50,19 @@ export default async function CountryCalendarPage({ params }: PageProps) {
   const config = getCountryConfig(country);
   if (!config) notFound();
 
-  const year = new Date().getFullYear();
+  const year = CURRENT_YEAR;
   const locale = await getLocale();
   const i18n = getTranslations(locale);
   const countryName = (i18n.countries as Record<string, string>)[country] ?? config.name;
   const monthNames = i18n.months as Record<string, string>;
 
   const holidays = getHolidays(config.code, year);
+
+  // Only link to adjacent years we actually generate (see CALENDAR_YEARS).
+  // Mirrors the guard in [year]/page.tsx so neither crawlers nor users can
+  // reach a year that 404s under dynamicParams = false.
+  const showPrevYear = CALENDAR_YEARS.includes(year - 1);
+  const showNextYear = CALENDAR_YEARS.includes(year + 1);
 
   return (
     <>
@@ -87,9 +93,17 @@ export default async function CountryCalendarPage({ params }: PageProps) {
           </div>
 
           <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-            <Link href={`/calendar/${country}/${year - 1}`} style={{ width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid var(--border)", borderRadius: 8, textDecoration: "none", color: "var(--fg)", fontSize: 16 }}>←</Link>
+            {showPrevYear ? (
+              <Link href={`/calendar/${country}/${year - 1}`} style={{ width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid var(--border)", borderRadius: 8, textDecoration: "none", color: "var(--fg)", fontSize: 16 }}>←</Link>
+            ) : (
+              <span style={{ width: 36, height: 36 }} />
+            )}
             <span style={{ fontSize: 14, fontWeight: 500, minWidth: 48, textAlign: "center" }}>{year}</span>
-            <Link href={`/calendar/${country}/${year + 1}`} style={{ width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid var(--border)", borderRadius: 8, textDecoration: "none", color: "var(--fg)", fontSize: 16 }}>→</Link>
+            {showNextYear ? (
+              <Link href={`/calendar/${country}/${year + 1}`} style={{ width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid var(--border)", borderRadius: 8, textDecoration: "none", color: "var(--fg)", fontSize: 16 }}>→</Link>
+            ) : (
+              <span style={{ width: 36, height: 36 }} />
+            )}
             <Link href={`/calendar/${country}/${year}/${new Date().getMonth() + 1}`} style={{ fontSize: 12, padding: "5px 12px", border: "1px solid var(--border)", borderRadius: 8, textDecoration: "none", color: "var(--muted)" }}>
               {i18n.calendar.monthlyView}
             </Link>
