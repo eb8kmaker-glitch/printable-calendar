@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getHolidays, buildCalendarDays, getCountryConfig } from "@/lib/holidays";
 import { getCalendarContent } from "@/lib/calendar-content";
-import { MONTH_NAMES, SUPPORTED_COUNTRIES } from "@/lib/types";
+import { MONTH_NAMES, SUPPORTED_COUNTRIES, CALENDAR_YEARS } from "@/lib/types";
 import { getEventsByMonth, formatEventDate, CATEGORY_LABELS } from "@/lib/events";
 import CalendarGrid from "@/components/CalendarGrid";
 import MonthNav from "@/components/MonthNav";
@@ -20,11 +20,9 @@ interface PageProps {
   params: Promise<{ country: string; year: string; month: string }>;
 }
 
-// Years we statically generate. With dynamicParams = false, any year outside
-// this list returns 404 instead of being rendered and written to the ISR cache.
-const CURRENT_YEAR = new Date().getFullYear();
-const CALENDAR_YEARS = [CURRENT_YEAR, CURRENT_YEAR + 1];
-
+// Years we statically generate: see CALENDAR_YEARS in lib/types. With
+// dynamicParams = false, any year outside that list returns 404 instead of
+// being rendered and written to the ISR cache.
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
@@ -46,7 +44,9 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { country, year, month } = await params;
   const config = getCountryConfig(country);
-  if (!config) return {};
+  // Out-of-range years 404 in the page below; don't emit canonical/hreflang
+  // URLs for one of them.
+  if (!config || !CALENDAR_YEARS.includes(Number(year))) return {};
 
   const locale = await getLocale();
   const i18n = getTranslations(locale);
@@ -94,7 +94,11 @@ export default async function CalendarPage({ params }: PageProps) {
   const month = Number(monthStr);
 
   const config = getCountryConfig(country);
-  if (!config || isNaN(year) || isNaN(month) || month < 1 || month > 12) {
+  // The CALENDAR_YEARS check subsumes isNaN(year): a non-numeric segment parses
+  // to NaN, which is never in the list. It also does the work dynamicParams =
+  // false is meant to do — that only gates prerendered routes, and this one
+  // renders dynamically, so an out-of-range year would otherwise render fine.
+  if (!config || !CALENDAR_YEARS.includes(year) || isNaN(month) || month < 1 || month > 12) {
     notFound();
   }
 
@@ -212,7 +216,7 @@ export default async function CalendarPage({ params }: PageProps) {
             >
               {i18n.calendar.yearView}
             </Link>
-            <MonthNav country={country} year={year} month={month} />
+            <MonthNav country={country} year={year} month={month} years={CALENDAR_YEARS} />
           </div>
         </div>
 

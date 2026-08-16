@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { SUPPORTED_COUNTRIES, MONTH_NAMES } from "@/lib/types";
+import { SUPPORTED_COUNTRIES, MONTH_NAMES, CALENDAR_YEARS } from "@/lib/types";
 import AdSlot from "@/components/AdSlot";
 import DynamicCalendarList from "@/components/DynamicCalendarList";
 import { buildFaqSchema } from "@/lib/seo-helpers";
@@ -245,6 +245,7 @@ export default async function SchoolCalendar2026Page() {
         <DynamicCalendarList
           storageKey="school-end"
           maxMonths={12}
+          years={CALENDAR_YEARS}
           badgeLabel="Last school month"
           pdfHeaderText="School Countdown"
           pdfTargetLabel="School End"

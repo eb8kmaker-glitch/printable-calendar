@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getHolidays, buildCalendarDays, getCountryConfig } from "@/lib/holidays";
-import { MONTH_NAMES, DAY_NAMES, SUPPORTED_COUNTRIES } from "@/lib/types";
+import { MONTH_NAMES, DAY_NAMES, SUPPORTED_COUNTRIES, CALENDAR_YEARS } from "@/lib/types";
 import DownloadButton from "@/components/DownloadButton";
 import AdSlot from "@/components/AdSlot";
 import { getLocale } from "@/i18n/server";
@@ -13,11 +13,9 @@ interface PageProps {
   params: Promise<{ country: string; year: string }>;
 }
 
-// Years we statically generate. With dynamicParams = false, any year outside
-// this list returns 404 instead of being rendered and written to the ISR cache.
-const CURRENT_YEAR = new Date().getFullYear();
-const CALENDAR_YEARS = [CURRENT_YEAR, CURRENT_YEAR + 1];
-
+// Years we statically generate: see CALENDAR_YEARS in lib/types. With
+// dynamicParams = false, any year outside that list returns 404 instead of
+// being rendered and written to the ISR cache.
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
@@ -33,7 +31,9 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { country, year } = await params;
   const config = getCountryConfig(country);
-  if (!config) return {};
+  // Out-of-range years 404 in the page below; don't emit a canonical URL for
+  // one of them.
+  if (!config || !CALENDAR_YEARS.includes(Number(year))) return {};
 
   const locale = await getLocale();
   const i18n = getTranslations(locale);
@@ -54,7 +54,11 @@ export default async function YearlyCalendarPage({ params }: PageProps) {
   const { country, year: yearStr } = await params;
   const year = Number(yearStr);
   const config = getCountryConfig(country);
-  if (!config || isNaN(year)) notFound();
+  // The CALENDAR_YEARS check subsumes isNaN: a non-numeric segment parses to
+  // NaN, which is never in the list. It also does the work dynamicParams =
+  // false is meant to do — that only gates prerendered routes, and this one
+  // renders dynamically, so an out-of-range year would otherwise render fine.
+  if (!config || !CALENDAR_YEARS.includes(year)) notFound();
 
   const locale = await getLocale();
   const i18n = getTranslations(locale);

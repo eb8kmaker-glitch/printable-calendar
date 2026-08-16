@@ -13,6 +13,14 @@ interface Stored { date: string; start: string; }
 export interface DynamicCalendarListProps {
   storageKey: string;
   maxMonths: number;
+  /**
+   * CALENDAR_YEARS, passed down from the server rather than imported here.
+   * The month list is built from the visitor's clock and their target date, so
+   * it can run past the years /calendar/[country]/[year]/[month] serves — those
+   * links 404. Importing the constant would recompute it against the visitor's
+   * clock too, which is the disagreement we're trying to avoid.
+   */
+  years: number[];
   /** Shown on the target month card badge, e.g. "Exam month" */
   badgeLabel: string;
   /** PDF headerText param, e.g. "Exam Countdown" */
@@ -96,7 +104,7 @@ function daysFromFirst(year: number, month: number, targetDate: string): number 
 }
 
 export default function DynamicCalendarList({
-  storageKey, maxMonths, badgeLabel,
+  storageKey, maxMonths, years, badgeLabel,
   pdfHeaderText, pdfTargetLabel,
   defaultMonths = 6, noDateHint, urlParamName,
 }: DynamicCalendarListProps) {
@@ -196,6 +204,7 @@ export default function DynamicCalendarList({
       {/* Month grid */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 14 }}>
         {months.map(({ year: y, month: m }) => {
+          const hasCalendarPage = years.includes(y);
           const isTargetMonth = hasDate && y === targetYear && m === targetMonth;
           const monthsToTarget = hasDate ? (targetYear - y) * 12 + (targetMonth - m) : null;
           const dN = hasDate && !isTargetMonth ? daysFromFirst(y, m, targetDate!) : null;
@@ -256,16 +265,31 @@ export default function DynamicCalendarList({
                   const pdfUrl = buildPdfUrl(c.code.toLowerCase(), y, m, targetDate, pdfHeaderText, pdfTargetLabel);
                   return (
                     <div key={c.code} style={{ display: "flex", gap: 4 }}>
-                      <Link
-                        href={`/calendar/${c.code.toLowerCase()}/${y}/${m}`}
-                        style={{
-                          fontSize: 11, padding: "4px 10px",
-                          border: "1px solid var(--border)", borderRadius: 5,
-                          textDecoration: "none", color: "var(--fg)",
-                        }}
-                      >
-                        {c.code}
-                      </Link>
+                      {/* A far-off target date can reach months we don't serve
+                          a calendar page for; keep the card and its PDF (the
+                          route handler renders any year) and drop the link. */}
+                      {hasCalendarPage ? (
+                        <Link
+                          href={`/calendar/${c.code.toLowerCase()}/${y}/${m}`}
+                          style={{
+                            fontSize: 11, padding: "4px 10px",
+                            border: "1px solid var(--border)", borderRadius: 5,
+                            textDecoration: "none", color: "var(--fg)",
+                          }}
+                        >
+                          {c.code}
+                        </Link>
+                      ) : (
+                        <span
+                          style={{
+                            fontSize: 11, padding: "4px 10px",
+                            border: "1px solid var(--border)", borderRadius: 5,
+                            color: "var(--muted)", opacity: 0.5,
+                          }}
+                        >
+                          {c.code}
+                        </span>
+                      )}
                       <a
                         href={pdfUrl}
                         download={`calendar-${c.code.toLowerCase()}-${y}-${String(m).padStart(2, "0")}.pdf`}

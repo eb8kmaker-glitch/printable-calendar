@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import AdSlot from "@/components/AdSlot";
 import DynamicCalendarList from "@/components/DynamicCalendarList";
+import { CALENDAR_YEARS } from "@/lib/types";
 import { buildFaqSchema } from "@/lib/seo-helpers";
 import DayCounter from "@/components/DayCounter";
 import type { DayMilestone } from "@/components/DayCounter";
@@ -175,6 +176,7 @@ export default async function StudyPlannerPage() {
         <DynamicCalendarList
           storageKey="exam-date"
           maxMonths={24}
+          years={CALENDAR_YEARS}
           badgeLabel="Exam month"
           pdfHeaderText="Exam Countdown"
           pdfTargetLabel="Exam Day"
