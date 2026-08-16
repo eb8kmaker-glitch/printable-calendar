@@ -10,16 +10,25 @@ const LANG_TO_COUNTRY: Record<string, string> = {
 export default function CalendarNavLink({
   currentLocale,
   label,
+  years,
 }: {
   currentLocale: string;
   label: string;
+  /**
+   * CALENDAR_YEARS, from the server. The month below still comes from the
+   * visitor's clock so this stays correct on prerendered pages, but a device
+   * whose clock is a year off would otherwise navigate to a year we don't
+   * serve — which 404s.
+   */
+  years: number[];
 }) {
   const router = useRouter();
 
   function handleClick() {
     const country = LANG_TO_COUNTRY[currentLocale] ?? "us";
     const now = new Date();
-    const year = now.getFullYear();
+    const clockYear = now.getFullYear();
+    const year = years.includes(clockYear) ? clockYear : years[0];
     const month = now.getMonth() + 1;
     router.push(`/calendar/${country}/${year}/${month}`);
   }

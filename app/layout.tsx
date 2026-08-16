@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import LangSwitcher from "@/components/LangSwitcher";
 import CalendarNavLink from "@/components/CalendarNavLink";
 import { organizationSchema, generateWebSiteSchema } from "@/lib/seo-helpers";
+import { CALENDAR_YEARS } from "@/lib/types";
 import { Analytics } from "@vercel/analytics/next";
 import { getLocale } from "@/i18n/server";
 import { getTranslations } from "@/i18n";
@@ -100,6 +101,7 @@ export default async function RootLayout({
               <CalendarNavLink
                 currentLocale={locale}
                 label={(i18n.nav as Record<string, string>).calendar ?? "Calendar"}
+                years={CALENDAR_YEARS}
               />
             }
             langSwitcher={

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { SUPPORTED_COUNTRIES, MONTH_NAMES } from "@/lib/types";
+import { SUPPORTED_COUNTRIES, MONTH_NAMES, CALENDAR_YEARS } from "@/lib/types";
 import { getHolidays } from "@/lib/holidays";
 import AdSlot from "@/components/AdSlot";
 import DynamicCalendarList from "@/components/DynamicCalendarList";
@@ -165,6 +165,7 @@ export default async function HolidayPlannerPage() {
         <DynamicCalendarList
           storageKey="trip-date"
           maxMonths={12}
+          years={CALENDAR_YEARS}
           badgeLabel="Trip month"
           pdfHeaderText="Trip Countdown"
           pdfTargetLabel="Departure"
