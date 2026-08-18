@@ -129,6 +129,7 @@ export default async function ResignationPlannerPage() {
           targetLabel={p.countdownLabel ?? "Last Day at Work"}
           storageKey="resignation-date"
           milestones={RESIGNATION_MILESTONES}
+          years={CALENDAR_YEARS}
         />
 
         {/* How to use */}

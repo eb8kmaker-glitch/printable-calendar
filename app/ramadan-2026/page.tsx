@@ -226,6 +226,7 @@ export default async function Ramadan2026Page() {
           storageKey="ramadan-start"
           milestones={RAMADAN_MILESTONES}
           defaultDate="2026-03-20"
+          years={CALENDAR_YEARS}
         />
 
         {/* Key dates */}

@@ -160,6 +160,7 @@ export default async function HolidayPlannerPage() {
           targetLabel={p.countdownLabel ?? "Departure Date"}
           storageKey="trip-date"
           milestones={HOLIDAY_MILESTONES}
+          years={CALENDAR_YEARS}
         />
 
         <DynamicCalendarList

@@ -176,6 +176,7 @@ export default async function WeddingCountdownPage() {
           targetLabel={p.countdownLabel ?? "Wedding Day"}
           storageKey="wedding-date"
           milestones={WEDDING_MILESTONES}
+          years={CALENDAR_YEARS}
         />
 
         {/* How to use */}
