@@ -171,6 +171,7 @@ export default async function StudyPlannerPage() {
           targetLabel={p.countdownLabel ?? "Exam Date"}
           storageKey="exam-date"
           milestones={STUDY_MILESTONES}
+          years={CALENDAR_YEARS}
         />
 
         <DynamicCalendarList

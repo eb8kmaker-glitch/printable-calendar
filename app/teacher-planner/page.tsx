@@ -156,6 +156,7 @@ export default async function TeacherPlannerPage() {
           targetLabel={p.countdownLabel ?? "End of Term"}
           storageKey="term-end"
           milestones={TEACHER_MILESTONES}
+          years={CALENDAR_YEARS}
         />
 
         <DynamicCalendarList

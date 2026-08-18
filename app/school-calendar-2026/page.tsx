@@ -240,6 +240,7 @@ export default async function SchoolCalendar2026Page() {
           targetLabel={p.countdownLabel ?? "Last Day of School"}
           storageKey="school-end"
           milestones={SCHOOL_MILESTONES}
+          years={CALENDAR_YEARS}
         />
 
         <DynamicCalendarList

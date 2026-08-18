@@ -14,6 +14,14 @@ interface Props {
   storageKey: string;
   milestones: DayMilestone[];
   defaultDate?: string; // YYYY-MM-DD
+  /**
+   * CALENDAR_YEARS, passed down from the server rather than imported here —
+   * importing it into a client component recomputes it against the visitor's
+   * clock. Bounds the date picker to the years we publish calendars for, so
+   * the limit is visible while choosing instead of only showing up later as
+   * month cards without a calendar link.
+   */
+  years: number[];
 }
 
 interface Stored {
@@ -21,7 +29,7 @@ interface Stored {
   start: string; // ISO date when the user first set this target
 }
 
-export default function DayCounter({ targetLabel, storageKey, milestones, defaultDate }: Props) {
+export default function DayCounter({ targetLabel, storageKey, milestones, defaultDate, years }: Props) {
   const [stored, setStored] = useState<Stored | null>(null);
   const [mounted, setMounted] = useState(false);
 
@@ -63,6 +71,13 @@ export default function DayCounter({ targetLabel, storageKey, milestones, defaul
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
+
+  // Bounds for the date picker. The lower bound is the start of the first
+  // published year rather than today: a target that has since passed is a
+  // state this component renders on purpose ("+N", "passed N days ago"), so
+  // dates earlier this year stay selectable.
+  const minDate = `${Math.min(...years)}-01-01`;
+  const maxDate = `${Math.max(...years)}-12-31`;
 
   const targetDate = stored ? new Date(stored.date + "T00:00:00") : null;
   const startDate = stored ? new Date(stored.start + "T00:00:00") : null;
@@ -164,6 +179,8 @@ export default function DayCounter({ targetLabel, storageKey, milestones, defaul
           <input
             type="date"
             value={stored?.date ?? ""}
+            min={minDate}
+            max={maxDate}
             onChange={(e) => updateDate(e.target.value)}
             style={{
               padding: "9px 12px",
